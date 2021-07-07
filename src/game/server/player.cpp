@@ -520,17 +520,17 @@ void CPlayer::Tick()
 int CPlayer::GetNeedForUp()
 {
 
-	if(AccData.Level >= 100) return 10000;
-	else if(AccData.Level >= 200) return 50000;
-	else if(AccData.Level >= 300) return 80000;
-	else if(AccData.Level >= 400) return 110000;
-	else if(AccData.Level >= 500) return 130000;
-	else if(AccData.Level >= 600) return 160000;
-	else if(AccData.Level >= 700) return 190000;
+	if(AccData.Level >= 100) return 2500;
+	else if(AccData.Level >= 200) return 25000;
+	else if(AccData.Level >= 300) return 50000;
+	else if(AccData.Level >= 400) return 75000;
+	else if(AccData.Level >= 500) return 100000;
+	else if(AccData.Level >= 600) return 125000;
+	else if(AccData.Level >= 700) return 160000;
 	else if(AccData.Level >= 1000) return 240000;
 	else if(AccData.Level >= 1100) return 300000;
 	else if(AccData.Level >= 1200) return 400000;
-	else return 400;
+	else return 200;
 
 	/*
 	if(AccData.Level >= 100) return 1000;
@@ -633,7 +633,7 @@ void CPlayer::ExpAdd(int Size, bool Bonus)
 	int GetExp = Size, Get = 0;
 	if(Bonus && Server()->GetClanID(m_ClientID))
 	{
-		Get = Size*50;
+		Get = Size*100;
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), PLUS, "Exp", Get, true);
 		GetExp = Size+Server()->GetClan(DADDEXP, Server()->GetClanID(m_ClientID));
 	}
@@ -1097,20 +1097,20 @@ const char* CPlayer::TitleGot()
 	{
 		int i = Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP);
 		if(i == 1)
-			return "_VIP Bronze";
+			return "_VIP";
 		else if(i == 2)
-			return "_VIP Silver";
+			return "_VIP";
 		else if(i == 3)
-			return "_VIP Gold";
+			return "_VIP";
 		else if(i == 4)
-			return "_VIP Gold";
+			return "_VIP";
 		else
-			return "_Platinum";
+			return "_VIP";
 	}
 	else if(Server()->GetItemSettings(m_ClientID, TITLEQUESTS))
 		return "1LVQuests";
 	else if(Server()->GetItemSettings(m_ClientID, BOSSDIE))
-		return "#Boss?Die";
+		return "_BossKiller_";
 	else if(Server()->GetItemSettings(m_ClientID, PIGPIG))
 		return "_Piggie_";
 	else if(Server()->GetItemSettings(m_ClientID, BIGCRAFT))

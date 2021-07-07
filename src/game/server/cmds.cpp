@@ -64,7 +64,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 			return GameServer()->SendChatTarget(ClientID, "Use: /sendmail <id> <itemid> <itemcount>");
 
 		if(GameServer()->m_apPlayers[id] && GameServer()->Server()->IsClientLogged(id) && itemid > 0 && itemid < 500 && citem > 0)
-			GameServer()->SendMail(id, "Sender mail Kurosio!", itemid, citem);
+			GameServer()->SendMail(id, "Sender mail!", itemid, citem);
 		return;
 	}
 
@@ -210,7 +210,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 
 	else if(!strncmp(Msg->m_pMessage, "/cmdlist", 8))
 	{
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "? ---- Command List");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "-------------------- Command List-------------------");
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/invite ?<name>, /createboss, /cmdlist, /lang <lang>");
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/login ?<name> <pass>, /register <name> <pass>");
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/newclan <cname>");

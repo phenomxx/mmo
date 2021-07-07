@@ -1043,14 +1043,6 @@ void CGameContext::OnTick()
 		Server()->GetTopClanHouse();
 	}
 
-	if(Server()->Tick() % (1 * Server()->TickSpeed() * 610) == 0)
-	{
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("### Server Information:"), NULL);
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Warning!! New Rules:"), NULL);
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Play only one server, if play 1-250 and play 250-500"), NULL);
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Account deleted, and if you leader clan reform."), NULL);
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Server version: 1.1 stable by Kurosio."), NULL);
-	}
 
 	// вывод топ листа раз в 5 минут
 	if(Server()->Tick() % (1 * Server()->TickSpeed() * 440) == 0)
@@ -1315,7 +1307,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					dynamic_string Buffer;
 					Server()->Localization()->Format_L(Buffer, pLanguage, _("All owners InfClass"), NULL);
 					Buffer.append("\n\n");
-					Server()->Localization()->Format_L(Buffer, pLanguage, _("Main contributors:\nNajvlad - Mapper\nRem1x - Helping\nMatodor - Helping\nKurosio - Code, Owner"), NULL);
+					Server()->Localization()->Format_L(Buffer, pLanguage, _("Main contributors:\nNajvlad - Mapper\nRem1x - Helping\nMatodor - Helping\nKurosio - Code\nphenomx - Owner"), NULL);
 					Buffer.append("\n\n");
 					Server()->Localization()->Format_L(Buffer, pLanguage, _("Created Modify rAzataz by Kurosio"), NULL);
 					Buffer.append("\n\n");
@@ -3069,11 +3061,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 	if(Type == NOAUTH)
 	{
 		AddVote_Localization(ClientID, "null", "☪ Information ( ´ ω ` )?:");
-		AddVote_Localization(ClientID, "info", "Credits information");
 		AddVote_Localization(ClientID, "help", "How start in game?");
-		AddVote_Localization(ClientID, "null", "- - - - - ");
-		AddVote_Localization(ClientID, "null", "rAzataz modify infClass by Kurosio");
-		AddVote_Localization(ClientID, "null", "All credits in 'Credits' information");
 		return;
 	}
 
@@ -3091,7 +3079,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "ღ Gold: {int:gold} Silver: {int:Money}", "gold", &m_apPlayers[ClientID]->AccData.Gold ,"Money", &m_apPlayers[ClientID]->AccData.Money);
 		AddVote("······················· ", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "# {str:psevdo}", "psevdo", LocalizeText(ClientID, "Sub Menu Information"));
-		AddVote_Localization(ClientID, "info", "☞ {str:dis}", "dis", g_Config.m_Discord);
+		AddVote_Localization(ClientID, "null", "☞ {str:dis}", "dis", g_Config.m_Discord);
 		AddVote_Localization(ClientID, "rrul", "☞ Attention Rules");
 		AddVoteMenu_Localization(ClientID, RESLIST, MENUONLY, "☞ Wanted Players");
 		AddVoteMenu_Localization(ClientID, EVENTLIST, MENUONLY, "☞ Event & Bonuses");
@@ -3728,10 +3716,9 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		m_apPlayers[ClientID]->m_LastVotelist = AUTH;
 		AddVote_Localization(ClientID, "null", "☪ Information ( ´ ω ` )?:");
 		AddVote_Localization(ClientID, "null", "Donating & Privileges");
-		AddVote_Localization(ClientID, "null", "1 euro - 100 donate coin");
-		AddVote_Localization(ClientID, "null", "For buy say Kurosio");
+		AddVote_Localization(ClientID, "null", "1 euro - 200 donate coin");
+		AddVote_Localization(ClientID, "null", "For buy say phenomx");
 		AddVote_Localization(ClientID, "null", "Or in Discord");
-		AddVote_Localization(ClientID, "info", "{str:dis}", "dis", g_Config.m_Discord);
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "$ Your Donate {int:don}", "don", &m_apPlayers[ClientID]->AccData.Donate);
 		AddVote_Localization(ClientID, "bvip", "☞ VIP Package [1000]");

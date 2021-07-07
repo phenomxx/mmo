@@ -4484,7 +4484,7 @@ bool CServer::GetOpenHouse(int HouseID)
 {
 	if(HouseID == -1)
 		return false;
-
+	
 	return m_stClan[m_HouseClanID[HouseID]].f_openhouse;
 }
 

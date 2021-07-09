@@ -869,8 +869,8 @@ void CCharacter::Tick()
 		// инициализация хп босса по кол-ву
 		if(m_pPlayer->GetBotType() == BOT_BOSSSLIME && !GameServer()->m_BossStart)
 		{
-			if(!g_Config.m_SvCityStart) m_Health = 10+GameServer()->GetBossLeveling()*1000;
-			else if(g_Config.m_SvCityStart == 1) m_Health = 10+GameServer()->GetBossLeveling()*1800;
+			if(!g_Config.m_SvCityStart) m_Health = 10+GameServer()->GetBossLeveling()*500;
+			else if(g_Config.m_SvCityStart == 1) m_Health = 10+GameServer()->GetBossLeveling()*1000;
 
 			m_pPlayer->m_HealthStart = m_Health;
 		}

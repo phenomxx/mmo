@@ -411,7 +411,7 @@ void CServer::SetClientCountry(int ClientID, int Country)
 
 void CServer::Kick(int ClientID, const char *pReason)
 {
-	if(ClientID < 0 || ClientID >= MAX_PLAYERS || m_aClients[ClientID].m_State == CClient::STATE_EMPTY)
+	if(ClientID >= MAX_CLIENTS || m_aClients[ClientID].m_State == CClient::STATE_EMPTY)
 	{
 		Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "server", "invalid client id to kick");
 		return;

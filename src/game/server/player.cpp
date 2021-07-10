@@ -12,6 +12,8 @@
 #include <game/server/entities/bots/boomer.h>
 #include <game/server/entities/bots/bossslime.h>
 #include <game/server/entities/bots/farmer.h>
+#include <engine/server.h>
+#include <game/server/gamecontext.h>
 
 MACRO_ALLOC_POOL_ID_IMPL(CPlayer, MAX_CLIENTS)
 
@@ -112,11 +114,11 @@ void CPlayer::RandomBoxTick()
 					case 3: getitem = RARESLIMEDIRT; break;
 				}
 			}
-			if(m_pCharacter)
-				GameServer()->CreateLolText(m_pCharacter, false, vec2(0,-75), vec2 (0,-1), 10, Server()->GetItemName(m_ClientID, getitem, false));
+			//if(m_pCharacter)
+			//	GameServer()->CreateLolText(m_pCharacter, false, vec2(0,-75), vec2 (0,-1), 1, Server()->GetItemName(m_ClientID, getitem, false));
 
-			if(m_OpenBox == 30)
-			{
+			//if(m_OpenBox == 30)
+			//{
 				m_OpenBox = 0;
 				m_OpenBoxType = 0;
 
@@ -124,41 +126,48 @@ void CPlayer::RandomBoxTick()
 					GameServer()->CreateDeath(m_pCharacter->m_Pos, m_ClientID);
 
 				int Get = 1;
-				GameServer()->GiveItem(m_ClientID, getitem, Get);
+				Server()->GiveItem(m_ClientID, getitem, Get);
 				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {str:get} x{int:num2}"),
 					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, RANDOMCRAFTITEM, false), "num", &Get, "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
 
-			}
+			//}
 		}
 	}
+
 	if(m_OpenBox && m_OpenBoxType == EVENTBOX)
 	{
 		int getitem = 0;
+		
 		if(m_OpenBox % 30 == 0)
 		{
 			int RandGet = rand()%160;
 			if(RandGet >= 0 && RandGet <= 158) getitem = MONEYBAG;
 			else getitem = RAREEVENTHAMMER;
 
-			if(m_pCharacter)
-				GameServer()->CreateLolText(m_pCharacter, false, vec2(0,-75), vec2 (0,-1), 10, Server()->GetItemName(m_ClientID, getitem, false));
-
-			if(m_OpenBox == 30)
-			{
 				m_OpenBox = 0;
 				m_OpenBoxType = 0;
-
+			
+			
+			
+			//if(m_OpenBox == 30)
+			//{
+				//m_OpenBox = 0;
+				//m_OpenBoxType = 0;
 				if(m_pCharacter)
-					GameServer()->CreateDeath(m_pCharacter->m_Pos, m_ClientID);
+				GameServer()->CreateDeath(m_pCharacter->m_Pos, m_ClientID);
 
 				int Get = 1;
-				GameServer()->GiveItem(m_ClientID, getitem, Get);
+				Server()->GiveItem(m_ClientID, getitem, Get);
 				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {str:get} x{int:num2}"),
 					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, EVENTBOX, false), "num", &Get, "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
 
-			}
+			//}
+			
 		}
+		
 	}
+	
+	
 	if(m_OpenBox && m_OpenBoxType == FARMBOX)
 	{
 		int getitem = 0;
@@ -186,22 +195,22 @@ void CPlayer::RandomBoxTick()
 					case 3: getitem = RARESLIMEDIRT; break;
 				}
 			}
-			if(m_pCharacter)
-				GameServer()->CreateLolText(m_pCharacter, false, vec2(0,-75), vec2 (0,-1), 10, Server()->GetItemName(m_ClientID, getitem, false));
+			//if(m_pCharacter)
+				//GameServer()->CreateLolText(m_pCharacter, false, vec2(0,-75), vec2 (0,-1), 3, Server()->GetItemName(m_ClientID, getitem, false));
 
-			if(m_OpenBox == 30)
-			{
+			//if(m_OpenBox == 30)
+			//{
 				m_OpenBox = 0;
 				m_OpenBoxType = 0;
 
 				if(m_pCharacter)
 					GameServer()->CreateDeath(m_pCharacter->m_Pos, m_ClientID);
 
-				GameServer()->GiveItem(m_ClientID, getitem, Get);
+				Server()->GiveItem(m_ClientID, getitem, Get);
 				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x1 and get {str:get} x{int:num2}"),
 					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, FARMBOX, false), "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
 
-			}
+			//}
 		}
 	}
 	if(m_OpenBox)
@@ -230,7 +239,7 @@ void CPlayer::BasicAuthedTick()
 		}
 	}
 
-	if(Server()->GetItemCount(m_ClientID, PIGPORNO) > 1000 && !Server()->GetItemCount(m_ClientID, PIGPIG))
+	if(Server()->GetItemCount(m_ClientID, PIGPORNO) > 50 && !Server()->GetItemCount(m_ClientID, PIGPIG))
 		GameServer()->SendMail(m_ClientID, "You unlock new title!", PIGPIG, 1);
 
 	if(AccData.Money >= 10000)
@@ -281,6 +290,7 @@ void CPlayer::Tick()
 		if(!Server()->GetSeccurity(m_ClientID))
 			GameServer()->SendChatTarget_Localization(m_ClientID, CHATCATEGORY_DEFAULT, _("Your account is at risk, set security"), NULL);
 	}
+
 
 	if(!IsBot())
 	{
@@ -521,13 +531,13 @@ int CPlayer::GetNeedForUp()
 {
 
 	if(AccData.Level >= 100) return 2500;
-	else if(AccData.Level >= 200) return 25000;
-	else if(AccData.Level >= 300) return 50000;
-	else if(AccData.Level >= 400) return 75000;
+	else if(AccData.Level >= 200) return 15000;
+	else if(AccData.Level >= 300) return 30000;
+	else if(AccData.Level >= 400) return 50000;
 	else if(AccData.Level >= 500) return 100000;
 	else if(AccData.Level >= 600) return 125000;
 	else if(AccData.Level >= 700) return 160000;
-	else if(AccData.Level >= 1000) return 240000;
+	else if(AccData.Level >= 1000) return 200000;
 	else if(AccData.Level >= 1100) return 300000;
 	else if(AccData.Level >= 1200) return 400000;
 	else return 200;

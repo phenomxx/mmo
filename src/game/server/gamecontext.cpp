@@ -2082,7 +2082,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 
 					Server()->RemItem(ClientID, SelectItem, Get, USEDUSE);
 					m_apPlayers[ClientID]->m_SelectItem = -1;
-					ResetVotes(ClientID, AUTH);
+					ResetVotes(ClientID, INVENTORY);
 					return;
 				}
 
@@ -2185,7 +2185,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						if(ItemID != -1 && ItemNum != -1)
 							GiveItem(ClientID, ItemID, ItemNum);
 
-						ResetVotes(ClientID, MAILMENU);
+						ResetVotes(ClientID, AUTH);
 					}
 				}
 

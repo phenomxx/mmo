@@ -1686,10 +1686,10 @@ void CCharacter::Die(int Killer, int Weapon)
 		if(pKillerPlayer && !pKillerPlayer->IsBot() && !m_pPlayer->IsBot()
 			&& Killer != m_pPlayer->GetCID() && !pKillerPlayer->m_InArea)
 		{
-			int get = 300;
+			int get = 150;
 			if(Server()->GetItemCount(Killer, RELRINGS))
 			{
-				get = 300-Server()->GetItemCount(Killer, RELRINGS)*10;
+				get = 150-Server()->GetItemCount(Killer, RELRINGS)*10;
 				if(get < 50)
 					get = 50;
 			}

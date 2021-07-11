@@ -640,20 +640,20 @@ void CPlayer::ExpAdd(int Size, bool Bonus)
 	if(IsBot())
 		return;
 
-	int GetExp = Size*10, Get = 0;
+	int GetExp = Size*50, Get = 0;
+	int gete=GetExp;
 	if(Bonus && Server()->GetClanID(m_ClientID))
 	{
 		Get = Size*100;
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), PLUS, "Exp", Get, true);
 		GetExp = Size+Server()->GetClan(DADDEXP, Server()->GetClanID(m_ClientID));
 	}
-
 	if(Bonus && m_ExperienceAdd)
-	GetExp = GetExp*3;
+	GetExp = GetExp*2;
 	if(Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP))
-		GetExp = GetExp*6;
-	else
-		GetExp = GetExp*3;
+		GetExp = gete*2;
+	if(Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP)&& m_ExperienceAdd)	
+	GetExp = gete*4;
 	if(Server()->GetClanID(m_ClientID) &&
 		Server()->GetClan(DEXP, Server()->GetClanID(m_ClientID)) >= Server()->GetClan(DLEVEL, Server()->GetClanID(m_ClientID))*GetNeedForUpClan())
 	{
@@ -663,7 +663,7 @@ void CPlayer::ExpAdd(int Size, bool Bonus)
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), MINUS, "Exp", warpminus, true);
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), PLUS, "Level", 1, true);
 	}
-	GetExp = GetExp*8;
+	
 	GameServer()->SendBroadcast_LStat(m_ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, 100, Server()->GetClanID(m_ClientID) > 0 ? INADDCEXP : INADDEXP, GetExp, Get);
 	AccData.Exp += GetExp;
 	if(rand()%8 == 1)

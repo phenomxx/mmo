@@ -662,7 +662,7 @@ void CPlayer::ExpAdd(int Size, bool Bonus)
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), MINUS, "Exp", warpminus, true);
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), PLUS, "Level", 1, true);
 	}
-	GetExp = GetExp*5;
+	GetExp = GetExp*8;
 	GameServer()->SendBroadcast_LStat(m_ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, 100, Server()->GetClanID(m_ClientID) > 0 ? INADDCEXP : INADDEXP, GetExp, Get);
 	AccData.Exp += GetExp;
 	if(rand()%8 == 1)

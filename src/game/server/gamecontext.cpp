@@ -1632,7 +1632,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						if(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER)
 							m_apPlayers[ClientID]->m_HealthStart += Get*50;
 						else if(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK)
-							m_apPlayers[ClientID]->m_HealthStart += Get*40;
+							m_apPlayers[ClientID]->m_HealthStart += Get*30;
 						else if(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS)
 							m_apPlayers[ClientID]->m_HealthStart += Get*40;
 					}
@@ -3162,9 +3162,9 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 
 			AddVote("············", "null", ClientID);
 			AddVote_Localization(ClientID, "null", "♫  {str:psevdo}", "psevdo", LocalizeText(ClientID, "Personal"));
-			CreateNewShop(ClientID, RESETINGUPGRADE, 3, 1, 30000);
+			CreateNewShop(ClientID, RESETINGUPGRADE, 3, 1, 15000);
 			CreateNewShop(ClientID, RESETINGSKILL, 3, 1, 8000);
-			CreateNewShop(ClientID, WHITETICKET, 3, 100, 20000);
+			CreateNewShop(ClientID, WHITETICKET, 3, 100, 5000);
 			CreateNewShop(ClientID, MOONO2, 3, 100, 5);
 			CreateNewShop(ClientID, BOOKEXPMIN, 2, 1, 100);
 			CreateNewShop(ClientID, CLANTICKET, 2, 15, 2500);

@@ -2378,7 +2378,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 			CPlayer *pPlayer = m_apPlayers[ClientID];
 			if(g_Config.m_SvCityStart == 1 && pPlayer->AccData.Level < 250)
 			{
-				SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("You need 100 level"), NULL);
+				SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("You need 250 level"), NULL);
 				return;
 			}
 

@@ -1517,7 +1517,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 							return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Quest not complected!"), NULL);
 						else
 						{
-							m_apPlayers[ClientID]->ExpAdd(25000);
+							m_apPlayers[ClientID]->AccData.Exp += 25000;
 							m_apPlayers[ClientID]->MoneyAdd(3000000);
 							m_apPlayers[ClientID]->AccData.Quest++;
 							Server()->RemItem(ClientID, 2, QUEST1, -1);
@@ -1531,7 +1531,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 							return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Quest not complected!"), NULL);
 						else
 						{
-							m_apPlayers[ClientID]->ExpAdd(40000);
+							m_apPlayers[ClientID]->AccData.Exp += 40000;
 							m_apPlayers[ClientID]->MoneyAdd(6000000);
 							m_apPlayers[ClientID]->AccData.Quest++;
 							Server()->RemItem(ClientID, 2, QUEST2, -1);
@@ -1545,7 +1545,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 							return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Quest not complected!"), NULL);
 						else
 						{
-							m_apPlayers[ClientID]->ExpAdd(200000);
+							m_apPlayers[ClientID]->AccData.Exp += 200000;;
 							m_apPlayers[ClientID]->MoneyAdd(50000000);
 							m_apPlayers[ClientID]->AccData.Quest++;
 							Server()->RemItem(ClientID, 3, QUEST3, -1);
@@ -1559,7 +1559,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 							return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Quest not complected!"), NULL);
 						else
 						{
-							m_apPlayers[ClientID]->ExpAdd(400000);
+							m_apPlayers[ClientID]->AccData.Exp += 250000;;
 							m_apPlayers[ClientID]->MoneyAdd(70000000);
 							m_apPlayers[ClientID]->AccData.Quest++;
 							Server()->RemItem(ClientID, 3, QUEST4, -1);
@@ -4605,35 +4605,35 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 			}
 			else if(ItemID == TOMATE)
 			{
-				PackOne += 15;
+				PackOne += 30;
 				if(i == Count-1)
 				{
 					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"),
 						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);
-
-					pPlayer->ExpAdd(PackOne, false);
+				pPlayer->AccData.Exp += PackOne;
+					//pPlayer->ExpAdd(PackOne, false);
 				}
 			}
 			else if(ItemID == POTATO)
 			{
-				PackOne += 25;
+				PackOne += 50;
 				if(i == Count-1)
 				{
 					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"),
 						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);
-
-					pPlayer->ExpAdd(PackOne, false);
+pPlayer->AccData.Exp += PackOne;
+					//pPlayer->ExpAdd(PackOne, false);
 				}
 			}
 			else if(ItemID == CARROT)
 			{
-				PackOne += 10;
+				PackOne += 20;
 				if(i == Count-1)
 				{
 					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"),
 						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);
-
-					pPlayer->ExpAdd(PackOne, false);
+pPlayer->AccData.Exp += PackOne;
+					//pPlayer->ExpAdd(PackOne, false);
 				}
 			}
 			else if(ItemID == CLANBOXEXP)

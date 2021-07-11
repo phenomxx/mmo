@@ -154,6 +154,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 			GameServer()->Server()->NewClan(ClientID, Reformat);
 			m_pPlayer->m_LoginSync = 150;
 		}
+		GameServer()->Server()->RemItem(ClientID, CLANTICKET, 1, 4);
 		return;
 	}
 

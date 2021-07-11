@@ -2491,7 +2491,7 @@ void CServer::SetItemPrice(int ClientID, int ItemID, int Level, int Price)
 	if(ItemID < 0 || ItemID >= 200)
 		return;
 
-	if(IsClientLogged(ClientID) && GetItemSettings(ClientID, PIGPIG) && Price > 10)
+	if(IsClientLogged(ClientID) && GetItemCount(ClientID, PIGPIG) && Price > 10)
 		Price -= (int)(Price/100)*5;
 
 	m_stInv[ClientID][ItemID].i_nlevel = Level;

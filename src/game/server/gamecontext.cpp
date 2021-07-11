@@ -1472,7 +1472,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if(Server()->GetSpawnInClanHouse(ClientID, 0) || Server()->GetSpawnInClanHouse(ClientID, 1))
 						return;
 
-					BuyUpgradeClan(ClientID, 500000, DADDEXP,"SpawnHouse");
+					BuyUpgradeClan(ClientID, 50000, DADDEXP,"SpawnHouse");
 				}
 
 				else if(str_comp(aCmd, "uaddmoney") == 0)
@@ -1517,8 +1517,8 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 							return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Quest not complected!"), NULL);
 						else
 						{
-							m_apPlayers[ClientID]->ExpAdd(4000);
-							m_apPlayers[ClientID]->MoneyAdd(200000);
+							m_apPlayers[ClientID]->ExpAdd(25000);
+							m_apPlayers[ClientID]->MoneyAdd(3000000);
 							m_apPlayers[ClientID]->AccData.Quest++;
 							Server()->RemItem(ClientID, 2, QUEST1, -1);
 							UpdateStats(ClientID);
@@ -1531,8 +1531,8 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 							return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Quest not complected!"), NULL);
 						else
 						{
-							m_apPlayers[ClientID]->ExpAdd(4000);
-							m_apPlayers[ClientID]->MoneyAdd(250000);
+							m_apPlayers[ClientID]->ExpAdd(40000);
+							m_apPlayers[ClientID]->MoneyAdd(6000000);
 							m_apPlayers[ClientID]->AccData.Quest++;
 							Server()->RemItem(ClientID, 2, QUEST2, -1);
 							UpdateStats(ClientID);
@@ -1545,8 +1545,8 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 							return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Quest not complected!"), NULL);
 						else
 						{
-							m_apPlayers[ClientID]->ExpAdd(8000);
-							m_apPlayers[ClientID]->MoneyAdd(500000);
+							m_apPlayers[ClientID]->ExpAdd(200000);
+							m_apPlayers[ClientID]->MoneyAdd(50000000);
 							m_apPlayers[ClientID]->AccData.Quest++;
 							Server()->RemItem(ClientID, 3, QUEST3, -1);
 							UpdateStats(ClientID);
@@ -1559,8 +1559,8 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 							return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Quest not complected!"), NULL);
 						else
 						{
-							m_apPlayers[ClientID]->ExpAdd(8000);
-							m_apPlayers[ClientID]->MoneyAdd(550000);
+							m_apPlayers[ClientID]->ExpAdd(400000);
+							m_apPlayers[ClientID]->MoneyAdd(70000000);
 							m_apPlayers[ClientID]->AccData.Quest++;
 							Server()->RemItem(ClientID, 3, QUEST4, -1);
 							UpdateStats(ClientID);
@@ -1573,7 +1573,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 							return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Quest not complected!"), NULL);
 						else
 						{
-							m_apPlayers[ClientID]->MoneyAdd(1000000);
+							m_apPlayers[ClientID]->MoneyAdd(100000000);
 							m_apPlayers[ClientID]->AccData.Quest++;
 							Server()->RemItem(ClientID, KWAHGANDON, QUEST5, -1);
 							Server()->RemItem(ClientID, PIGPORNO, QUEST5, -1);
@@ -1587,7 +1587,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 							return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Quest not complected!"), NULL);
 						else
 						{
-							m_apPlayers[ClientID]->MoneyAdd(1050000);
+							m_apPlayers[ClientID]->MoneyAdd(100000000);
 							m_apPlayers[ClientID]->AccData.Quest++;
 							Server()->RemItem(ClientID, KWAHGANDON, QUEST6, -1);
 							Server()->RemItem(ClientID, FOOTKWAH, QUEST6, -1);
@@ -3786,25 +3786,25 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			{
 				int Need = QUEST1, Counts = Server()->GetItemCount(ClientID, PIGPORNO);
 				AddVote_Localization(ClientID, "null", "Pigs [Step 1] - Kill pig and get pig meat [{int:get}/{int:need}]", "get", &Counts, "need", &Need);
-				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "4000exp/200000Silver");
+				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "25000exp/300 GOLD");
 			}
 			else if(m_apPlayers[ClientID]->AccData.Quest == 2)
 			{
 				int Need = QUEST2, Counts = Server()->GetItemCount(ClientID, PIGPORNO);
 				AddVote_Localization(ClientID, "null", "Pigs [Step 2] - Kill pig and get pig meat [{int:get}/{int:need}]", "get", &Counts, "need", &Need);
-				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "4000exp/250000Silver");
+				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "40000exp/600 GOLD");
 			}
 			else if(m_apPlayers[ClientID]->AccData.Quest == 3)
 			{
 				int Need = QUEST3, Counts = Server()->GetItemCount(ClientID, KWAHGANDON);
 				AddVote_Localization(ClientID, "null", "Kwah [Step 1] - Kill kwah and get head [{int:get}/{int:need}]", "get", &Counts, "need", &Need);
-				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "8000exp/500000Silver");
+				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "200000exp/5000 GOLD");
 			}
 			else if(m_apPlayers[ClientID]->AccData.Quest == 4)
 			{
 				int Need = QUEST4, Counts = Server()->GetItemCount(ClientID, KWAHGANDON);
 				AddVote_Localization(ClientID, "null", "Kwah [Step 2] - Kill kwah and get head [{int:get}/{int:need}]", "get", &Counts, "need", &Need);
-				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "8000exp/550000Silver");
+				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "400000exp/7000 GOLD");
 			}
 			else if(m_apPlayers[ClientID]->AccData.Quest == 5)
 			{
@@ -3812,7 +3812,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 				int Counts = Server()->GetItemCount(ClientID, PIGPORNO);
 				int Counts2 = Server()->GetItemCount(ClientID, KWAHGANDON);
 				AddVote_Localization(ClientID, "null", "Pigs&Kwah's [Step 1] - Pig meat, Head Kwah [{int:get}/{int:need} & {int:get2}/{int:need2}]", "get", &Counts, "need", &Need, "get2", &Counts2, "need2", &Need);
-				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "Earrings Kwah, 1000000Silver");
+				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "Earrings Kwah, 10000 GOLD");
 			}
 			else if(m_apPlayers[ClientID]->AccData.Quest == 6)
 			{
@@ -3820,7 +3820,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 				int Counts = Server()->GetItemCount(ClientID, KWAHGANDON);
 				int Counts2 = Server()->GetItemCount(ClientID, FOOTKWAH);
 				AddVote_Localization(ClientID, "null", "Kwah [Step 1] - Head Kwah, Foot Kwah [{int:get}/{int:need} & {int:get2}/{int:need2}]", "get", &Counts, "need", &Need, "get2", &Counts2, "need2", &Need);
-				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "Formula Weapon's, 1050000Silver");
+				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "Formula Weapon's, 10000 GOLD");
 				AddVote_Localization(ClientID, "null", "+ Title ♥Quests_#");
 			}
 			else

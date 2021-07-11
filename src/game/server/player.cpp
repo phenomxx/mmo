@@ -239,8 +239,8 @@ void CPlayer::BasicAuthedTick()
 		}
 	}
 
-	if(Server()->GetItemCount(m_ClientID, PIGPORNO) > 50 && !Server()->GetItemCount(m_ClientID, PIGPIG))
-		GameServer()->SendMail(m_ClientID, "You unlock new title!", PIGPIG, 1);
+	if(Server()->GetItemCount(m_ClientID, PIGPORNO) >= 50 && !Server()->GetItemCount(m_ClientID, PIGPIG))
+		GameServer()->GiveItem(m_ClientID, PIGPIG, 1);
 
 	if(AccData.Money >= 10000)
 	{
@@ -564,7 +564,7 @@ int CPlayer::GetNeedForUpClan()
 int CPlayer::GetNeedForUpgClan(int Type)
 {
 	int Get = Server()->GetClan(Type, Server()->GetClanID(m_ClientID));
-	return 100+Get*500;
+	return 100+Get*100;
 }
 
 void CPlayer::PostTick()
@@ -612,7 +612,7 @@ void CPlayer::MoneyAdd(int Size, bool ClanBonus, bool MoneyDouble)
 
 	if(MoneyDouble)
 	{
-		if(Server()->GetItemSettings(m_ClientID, X2MONEYEXPVIP))
+		if(Server()->GetItemSettings(m_ClientID, SPECSNAPDRAW))
 			GetMoney = (int)GetMoney*(Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP)*2);
 		else if(MoneyDouble && (m_MoneyAdd))
 			GetMoney = (int)(GetMoney*2);
@@ -640,7 +640,7 @@ void CPlayer::ExpAdd(int Size, bool Bonus)
 	if(IsBot())
 		return;
 
-	int GetExp = Size, Get = 0;
+	int GetExp = Size*10, Get = 0;
 	if(Bonus && Server()->GetClanID(m_ClientID))
 	{
 		Get = Size*100;
@@ -650,7 +650,7 @@ void CPlayer::ExpAdd(int Size, bool Bonus)
 
 	if(Bonus && m_ExperienceAdd)
 		GetExp = GetExp*2;
-	if(Server()->GetItemSettings(m_ClientID, X2MONEYEXPVIP))
+	if(Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP))
 		GetExp = GetExp*((Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP))*2);
 
 	if(Server()->GetClanID(m_ClientID) &&
@@ -662,7 +662,7 @@ void CPlayer::ExpAdd(int Size, bool Bonus)
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), MINUS, "Exp", warpminus, true);
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), PLUS, "Level", 1, true);
 	}
-
+	GetExp = GetExp*8;
 	GameServer()->SendBroadcast_LStat(m_ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, 100, Server()->GetClanID(m_ClientID) > 0 ? INADDCEXP : INADDEXP, GetExp, Get);
 	AccData.Exp += GetExp;
 	if(rand()%8 == 1)
@@ -1107,15 +1107,15 @@ const char* CPlayer::TitleGot()
 	{
 		int i = Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP);
 		if(i == 1)
-			return "_VIP";
+			return "_[VIP]_";
 		else if(i == 2)
-			return "_VIP";
+			return "_[VIP]_";
 		else if(i == 3)
-			return "_VIP";
+			return "_[VIP]_";
 		else if(i == 4)
-			return "_VIP";
+			return "_[VIP]_";
 		else
-			return "_VIP";
+			return "_[VIP]_";
 	}
 	else if(Server()->GetItemSettings(m_ClientID, TITLEQUESTS))
 		return "1LVQuests";

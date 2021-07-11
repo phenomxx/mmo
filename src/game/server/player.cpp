@@ -641,7 +641,7 @@ void CPlayer::ExpAdd(int Size, bool Bonus)
 	if(IsBot())
 		return;
 
-	int GetExp = Size*30, Get = 0;
+	int GetExp = Size*20, Get = 0;
 	int gete=GetExp;
 	if(Bonus && Server()->GetClanID(m_ClientID))
 	{

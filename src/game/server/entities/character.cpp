@@ -1987,7 +1987,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 
 						if(!g_Config.m_SvCityStart)
 						{
-							CreateDropRandom(MONEYBAG, 2+rand()%5+1, false, i, Force/(50+randforce));
+							CreateDropRandom(MONEYBAG, 40+rand()%5+1, false, i, Force/(50+randforce));
 							CreateDropRandom(RARESLIMEDIRT, 1, 90, i, Force/(45+randforce));
 							CreateDropRandom(FORMULAFORRING, 1, 90, i, Force/(40+randforce));
 							CreateDropRandom(FORMULAEARRINGS, 1, 90, i, Force/(35+randforce));
@@ -1996,7 +1996,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 						}
 						else if(g_Config.m_SvCityStart == 1)
 						{
-							CreateDropRandom(MONEYBAG, 40+rand()%20+1, false, i, Force/(50+randforce));
+							CreateDropRandom(MONEYBAG, 70+rand()%20+1, false, i, Force/(50+randforce));
 							CreateDropRandom(BOOKEXPMIN, 1, 15, i, Force/(45+randforce));
 							CreateDropRandom(BOOKMONEYMIN, 1, 80, i, Force/(45+randforce));
 							CreateDropRandom(CLANBOXEXP, 1, 50, i, Force/(45+randforce));

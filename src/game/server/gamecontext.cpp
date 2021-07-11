@@ -3469,7 +3469,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			AddVote("", "null", ClientID);
 			AddVote_Localization(ClientID, "null", "House upgrade for clan member");
 
-			int Count = 500000;
+			int Count = 50000;
 			AddVote_Localization(ClientID, "uspawnhouse", "- Buy Spawning in House [{int:price}]", "price", &Count);
 
 			int MaxCount = Server()->GetClan(DCHAIRHOUSE, Server()->GetClanID(ClientID));

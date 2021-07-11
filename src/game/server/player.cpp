@@ -649,10 +649,11 @@ void CPlayer::ExpAdd(int Size, bool Bonus)
 	}
 
 	if(Bonus && m_ExperienceAdd)
-		GetExp = GetExp*2;
+		GetExp = GetExp*3;
 	if(Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP))
-		GetExp = GetExp*((Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP))*2);
-
+		GetExp = GetExp*((Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP))*6);
+if(!Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP))
+		GetExp = GetExp*3;
 	if(Server()->GetClanID(m_ClientID) &&
 		Server()->GetClan(DEXP, Server()->GetClanID(m_ClientID)) >= Server()->GetClan(DLEVEL, Server()->GetClanID(m_ClientID))*GetNeedForUpClan())
 	{

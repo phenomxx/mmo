@@ -531,15 +531,15 @@ int CPlayer::GetNeedForUp()
 {
 
 	if(AccData.Level >= 100) return 2500;
-	else if(AccData.Level >= 200) return 15000;
-	else if(AccData.Level >= 300) return 30000;
-	else if(AccData.Level >= 400) return 50000;
-	else if(AccData.Level >= 500) return 100000;
-	else if(AccData.Level >= 600) return 125000;
-	else if(AccData.Level >= 700) return 160000;
-	else if(AccData.Level >= 1000) return 200000;
-	else if(AccData.Level >= 1100) return 300000;
-	else if(AccData.Level >= 1200) return 400000;
+	else if(AccData.Level >= 200) return 20000;
+	else if(AccData.Level >= 300) return 50000;
+	else if(AccData.Level >= 400) return 100000;
+	else if(AccData.Level >= 500) return 130000;
+	else if(AccData.Level >= 600) return 180000;
+	else if(AccData.Level >= 700) return 220000;
+	else if(AccData.Level >= 1000) return 300000;
+	else if(AccData.Level >= 1100) return 400000;
+	else if(AccData.Level >= 1200) return 500000;
 	else return 200;
 
 	/*
@@ -898,12 +898,12 @@ void CPlayer::TryRespawn()
 			if(g_Config.m_SvCityStart == 1)
 			{
 				AccData.Level = m_BigBot ? 280+rand()%3 : 250;
-				AccUpgrade.Health = 100+AccData.Level*2;
+				AccUpgrade.Health = 300+AccData.Level*2;
 				AccUpgrade.Damage = AccData.Level+50;
 			}
 			else
 			{
-				AccData.Level = m_BigBot ? 10+rand()%3 : 5;
+				AccData.Level = m_BigBot ? 20+rand()%3 : 10;
 				AccUpgrade.Health = m_BigBot ? AccData.Level : 0;
 				if(m_BigBot)
 				{
@@ -920,12 +920,12 @@ void CPlayer::TryRespawn()
 			if(g_Config.m_SvCityStart == 1)
 			{
 				AccData.Level = m_BigBot ? 370+rand()%3 : 350+rand()%3;
-				AccUpgrade.Health = 100+AccData.Level*2;
+				AccUpgrade.Health = 300+AccData.Level*2;
 				AccUpgrade.Damage = AccData.Level+50;
 			}
 			else
 			{
-				AccData.Level = m_BigBot ? 140 : 125+rand()%3;
+				AccData.Level = m_BigBot ? 140 : 100+rand()%3;
 				AccUpgrade.Health = 100+AccData.Level;
 				AccUpgrade.Damage = AccData.Level/2;
 			}
@@ -937,12 +937,12 @@ void CPlayer::TryRespawn()
 			if(g_Config.m_SvCityStart == 1)
 			{
 				AccData.Level = m_BigBot ? 510+rand()%3 : 490+rand()%15;
-				AccUpgrade.Health = 100+(int)(AccData.Level*2);
+				AccUpgrade.Health = 300+(int)(AccData.Level*2);
 				AccUpgrade.Damage = (int)(AccData.Level+50);
 			}
 			else
 			{
-				AccData.Level = m_BigBot ? 250+rand()%3 : 200+rand()%3;
+				AccData.Level = m_BigBot ? 200+rand()%3 : 150+rand()%3;
 				AccUpgrade.Health = 100+AccData.Level;
 				AccUpgrade.Damage = AccData.Level;
 			}

@@ -607,13 +607,14 @@ void CPlayer::MoneyAdd(int Size, bool ClanBonus, bool MoneyDouble)
 		return;
 
 	int GetMoney = Size;
+	int getm=GetMoney;
 	if(ClanBonus && Server()->GetClanID(m_ClientID))
 		GetMoney = (Size+Server()->GetClan(DADDMONEY, Server()->GetClanID(m_ClientID))*100);
 
 	if(MoneyDouble)
 	{
-		if(Server()->GetItemSettings(m_ClientID, SPECSNAPDRAW))
-			GetMoney = (int)GetMoney*(Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP)*2);
+		if(Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP))
+			GetMoney = (int)(GetMoney*2);
 		else if(MoneyDouble && (m_MoneyAdd))
 			GetMoney = (int)(GetMoney*2);
 	}

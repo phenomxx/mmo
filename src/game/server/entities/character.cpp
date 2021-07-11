@@ -887,7 +887,7 @@ void CCharacter::Tick()
 			}
 		}
 
-		if((m_pPlayer->m_AngryWroth > 120 || Server()->GetItemCount(m_pPlayer->GetCID(), SPECSNAPDRAW)) && Server()->Tick() % (1 * Server()->TickSpeed()) == 0)
+		if((m_pPlayer->m_AngryWroth > 120 || Server()->GetItemCount(m_pPlayer->GetCID(), X2MONEYEXPVIP)) && Server()->Tick() % (1 * Server()->TickSpeed()) == 0)
 			GameServer()->CreateDeath(m_Pos, m_pPlayer->GetCID());
 
 		m_pPlayer->m_Health = m_Health;

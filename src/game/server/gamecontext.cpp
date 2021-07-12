@@ -4605,7 +4605,7 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 			}
 			else if(ItemID == TOMATE)
 			{
-				PackOne += 30;
+				PackOne += 80;
 				if(i == Count-1)
 				{
 					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"),
@@ -4616,7 +4616,7 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 			}
 			else if(ItemID == POTATO)
 			{
-				PackOne += 50;
+				PackOne += 100;
 				if(i == Count-1)
 				{
 					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"),
@@ -4627,7 +4627,7 @@ pPlayer->AccData.Exp += PackOne;
 			}
 			else if(ItemID == CARROT)
 			{
-				PackOne += 20;
+				PackOne += 50;
 				if(i == Count-1)
 				{
 					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"),

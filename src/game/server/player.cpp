@@ -957,7 +957,9 @@ void CPlayer::TryRespawn()
 			AccUpgrade.Health = (int)(AccData.Level/3);
 			AccUpgrade.Damage = 10;
 			if(g_Config.m_SvCityStart == 1)
+			{
 				AccUpgrade.Damage = 180;
+				AccUpgrade.Health = (int)(AccData.Level);}
 		}
 		else if(m_BotType == BOT_NPC)
 		{

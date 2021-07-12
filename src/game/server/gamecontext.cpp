@@ -1316,7 +1316,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					return;
 				}
 
-				else if(str_comp(aCmd, "rrul") == 0)
+				/*else if(str_comp(aCmd, "rrul") == 0)
 				{
 					SendChatTarget(ClientID, "------- {Rules} -------");
 					SendChatTarget(ClientID, "Don't use bugs!");
@@ -1327,7 +1327,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					SendChatTarget(ClientID, "Don't buily players!");
 					SendChatTarget(ClientID, "Don't interfere, in game other's players!");
 					return;
-				}
+				}*/
 
 				else if(str_comp(aCmd, "help") == 0)
 				{
@@ -2077,7 +2077,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 
 					int Get = chartoint(pReason, 100000);
 					if(SelectItem == RANDOMCRAFTITEM || SelectItem == EVENTBOX || SelectItem == FARMBOX ||
-						SelectItem == RESETINGUPGRADE || SelectItem == RESETINGSKILL || SelectItem == VIPPACKAGE)
+						SelectItem == RESETINGUPGRADE || SelectItem == RESETINGSKILL || SelectItem == VIPPACKAGE || SelectItem == BOSSBOX)
 						Get = 1;
 
 					Server()->RemItem(ClientID, SelectItem, Get, USEDUSE);
@@ -3080,7 +3080,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote("······················· ", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "# {str:psevdo}", "psevdo", LocalizeText(ClientID, "Sub Menu Information"));
 		AddVote_Localization(ClientID, "null", "☞ {str:dis}", "dis", g_Config.m_Discord);
-		AddVote_Localization(ClientID, "rrul", "☞ Attention Rules");
+		AddVoteMenu_Localization(ClientID, RULEMENU, MENUONLY, "☞ # ~ DevLog");
 		AddVoteMenu_Localization(ClientID, RESLIST, MENUONLY, "☞ Wanted Players");
 		AddVoteMenu_Localization(ClientID, EVENTLIST, MENUONLY, "☞ Event & Bonuses");
 		AddVoteMenu_Localization(ClientID, JOBSSET, MENUONLY, "☞ Job & Professions");
@@ -3628,6 +3628,26 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddBack(ClientID);
 		return;
 	}
+	else if(Type == RULEMENU)
+	{
+		m_apPlayers[ClientID]->m_LastVotelist = AUTH;
+		AddVote_Localization(ClientID, "null", "☪ DevLog ( ´ ω ` )?:");
+		AddVote_Localization(ClientID, "null", "SERVER UPDATE v1.0");
+		AddVote("", "null", ClientID);
+		AddVote_Localization(ClientID, "null", "▹ # ~ NEW");
+		AddVote("", "null", ClientID);
+		AddVote_Localization(ClientID, "null", "▹ Items:");
+		AddVote_Localization(ClientID, "null", "▹ Boss Slime Box");
+		AddVote("", "null", ClientID);
+		AddVote_Localization(ClientID, "null", "▹ Artifacts:");
+		AddVote_Localization(ClientID, "null", "▹ Slime Sphere - Gives 10 %hp and 5 %armor");
+		AddVote_Localization(ClientID, "null", "▹ Slime Necklacke - Gives 10 %hp");
+		AddVote("", "null", ClientID);
+		AddVote_Localization(ClientID, "null", "▹ # ~ WRITE IDEAS TO PHENOMX");
+		//AddVote_Localization(ClientID, "null", "▹ Armor & Enquip");
+		AddBack(ClientID);
+		return;
+	}
 
 	// ############################### Топ меню
 	else if(Type == TOPMENU)
@@ -3915,6 +3935,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 
 		return;
 	}
+	
 }
 
 void CGameContext::AddNewCraftVote(int ClientID, const char *Need, int ItemID)
@@ -4695,7 +4716,7 @@ pPlayer->AccData.Exp += PackOne;
 				UpdateStats(ClientID);
 				break;
 			}
-			else if(ItemID == RANDOMCRAFTITEM || ItemID == EVENTBOX || ItemID == FARMBOX)
+			else if(ItemID == RANDOMCRAFTITEM || ItemID == EVENTBOX || ItemID == FARMBOX || ItemID == BOSSBOX)
 			{
 				Count = 1;
 				m_apPlayers[ClientID]->m_OpenBox = 210;

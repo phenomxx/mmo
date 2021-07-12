@@ -149,7 +149,7 @@ void CPlayer::RandomBoxTick()
 			
 			
 			
-			//if(m_OpenBox == 30)
+			//if(= 30)
 			//{
 				//m_OpenBox = 0;
 				//m_OpenBoxType = 0;
@@ -166,6 +166,45 @@ void CPlayer::RandomBoxTick()
 		}
 		
 	}
+	if(m_OpenBox && m_OpenBoxType == BOSSBOX)
+	{
+		int getitem = 0;
+		if(m_OpenBox % 30 == 0)
+		{
+			int Get = 1;
+			int RandGet = rand()%160;
+			if(RandGet >= 0 && RandGet <= 150)
+			{
+				int RandItem = rand()%2;
+				switch(RandItem)
+				{
+					default : getitem = MONEYBAG, Get = 50; break;
+					case 1: getitem = FARMBOX, Get = 5; break;
+					case 2: getitem = RANDOMCRAFTITEM, Get = 5; break;
+				}
+			}
+			else
+			{
+				int RandItem = rand()%2;
+				switch(RandItem)
+				{
+					default: getitem = SLIMENECKLACKE; break;
+					case 1: getitem = SLIMESPHERE; break;	
+				}
+			}
+			m_OpenBox = 0;
+				m_OpenBoxType = 0;
+
+				if(m_pCharacter)
+					GameServer()->CreateDeath(m_pCharacter->m_Pos, m_ClientID);
+
+				Server()->GiveItem(m_ClientID, getitem, Get);
+				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x1 and get {str:get} x{int:num2}"),
+					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, BOSSBOX, false), "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
+		
+		}
+	}
+
 	
 	
 	if(m_OpenBox && m_OpenBoxType == FARMBOX)
@@ -898,8 +937,8 @@ void CPlayer::TryRespawn()
 			if(g_Config.m_SvCityStart == 1)
 			{
 				AccData.Level = m_BigBot ? 280+rand()%3 : 250;
-				AccUpgrade.Health = 300+AccData.Level*3;
-				AccUpgrade.Damage = AccData.Level+50;
+				AccUpgrade.Health = 300+AccData.Level*6;
+				AccUpgrade.Damage = AccData.Level+100;
 			}
 			else
 			{
@@ -920,8 +959,8 @@ void CPlayer::TryRespawn()
 			if(g_Config.m_SvCityStart == 1)
 			{
 				AccData.Level = m_BigBot ? 370+rand()%3 : 350+rand()%3;
-				AccUpgrade.Health = 300+AccData.Level*3;
-				AccUpgrade.Damage = AccData.Level+50;
+				AccUpgrade.Health = 300+AccData.Level*6;
+				AccUpgrade.Damage = AccData.Level+75;
 			}
 			else
 			{
@@ -937,8 +976,8 @@ void CPlayer::TryRespawn()
 			if(g_Config.m_SvCityStart == 1)
 			{
 				AccData.Level = m_BigBot ? 510+rand()%3 : 490+rand()%15;
-				AccUpgrade.Health = 300+(int)(AccData.Level*3);
-				AccUpgrade.Damage = (int)(AccData.Level+50);
+				AccUpgrade.Health = 300+(int)(AccData.Level*6);
+				AccUpgrade.Damage = (int)(AccData.Level+100);
 			}
 			else
 			{

@@ -1993,6 +1993,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 							CreateDropRandom(FORMULAEARRINGS, 1, 90, i, Force/(35+randforce));
 							CreateDropRandom(FORMULAWEAPON, 1, 90, i, Force/(40+randforce));
 							CreateDropRandom(RANDOMCRAFTITEM, 1, 15, i, Force/(45+randforce));
+							CreateDropRandom(BOSSBOX, 1, false, i, Force/(45+randforce));
 						}
 						else if(g_Config.m_SvCityStart == 1)
 						{
@@ -2332,6 +2333,13 @@ void CCharacter::ClassSpawnAttributes()
 	// прибавка 5% к хп
 	if(Server()->GetItemCount(m_pPlayer->GetCID(), RINGBOOMER))
 		m_Health += (m_Health/100)*5;
+	if(Server()->GetItemCount(m_pPlayer->GetCID(), SLIMESPHERE))
+	{
+		m_Health += (m_Health/100)*10;
+		m_Armor += (m_Armor/100)*5;
+	}
+	if(Server()->GetItemCount(m_pPlayer->GetCID(), SLIMENECKLACKE))
+		m_Health += (m_Health/100)*10;
 
 	// настройки прокачек оружия
 	int geta = (int)(5+m_pPlayer->AccUpgrade.Ammo);

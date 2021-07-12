@@ -173,7 +173,7 @@ void CPlayer::RandomBoxTick()
 		{
 			int Get = 1;
 			int RandGet = rand()%160;
-			if(RandGet >= 0 && RandGet <= 150)
+			if(RandGet >= 0 && RandGet <= 158)
 			{
 				int RandItem = rand()%2;
 				switch(RandItem)

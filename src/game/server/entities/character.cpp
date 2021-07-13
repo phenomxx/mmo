@@ -2390,7 +2390,7 @@ void CCharacter::ClassSpawnAttributes()
 			new CSnapFullProject(GameWorld(), m_Pos, m_pPlayer->GetCID(), 3, WEAPON_GRENADE, true);
 
 		if(Server()->GetItemCount(m_pPlayer->GetCID(), SNAPHANDLE))
-			new CSnapFullProject(GameWorld(), m_Pos, m_pPlayer->GetCID(), 5, 1, true);
+			new CSnapFullProject(GameWorld(), m_Pos, m_pPlayer->GetCID(), 6, 6, true);
 	}
 
 	Server()->SetMaxAmmo(m_pPlayer->GetCID(), INFWEAPON_HAMMER, 10000);

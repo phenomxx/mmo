@@ -937,7 +937,7 @@ void CPlayer::TryRespawn()
 			if(g_Config.m_SvCityStart == 1)
 			{
 				AccData.Level = m_BigBot ? 280+rand()%3 : 250;
-				AccUpgrade.Health = 300+AccData.Level*7;
+				AccUpgrade.Health = 300+(AccData.Level*7);
 				AccUpgrade.Damage = AccData.Level+300;
 			}
 			else
@@ -959,7 +959,7 @@ void CPlayer::TryRespawn()
 			if(g_Config.m_SvCityStart == 1)
 			{
 				AccData.Level = m_BigBot ? 370+rand()%3 : 350+rand()%3;
-				AccUpgrade.Health = 300+AccData.Level*4;
+				AccUpgrade.Health = 300+(AccData.Level*4);
 				AccUpgrade.Damage = AccData.Level+200;
 			}
 			else
@@ -976,7 +976,7 @@ void CPlayer::TryRespawn()
 			if(g_Config.m_SvCityStart == 1)
 			{
 				AccData.Level = m_BigBot ? 510+rand()%3 : 490+rand()%15;
-				AccUpgrade.Health = 300+(int)(AccData.Level*6);
+				AccUpgrade.Health = 300+(int)(AccData.Level*5);
 				AccUpgrade.Damage = (int)(AccData.Level+250);
 			}
 			else

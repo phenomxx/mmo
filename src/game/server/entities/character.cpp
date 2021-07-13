@@ -1934,11 +1934,13 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 					CreateDropRandom(ASUPRRISE, 1, 2000, From, Force/(50+randforce));
 					CreateDropRandom(PIGPORNO, 1, 40, From, Force/(50+randforce));
 					CreateDropRandom(LEATHER, 1, 60, From, Force/(50+randforce));
+					CreateDropRandom(PRESSEDPIECE, 1, 80, From, Force/(50+randforce));
 				}
 				else if(g_Config.m_SvCityStart == 1)
 				{
 					CreateDropRandom(ZOMBIEBRAIN, 1, 40, From, Force/(50+randforce));
 					CreateDropRandom(ZOMBIEEYE, 1, 40, From, Force/(50+randforce));
+					CreateDropRandom(PRESSEDPIECE, 1, 80, From, Force/(50+randforce));
 				}
 			}
 
@@ -1948,11 +1950,13 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 				{
 					CreateDropRandom(KWAHGANDON, 1, 44, From, Force/(50+randforce));
 					CreateDropRandom(FOOTKWAH, 1, 44, From, Force/(40+randforce));
+					CreateDropRandom(PRESSEDPIECE, 1, 80, From, Force/(50+randforce));
 				}
 				else if(g_Config.m_SvCityStart == 1)
 				{
 					CreateDropRandom(SKELETSBONE, 1, 45, From, Force/(50+randforce));
 					CreateDropRandom(SKELETSKULL, 1, 45, From, Force/(50+randforce));
+					CreateDropRandom(PRESSEDPIECE, 1, 80, From, Force/(50+randforce));
 				}
 			}
 			if(pFrom && m_pPlayer->GetBotType() == BOT_L3MONSTER)
@@ -1960,12 +1964,14 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 				if(!g_Config.m_SvCityStart)
 				{
 					CreateDropRandom(HEADBOOMER, 1, 42, From, Force/(50+randforce));
+					CreateDropRandom(PRESSEDPIECE, 1, 80, From, Force/(50+randforce));
 				}
 				else if(g_Config.m_SvCityStart == 1)
 				{
 					CreateDropRandom(NIMFHEART, 1, 40, From, Force/(50+randforce));
 					CreateDropRandom(NIMFEARS, 1, 40, From, Force/(50+randforce));
 					CreateDropRandom(NIMFBODY, 1, 40, From, Force/(50+randforce));
+					CreateDropRandom(PRESSEDPIECE, 1, 80, From, Force/(50+randforce));
 				}
 			}
 		}

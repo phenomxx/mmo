@@ -2703,13 +2703,15 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		case WEAPONPRESSED:
 		{
 			if(!Server()->GetItemCount(ClientID, IGUN) || !Server()->GetItemCount(ClientID, ISHOTGUN) ||
-				!Server()->GetItemCount(ClientID, IGRENADE) || !Server()->GetItemCount(ClientID, ILASER))
-				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Weapon's (gun, shotgun, grenade, laser)", NULL);
+				!Server()->GetItemCount(ClientID, IGRENADE) || !Server()->GetItemCount(ClientID, ILASER) || (Server()->GetItemCount(ClientID, PRESSEDPIECE) < 10))
+				return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Weapon's (gun, shotgun, grenade, laser and 10 pressed piece)", NULL);
 
 			Server()->RemItem(ClientID, IGUN, Count, -1);
 			Server()->RemItem(ClientID, ISHOTGUN, Count, -1);
 			Server()->RemItem(ClientID, IGRENADE, Count, -1);
 			Server()->RemItem(ClientID, ILASER, Count, -1);
+			Server()->RemItem(ClientID, PRESSEDPIECE, 10, -1);
+
 		} break;
 		case RINGBOOMER:
 		{
@@ -3638,6 +3640,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "▹ Items:");
 		AddVote_Localization(ClientID, "null", "▹ Boss Slime Box");
+		AddVote_Localization(ClientID, "null", "▹ Pressed piece (need for craft +5 ammo drops from all mobs)");
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "▹ Artifacts:");
 		AddVote_Localization(ClientID, "null", "▹ Slime Sphere - Gives 10 %hp and 5 %armor");
@@ -3899,7 +3902,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			else if(m_apPlayers[ClientID]->m_SortedSelectCraft == 3)
 			{
 				AddNewCraftVote(ClientID, "Module (happy, evil, surprise, blink, pain)", MODULEEMOTE);
-				AddNewCraftVote(ClientID, "Weapon (gun, shotgun, grenade, laser)", WEAPONPRESSED);
+				AddNewCraftVote(ClientID, "Weapon (gun, shotgun, grenade, laser, pressed piece x10)", WEAPONPRESSED);
 				AddNewCraftVote(ClientID, "Formula Weapons, Ring Boomer", MODULESHOTGUNSLIME);
 				AddNewCraftVote(ClientID, "Formula Weapons x25", ENDEXPLOSION);
 			}

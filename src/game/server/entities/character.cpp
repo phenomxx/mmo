@@ -527,6 +527,8 @@ void CCharacter::FireWeapon()
 
 			if(Hits)
 				m_ReloadTimer = Server()->TickSpeed()/3;
+				if(Server()->GetItemCount(m_pPlayer->GetCID(), VAMPIREFANG))
+				m_Health += m_DamageTaken/8;
 
 		} break;
 
@@ -545,6 +547,8 @@ void CCharacter::FireWeapon()
 					g_pData->m_Weapons.m_Gun.m_pBase->m_Damage, Explode, 10, -1, WEAPON_GUN);
 
 			GameServer()->CreateSound(m_Pos, SOUND_GUN_FIRE);
+			if(Server()->GetItemCount(m_pPlayer->GetCID(), VAMPIREFANG))
+				m_Health += m_DamageTaken/8;
 		} break;
 
 		case WEAPON_SHOTGUN:
@@ -589,6 +593,9 @@ void CCharacter::FireWeapon()
 			}
 			Server()->SendMsg(&Msg, 0, m_pPlayer->GetCID());
 			GameServer()->CreateSound(m_Pos, SOUND_SHOTGUN_FIRE);
+			
+			if(Server()->GetItemCount(m_pPlayer->GetCID(), VAMPIREFANG))
+				m_Health += m_DamageTaken/8;
 		} break;
 
 		case WEAPON_GRENADE:
@@ -638,6 +645,8 @@ void CCharacter::FireWeapon()
 				Server()->SendMsg(&Msg, 0, m_pPlayer->GetCID());
 			}
 			GameServer()->CreateSound(m_Pos, SOUND_GRENADE_FIRE);
+			if(Server()->GetItemCount(m_pPlayer->GetCID(), VAMPIREFANG))
+				m_Health += m_DamageTaken/8;
 		} break;
 
 		case WEAPON_RIFLE:
@@ -666,6 +675,8 @@ void CCharacter::FireWeapon()
 			}
 			Server()->SendMsg(&Msg, 0, m_pPlayer->GetCID());
 			GameServer()->CreateSound(m_Pos, SOUND_RIFLE_FIRE);
+			if(Server()->GetItemCount(m_pPlayer->GetCID(), VAMPIREFANG))
+				m_Health += m_DamageTaken/8;
 		} break;
 
 		case WEAPON_NINJA:
@@ -2007,6 +2018,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 							CreateDropRandom(BOOKEXPMIN, 1, 15, i, Force/(45+randforce));
 							CreateDropRandom(BOOKMONEYMIN, 1, 80, i, Force/(45+randforce));
 							CreateDropRandom(CLANBOXEXP, 1, 50, i, Force/(45+randforce));
+							CreateDropRandom(BOSSBOX2, 1, false, i, Force/(45+randforce));
 						}
 					}
 				}

@@ -205,6 +205,44 @@ void CPlayer::RandomBoxTick()
 		}
 	}
 
+if(m_OpenBox && m_OpenBoxType == BOSSBOX2)
+	{
+		int getitem = 0;
+		if(m_OpenBox % 30 == 0)
+		{
+			int Get = 1;
+			int RandGet = rand()%160;
+			if(RandGet >= 0 && RandGet <= 158)
+			{
+				int RandItem = rand()%2;
+				switch(RandItem)
+				{
+					default : getitem = MONEYBAG, Get = 50; break;
+					case 1: getitem = FARMBOX, Get = 5; break;
+					case 2: getitem = RANDOMCRAFTITEM, Get = 5; break;
+				}
+			}
+			else
+			{
+				int RandItem = rand()%2;
+				switch(RandItem)
+				{
+					default: getitem = VAMPIREFANG; break;
+					case 1: getitem = PRESSEDPIECE , Get = 10; break;	
+				}
+			}
+			m_OpenBox = 0;
+				m_OpenBoxType = 0;
+
+				if(m_pCharacter)
+					GameServer()->CreateDeath(m_pCharacter->m_Pos, m_ClientID);
+
+				Server()->GiveItem(m_ClientID, getitem, Get);
+				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x1 and get {str:get} x{int:num2}"),
+					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, BOSSBOX, false), "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
+		
+		}
+	}
 	
 	
 	if(m_OpenBox && m_OpenBoxType == FARMBOX)

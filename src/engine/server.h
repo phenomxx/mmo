@@ -228,6 +228,8 @@ enum
 	SLIMESPHERE,
 	SLIMENECKLACKE,
 	PRESSEDPIECE,
+	BOSSBOX2,
+	VAMPIREFANG,
 	MAX_ITEM,
 
 	// 1 - Weapon Upgradins, 2 - Rare Artifacts, 3 - Quest Item's, 4 - Useds Items, 5 - Crafted Item

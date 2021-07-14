@@ -2077,7 +2077,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 
 					int Get = chartoint(pReason, 100000);
 					if(SelectItem == RANDOMCRAFTITEM || SelectItem == EVENTBOX || SelectItem == FARMBOX ||
-						SelectItem == RESETINGUPGRADE || SelectItem == RESETINGSKILL || SelectItem == VIPPACKAGE || SelectItem == BOSSBOX)
+						SelectItem == RESETINGUPGRADE || SelectItem == RESETINGSKILL || SelectItem == VIPPACKAGE || SelectItem == BOSSBOX || SelectItem == BOSSBOX2)
 						Get = 1;
 
 					Server()->RemItem(ClientID, SelectItem, Get, USEDUSE);
@@ -3640,11 +3640,13 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "▹ Items:");
 		AddVote_Localization(ClientID, "null", "▹ Boss Slime Box");
-		AddVote_Localization(ClientID, "null", "▹ Pressed piece (need for craft +5 ammo drops from all mobs)");
+		AddVote_Localization(ClientID, "null", "▹ Pressed piece (need for craft +3 ammo drops from all mobs)");
+		AddVote_Localization(ClientID, "null", "▹ Boss Vampire Box");
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "▹ Artifacts:");
 		AddVote_Localization(ClientID, "null", "▹ Slime Sphere - Gives 10 %hp and 5 %armor");
 		AddVote_Localization(ClientID, "null", "▹ Slime Necklacke - Gives 10 %hp");
+		AddVote_Localization(ClientID, "null", "▹ Vampire Fang - Gives Lifesteal");
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "▹ # ~ WRITE IDEAS TO PHENOMX");
 		//AddVote_Localization(ClientID, "null", "▹ Armor & Enquip");
@@ -4719,7 +4721,7 @@ pPlayer->AccData.Exp += PackOne;
 				UpdateStats(ClientID);
 				break;
 			}
-			else if(ItemID == RANDOMCRAFTITEM || ItemID == EVENTBOX || ItemID == FARMBOX || ItemID == BOSSBOX)
+			else if(ItemID == RANDOMCRAFTITEM || ItemID == EVENTBOX || ItemID == FARMBOX || ItemID == BOSSBOX || ItemID == BOSSBOX2)
 			{
 				Count = 1;
 				m_apPlayers[ClientID]->m_OpenBox = 210;

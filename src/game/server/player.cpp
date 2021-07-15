@@ -724,14 +724,28 @@ void CPlayer::ExpAdd(int Size, bool Bonus)
 	{
 		Get = Size*100;
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), PLUS, "Exp", Get, true);
-		GetExp = Size+Server()->GetClan(DADDEXP, Server()->GetClanID(m_ClientID));
+		GetExp = gete+Server()->GetClan(DADDEXP, Server()->GetClanID(m_ClientID));
+
 	}
+
 	if(Bonus && m_ExperienceAdd)
-	GetExp = GetExp*2;
+	GetExp = gete*2;
+
+	if(Bonus && m_ExperienceAdd && Server()->GetClanID(m_ClientID))
+	GetExp = gete*2+Server()->GetClan(DADDEXP, Server()->GetClanID(m_ClientID));
+
 	if(Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP))
 		GetExp = gete*2;
+
+	if(Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP)&& Server()->GetClanID(m_ClientID)&& Bonus)
+		GetExp = gete*2+Server()->GetClan(DADDEXP, Server()->GetClanID(m_ClientID));
+	
 	if(Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP)&& m_ExperienceAdd)	
 	GetExp = gete*4;
+	
+	if(Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP)&& m_ExperienceAdd && Server()->GetClanID(m_ClientID) && Bonus)	
+	GetExp = gete*4+Server()->GetClan(DADDEXP, Server()->GetClanID(m_ClientID));
+	
 	if(Server()->GetClanID(m_ClientID) &&
 		Server()->GetClan(DEXP, Server()->GetClanID(m_ClientID)) >= Server()->GetClan(DLEVEL, Server()->GetClanID(m_ClientID))*GetNeedForUpClan())
 	{

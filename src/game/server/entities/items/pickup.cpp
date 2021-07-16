@@ -281,8 +281,8 @@ void CPickup::MaterFarm(int ClientID, int MaterialID)
 	if(Server()->GetMaterials(MaterialID) < 25)
 		return	GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("Not materials. Need min 25"), NULL); 
 	
-	if(Server()->GetItemCount(ClientID, MATERIAL) > 3000)
-		return	GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("Max in inventory 3000 material. Come to in Shop!"), NULL); 
+	if(Server()->GetItemCount(ClientID, MATERIAL) > 6000)
+		return	GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("Max in inventory 6000 material. Come to in Shop!"), NULL); 
 
 	m_Drop += 25;
 	GameServer()->CreateSound(m_Pos, 20); 

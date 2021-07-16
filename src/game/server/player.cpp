@@ -90,17 +90,19 @@ void CPlayer::RandomBoxTick()
 {
 	if(m_OpenBox && m_OpenBoxType == RANDOMCRAFTITEM)
 	{
+		int get = 1;
 		int getitem = 0;
 		if(m_OpenBox % 30 == 0)
 		{
 			int RandGet = rand()%100;
 			if(RandGet >= 0 && RandGet <= 95)
 			{
-				int RandItem = rand()%2;
+				int RandItem = rand()%3;
 				switch(RandItem)
 				{
 					default: getitem = FOOTKWAH; break;
 					case 1: getitem = HEADBOOMER; break;
+					case 2: getitem = PRESSEDPIECE; break;
 				}
 			}
 			else
@@ -112,6 +114,7 @@ void CPlayer::RandomBoxTick()
 					case 1: getitem = FORMULAFORRING; break;
 					case 2: getitem = FORMULAWEAPON; break;
 					case 3: getitem = RARESLIMEDIRT; break;
+					
 				}
 			}
 			//if(m_pCharacter)
@@ -141,7 +144,7 @@ void CPlayer::RandomBoxTick()
 		if(m_OpenBox % 30 == 0)
 		{
 			int RandGet = rand()%160;
-			if(RandGet >= 0 && RandGet <= 158) getitem = MONEYBAG;
+			if(RandGet >= 0 && RandGet <= 154) getitem = MONEYBAG;
 			else getitem = RAREEVENTHAMMER;
 
 				m_OpenBox = 0;
@@ -173,14 +176,14 @@ void CPlayer::RandomBoxTick()
 		{
 			int Get = 1;
 			int RandGet = rand()%160;
-			if(RandGet >= 0 && RandGet <= 158)
+			if(RandGet >= 0 && RandGet <= 156)
 			{
-				int RandItem = rand()%2;
+				int RandItem = rand()%3;
 				switch(RandItem)
 				{
 					default : getitem = MONEYBAG, Get = 50; break;
 					case 1: getitem = FARMBOX, Get = 5; break;
-					case 2: getitem = RANDOMCRAFTITEM, Get = 5; break;
+					case 2: getitem = RANDOMCRAFTITEM, Get = 1; break;
 				}
 			}
 			else
@@ -212,14 +215,14 @@ if(m_OpenBox && m_OpenBoxType == BOSSBOX2)
 		{
 			int Get = 1;
 			int RandGet = rand()%160;
-			if(RandGet >= 0 && RandGet <= 158)
+			if(RandGet >= 0 && RandGet <= 156)
 			{
-				int RandItem = rand()%2;
+				int RandItem = rand()%3;
 				switch(RandItem)
 				{
 					default : getitem = MONEYBAG, Get = 50; break;
 					case 1: getitem = FARMBOX, Get = 5; break;
-					case 2: getitem = RANDOMCRAFTITEM, Get = 5; break;
+					case 2: getitem = RANDOMCRAFTITEM, Get = 1; break;
 				}
 			}
 			else
@@ -239,7 +242,7 @@ if(m_OpenBox && m_OpenBoxType == BOSSBOX2)
 
 				Server()->GiveItem(m_ClientID, getitem, Get);
 				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x1 and get {str:get} x{int:num2}"),
-					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, BOSSBOX, false), "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
+					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, BOSSBOX2, false), "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
 		
 		}
 	}

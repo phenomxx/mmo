@@ -1972,12 +1972,12 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					BuyItem(SKILLUPBOX, ClientID, 1);
 					return;
 				}
-				else if(str_comp(aCmd, "bantipvp") == 0)
+				/*else if(str_comp(aCmd, "bantipvp") == 0)
 				{
 					Server()->SetItemPrice(ClientID, SANTIPVP, 0, 200);
 					BuyItem(SANTIPVP, ClientID, 1);
 					return;
-				}
+				}*/
 
 				// НАСТРОЙКИ ФУНКЦИИ
 				else if(str_comp(aCmd, "ssantiping") == 0)
@@ -2051,12 +2051,12 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					ResetVotes(ClientID, CLMENU);
 					return;
 				}
-				else if(str_comp(aCmd, "ssantipvp") == 0)
+				/*else if(str_comp(aCmd, "ssantipvp") == 0)
 				{
 					Server()->SetItemSettings(ClientID, SANTIPVP);
 					ResetVotes(ClientID, SETTINGS);
 					return;
-				}
+				}*/
 				else if(str_comp(aCmd, "sssetingsdrop") == 0)
 				{
 					Server()->SetItemSettings(ClientID, SDROP);
@@ -3342,8 +3342,8 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		Data = Server()->GetSeccurity(ClientID) ? "☑" : "☐";
 		AddVote_Localization(ClientID, "ssseccurity", "☞ Login and Password {str:stat}", "stat", Data);
 
-		Data = Server()->GetItemSettings(ClientID, SANTIPVP) ? "☑" : "☐";
-		AddVote_Localization(ClientID, "ssantipvp", "☞ VIP: AntiPVP {str:stat}", "stat", Data);
+		/*Data = Server()->GetItemSettings(ClientID, SANTIPVP) ? "☑" : "☐";
+		AddVote_Localization(ClientID, "ssantipvp", "☞ VIP: AntiPVP {str:stat}", "stat", Data);*/
 
 		Data = "FULL";
 		if(Server()->GetItemSettings(ClientID, SCHAT) == 1) Data = "NORMAL";
@@ -3637,6 +3637,9 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "SERVER UPDATE v1.0");
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "▹ # ~ NEW");
+		AddVote_Localization(ClientID, "null", "▹ Other:");
+		AddVote_Localization(ClientID, "null", "▹ CREATED DISCORD SERVER https://discord.gg/jwDP6anpKP");
+		AddVote_Localization(ClientID, "null", "▹ DELETED VIP ANTI-PVP SYSTEM");
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "▹ Items:");
 		AddVote_Localization(ClientID, "null", "▹ Boss Slime Box");
@@ -3648,6 +3651,9 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "▹ Slime Necklacke - Gives 10 %hp");
 		AddVote_Localization(ClientID, "null", "▹ Vampire Fang - Gives Lifesteal");
 		AddVote("", "null", ClientID);
+		AddVote_Localization(ClientID, "null", "▹ Jobs:");
+		AddVote_Localization(ClientID, "null", "▹ Loader: Increase max amount of material from 3000 to 6000");
+		AddVote_Localization(ClientID, "null", "▹ Enchant: For enchant your armor you need 1000 material");
 		AddVote_Localization(ClientID, "null", "▹ # ~ WRITE IDEAS TO PHENOMX");
 		//AddVote_Localization(ClientID, "null", "▹ Armor & Enquip");
 		AddBack(ClientID);
@@ -3747,12 +3753,10 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "$ Your Donate {int:don}", "don", &m_apPlayers[ClientID]->AccData.Donate);
 		AddVote_Localization(ClientID, "bvip", "☞ VIP Package [1000]");
-		AddVote_Localization(ClientID, "null", "Item AntiPVP, SP Box, 10.000 Money Bag");
+		AddVote_Localization(ClientID, "null", "SP Box, 10.000 Money Bag");
 		AddVote_Localization(ClientID, "null", "X2 - Money & Exp + Special Snap Draw Item");
 		AddVote_Localization(ClientID, "bsp", "☞ SP Box [200]");
 		AddVote_Localization(ClientID, "null", "Added 20 Upgrade + 10 Skill point");
-		AddVote_Localization(ClientID, "bantipvp", "☞ Item AntiPVP [200]");
-		AddVote_Localization(ClientID, "null", "You got AntiPVP settings");
 		AddVote("", "null", ClientID);
 		AddBack(ClientID);
 		return;
@@ -4714,7 +4718,7 @@ pPlayer->AccData.Exp += PackOne;
 			{
 				Count = 1;
 				SendMail(ClientID, "You buying VIP your bonus!", SKILLUPBOX, 1);
-				SendMail(ClientID, "You buying VIP your bonus!", SANTIPVP, 1);
+				//SendMail(ClientID, "You buying VIP your bonus!", SANTIPVP, 1);
 				SendMail(ClientID, "You buying VIP your bonus!", X2MONEYEXPVIP, 1);
 				SendMail(ClientID, "You buying VIP your bonus!", SPECSNAPDRAW, 1);
 				SendMail(ClientID, "You buying VIP your bonus!", MONEYBAG, 10000);

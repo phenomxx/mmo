@@ -1761,9 +1761,9 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 				return true;
 
 			// АнтиПВП вся хуня
-			if((Server()->GetItemSettings(m_pPlayer->GetCID(), SANTIPVP) || Server()->GetItemSettings(From, SANTIPVP) ||
+			/*if((Server()->GetItemSettings(m_pPlayer->GetCID(), SANTIPVP) || Server()->GetItemSettings(From, SANTIPVP) ||
 				m_pPlayer->m_AntiPvpSmall) && !m_pPlayer->IsBot() && !pFrom->IsBot() && m_pPlayer->GetCID() != From)
-				return true;
+				return true;*/
 
 			// Боссецкий
 			if((pFrom->m_InBossed || (m_pPlayer->m_InBossed && m_pPlayer->GetCID() != From)) && !pFrom->IsBot() && !m_pPlayer->IsBot())

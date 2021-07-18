@@ -2331,7 +2331,7 @@ void CCharacter::ClassSpawnAttributes()
 
 	// антипвп мелких уровней
 	m_pPlayer->m_AntiPvpSmall = false;
-	if(m_pPlayer->AccData.Level < 20)
+	if(m_pPlayer->AccData.Level < 70)
 	{
 		m_pPlayer->m_AntiPvpSmall = true;
 

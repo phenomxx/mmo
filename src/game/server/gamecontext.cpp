@@ -3640,6 +3640,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "▹ Other:");
 		AddVote_Localization(ClientID, "null", "▹ CREATED DISCORD SERVER https://discord.gg/jwDP6anpKP");
 		AddVote_Localization(ClientID, "null", "▹ DELETED VIP ANTI-PVP SYSTEM");
+		AddVote_Localization(ClientID, "null", "▹ CHANGE ANTI-PVP FOR LOWLEVELS FROM 20 to 70 lvl");
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "▹ Items:");
 		AddVote_Localization(ClientID, "null", "▹ Boss Slime Box");

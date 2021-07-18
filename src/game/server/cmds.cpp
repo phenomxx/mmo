@@ -44,7 +44,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		return;
 	}
 
-	else if(!strncmp(Msg->m_pMessage, "/giveitem", 9) && GameServer()->Server()->IsAuthed(ClientID))
+	/*else if(!strncmp(Msg->m_pMessage, "/giveitem", 9) && GameServer()->Server()->IsAuthed(ClientID))
 	{
 		LastChat();
 		int id = 0, itemid = 0, citem = 0;
@@ -96,7 +96,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		if (GameServer()->GetPlayerChar(ClientID))
 			GameServer()->CreateSound(m_pPlayer->GetCharacter()->m_Pos, soundid);
 		return;
-	}
+	}*/
 	else if (!strncmp(Msg->m_pMessage, "/trah", 5) && GameServer()->Server()->IsAuthed(ClientID))
 	{
 		LastChat();

@@ -2586,13 +2586,13 @@ bool CGameContext::ConPause(IConsole::IResult *pResult, void *pUserData)
 	return true;
 }
 
-bool CGameContext::ConRestart(IConsole::IResult *pResult, void *pUserData)
+/*bool CGameContext::ConRestart(IConsole::IResult *pResult, void *pUserData)
 {
 	CGameContext *pSelf = (CGameContext *)pUserData;
 	pSelf->m_pController->StartRound();
 
 	return true;
-}
+}*/
 
 bool CGameContext::ConBroadcast(IConsole::IResult *pResult, void *pUserData)
 {
@@ -4257,7 +4257,7 @@ void CGameContext::OnConsoleInit()
 	Console()->Register("tune_dump", "", CFGFLAG_SERVER, ConTuneDump, this, "Dump tuning");
 
 	Console()->Register("pause", "", CFGFLAG_SERVER, ConPause, this, "Pause/unpause game");
-	Console()->Register("restart", "?i<sec>", CFGFLAG_SERVER|CFGFLAG_STORE, ConRestart, this, "Restart in x seconds (0 = abort)");
+	//Console()->Register("restart", "?i<sec>", CFGFLAG_SERVER|CFGFLAG_STORE, ConRestart, this, "Restart in x seconds (0 = abort)");
 	Console()->Register("broadcast", "r<message>", CFGFLAG_SERVER, ConBroadcast, this, "Broadcast message");
 	Console()->Register("say", "r", CFGFLAG_SERVER, ConSay, this, "Say in chat");
 	Console()->Chain("sv_motd", ConchainSpecialMotdupdate, this);

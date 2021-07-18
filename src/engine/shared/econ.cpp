@@ -182,10 +182,10 @@ void CEcon::Send(int ClientID, const char *pLine)
 		m_NetConsole.Send(ClientID, pLine);
 }
 
-void CEcon::Shutdown()
+/*void CEcon::Shutdown()
 {
 	if(!m_Ready)
 		return;
 
 	m_NetConsole.Close();
-}
+}*/

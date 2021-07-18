@@ -47,7 +47,7 @@ public:
 	void Init(IConsole *pConsole, class CNetBan *pNetBan);
 	void Update();
 	void Send(int ClientID, const char *pLine);
-	void Shutdown();
+	//void Shutdown();
 };
 
 #endif

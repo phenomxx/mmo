@@ -353,7 +353,7 @@ public:
 	static bool ConKick(IConsole::IResult *pResult, void *pUser);
 	static bool ConStatus(IConsole::IResult *pResult, void *pUser);
 	static bool ConOptionStatus(IConsole::IResult *pResult, void *pUser);
-	static bool ConShutdown(IConsole::IResult *pResult, void *pUser);
+	//static bool ConShutdown(IConsole::IResult *pResult, void *pUser);
 	static bool ConMapReload(IConsole::IResult *pResult, void *pUser);
 	static bool ConLogout(IConsole::IResult *pResult, void *pUser);
 	static bool ConchainSpecialInfoupdate(IConsole::IResult *pResult, void *pUserData, IConsole::FCommandCallback pfnCallback, void *pCallbackUserData);

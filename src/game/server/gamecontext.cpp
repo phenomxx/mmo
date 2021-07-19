@@ -3641,6 +3641,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "▹ CREATED DISCORD SERVER https://discord.gg/jwDP6anpKP");
 		AddVote_Localization(ClientID, "null", "▹ DELETED VIP ANTI-PVP SYSTEM");
 		AddVote_Localization(ClientID, "null", "▹ CHANGE ANTI-PVP FOR LOWLEVELS FROM 20 to 70 lvl");
+		AddVote_Localization(ClientID, "null", "▹ FIX Pizdomet now its not infinity your mana = your ammo");
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "▹ Items:");
 		AddVote_Localization(ClientID, "null", "▹ Boss Slime Box");

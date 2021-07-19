@@ -602,10 +602,16 @@ void CCharacter::FireWeapon()
 		{
 			if(Server()->GetItemSettings(m_pPlayer->GetCID(), PIZDAMET))
 			{
-				if(rand()%2 == 0)
+				//if(rand()%2 == 0)
 					m_pPlayer->m_Mana--;
+					if(!m_pPlayer->m_ManaTick)
+			{
+				m_pPlayer->m_Mana++;
+				m_pPlayer->m_ManaTick = 10;
+				GameServer()->SendBroadcast_LStat(m_pPlayer->GetCID(), 2, 50, -1);
+			}
 
-				m_aWeapons[m_ActiveWeapon].m_Ammo++;
+				m_aWeapons[m_ActiveWeapon].m_Ammo=m_pPlayer->m_Mana/2;
 				new CPizdamet(GameWorld(), m_Pos, m_pPlayer->GetCID());
 			}
 			else

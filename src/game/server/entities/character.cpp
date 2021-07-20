@@ -611,7 +611,7 @@ void CCharacter::FireWeapon()
 				GameServer()->SendBroadcast_LStat(m_pPlayer->GetCID(), 2, 50, -1);
 			}
 
-				m_aWeapons[m_ActiveWeapon].m_Ammo=m_pPlayer->m_Mana/2;
+				m_aWeapons[m_ActiveWeapon].m_Ammo=m_pPlayer->m_Mana/5;
 				new CPizdamet(GameWorld(), m_Pos, m_pPlayer->GetCID());
 			}
 			else

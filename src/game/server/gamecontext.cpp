@@ -3785,8 +3785,8 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		if(Server()->GetItemType(ClientID, SelectItem) == 4)
 			AddVote_Localization(ClientID, "useitem", "▹ Use item's");
 
-		if(Server()->GetItemPrice(ClientID, SelectItem, 1) > 0 && m_apPlayers[ClientID]->GetWork())
-			AddVote_Localization(ClientID, "sellitem", "▹ Sell item's");
+		/*if(Server()->GetItemPrice(ClientID, SelectItem, 1) > 0 && m_apPlayers[ClientID]->GetWork())
+			AddVote_Localization(ClientID, "sellitem", "▹ Sell item's");*/
 
 		if(Server()->GetItemType(ClientID, SelectItem) != 6)
 			AddVote_Localization(ClientID, "dropitem", "▹ Drop item's");

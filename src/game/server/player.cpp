@@ -610,7 +610,7 @@ void CPlayer::Tick()
 int CPlayer::GetNeedForUp()
 {
 
-	if(AccData.Level >= 100) return 3000;
+	if(AccData.Level >= 100) return 2000;
 	else if(AccData.Level >= 200) return 10000;
 	else if(AccData.Level >= 300) return 50000;
 	else if(AccData.Level >= 400) return 200000;
@@ -997,7 +997,7 @@ void CPlayer::TryRespawn()
 			}
 			else
 			{
-				AccData.Level = m_BigBot ? 40+rand()%3 : 30;
+				AccData.Level = m_BigBot ? 30+rand()%3 : 20;
 				AccUpgrade.Health = AccData.Level/3;
 				if(m_BigBot)
 				{

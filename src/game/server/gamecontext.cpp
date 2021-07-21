@@ -4740,7 +4740,7 @@ pPlayer->AccData.Exp += PackOne;
 		dbg_msg("used", "%s use item %s:%d (count: %d)", Server()->ClientName(ClientID), Server()->GetItemName(ClientID, ItemID, false), ItemID, Count);
 		return;
 	}
-	if(Type == USEDSELL)
+	/*if(Type == USEDSELL)
 	{
 		int NeedMoney = (int)(Server()->GetItemPrice(ClientID, ItemID, 1)/2);
 		NeedMoney = NeedMoney*Count;
@@ -4766,7 +4766,7 @@ pPlayer->AccData.Exp += PackOne;
 		UpdateStats(ClientID);
 		ResetVotes(ClientID, AUTH);
 		return;
-	}
+	}*/
 	if(Type == USEDDROP)
 	{
 		int ClinID = -1;

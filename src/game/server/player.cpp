@@ -617,8 +617,8 @@ int CPlayer::GetNeedForUp()
 	else if(AccData.Level >= 500) return 350000;
 	else if(AccData.Level >= 600) return 700000;
 	else if(AccData.Level >= 700) return 900000;
-	else if(AccData.Level >= 1000) return 1200000;
-	else if(AccData.Level >= 1100) return 1300000;
+	else if(AccData.Level >= 1000) return 12000000;
+	else if(AccData.Level >= 1100) return 13000000;
 	else if(AccData.Level >= 1200) return 14000000;
 	else return 500;
 

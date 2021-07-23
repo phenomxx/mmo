@@ -609,18 +609,30 @@ void CPlayer::Tick()
 
 int CPlayer::GetNeedForUp()
 {
+	int exp=100;
 
-	if(AccData.Level >= 100) return 2000;
-	else if(AccData.Level >= 200) return 10000;
-	else if(AccData.Level >= 300) return 50000;
-	else if(AccData.Level >= 400) return 200000;
-	else if(AccData.Level >= 500) return 350000;
-	else if(AccData.Level >= 600) return 700000;
-	else if(AccData.Level >= 700) return 900000;
-	else if(AccData.Level >= 1000) return 12000000;
-	else if(AccData.Level >= 1100) return 13000000;
-	else if(AccData.Level >= 1200) return 14000000;
-	else return 500;
+	if(AccData.Level > 100) 
+	exp=500;
+	
+	if(AccData.Level > 200) exp=1000;
+	
+	if(AccData.Level > 300) exp=3000;
+	
+	if(AccData.Level > 400) exp=8000;
+	
+	if(AccData.Level > 500) exp=10000;
+	
+	if(AccData.Level > 600) exp=14000;
+	
+	if(AccData.Level > 700) exp=18000;
+	
+	if(AccData.Level > 1000) exp=30000;
+	
+	if(AccData.Level > 1100) exp=40000;
+	
+	if(AccData.Level > 1200) exp=50000;
+	
+	return exp;
 
 	/*
 	if(AccData.Level >= 100) return 1000;
@@ -644,7 +656,7 @@ int CPlayer::GetNeedForUpClan()
 int CPlayer::GetNeedForUpgClan(int Type)
 {
 	int Get = Server()->GetClan(Type, Server()->GetClanID(m_ClientID));
-	return 100+Get*100;
+	return 100+Get*500;
 }
 
 void CPlayer::PostTick()

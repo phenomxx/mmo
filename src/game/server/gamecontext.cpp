@@ -3118,6 +3118,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 				Server()->SetMaterials(0, Server()->GetMaterials(0)+Count);
 				Server()->RemItem(ClientID, MATERIAL, Count, -1);
 				m_apPlayers[ClientID]->AccData.Gold += Gold;
+				UpdateStats(ClientID);
 			}
 
 			AddVote("", "null", ClientID);
@@ -4740,7 +4741,7 @@ pPlayer->AccData.Exp += PackOne;
 		dbg_msg("used", "%s use item %s:%d (count: %d)", Server()->ClientName(ClientID), Server()->GetItemName(ClientID, ItemID, false), ItemID, Count);
 		return;
 	}
-	/*if(Type == USEDSELL)
+	if(Type == USEDSELL)
 	{
 		int NeedMoney = (int)(Server()->GetItemPrice(ClientID, ItemID, 1)/2);
 		NeedMoney = NeedMoney*Count;
@@ -4766,7 +4767,7 @@ pPlayer->AccData.Exp += PackOne;
 		UpdateStats(ClientID);
 		ResetVotes(ClientID, AUTH);
 		return;
-	}*/
+	}
 	if(Type == USEDDROP)
 	{
 		int ClinID = -1;

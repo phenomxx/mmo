@@ -501,6 +501,12 @@ void CGameContext::SendGuide(int ClientID, int BossType)
 			argtext = "All";
 			Server()->Localization()->Format_L(Buffer, pLanguage, _("Weapon: Shotgun / Speed: Fast+\nRank Boss B\n\nHeadshot's: if you are near!\n\nReward:\n- Money bag x40-80\n- 5% - craft item\n- 20% - Random Craft Box"), NULL);
 		}
+		else if(g_Config.m_SvCityStart == 2)
+		{
+			arghealth = 2000;
+			argtext = "All";
+			Server()->Localization()->Format_L(Buffer, pLanguage, _("Weapon: Shotgun / Speed: Fast+\nRank Boss B\n\nHeadshot's: if you are near!\n\nReward:\n- Money bag x40-80\n- 5% - craft item\n- 20% - Random Craft Box"), NULL);
+		}
 	}
 	int Time = m_BossStartTick/Server()->TickSpeed();
 	SendMOTD_Localization(ClientID, "Guide / Boss: {str:name}\nHealth sum level*{int:hp}\nRecomended class: {str:rclass}\n\n{str:guide}\n\n\nWait players for raid {int:siska} sec.",
@@ -2077,7 +2083,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 
 					int Get = chartoint(pReason, 100000);
 					if(SelectItem == RANDOMCRAFTITEM || SelectItem == EVENTBOX || SelectItem == FARMBOX ||
-						SelectItem == RESETINGUPGRADE || SelectItem == RESETINGSKILL || SelectItem == VIPPACKAGE || SelectItem == BOSSBOX || SelectItem == BOSSBOX2)
+						SelectItem == RESETINGUPGRADE || SelectItem == RESETINGSKILL || SelectItem == VIPPACKAGE || SelectItem == BOSSBOX || SelectItem == BOSSBOX2 || SelectItem == BOSSBOX3)
 						Get = 1;
 
 					Server()->RemItem(ClientID, SelectItem, Get, USEDUSE);
@@ -2379,6 +2385,11 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 			if(g_Config.m_SvCityStart == 1 && pPlayer->AccData.Level < 250)
 			{
 				SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("You need 250 level"), NULL);
+				return;
+			}
+			if(g_Config.m_SvCityStart == 2 && pPlayer->AccData.Level < 1000)
+			{
+				SendBroadcast_Localization(ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("You need 1000 level"), NULL);
 				return;
 			}
 
@@ -3000,6 +3011,72 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 			}
 			Server()->RemItem(ClientID, COOPERORE, 100, -1);
 			Server()->RemItem(ClientID, IRONORE, 10, -1);
+		} break;
+		case ORIHALCUMBODY:
+		{
+			if(Server()->GetItemCount(ClientID, ORIHALCUM) < 30 || Server()->GetItemCount(ClientID, KINGSOUL) < 10 || !Server()->GetItemCount(ClientID, DRAGONBODY))
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Orihalcum orex30, King Soulx10, Dragon Body", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, ORIHALCUM, 30, -1);
+			Server()->RemItem(ClientID, KINGSOUL, 10, -1);
+			Server()->RemItem(ClientID, DRAGONBODY, 1, -1);
+		} break;
+		case ORIHALCUMFEET:
+		{
+			if(Server()->GetItemCount(ClientID, ORIHALCUM) < 20 || Server()->GetItemCount(ClientID, KINGSOUL) < 5 || !Server()->GetItemCount(ClientID, DRAGONFEET))
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Orihalcum orex20, King Soulx5, Dragon Feet", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, ORIHALCUM, 20, -1);
+			Server()->RemItem(ClientID, KINGSOUL, 5, -1);
+			Server()->RemItem(ClientID, DRAGONFEET, 1, -1);
+		} break;
+		case PALLADIUMCHEST:
+		{
+			if(Server()->GetItemCount(ClientID, PALLADIN) < 30 || Server()->GetItemCount(ClientID, KINGSOUL) < 10 || !Server()->GetItemCount(ClientID, ORIHALCUMBODY))
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Palladium orex30, King Soulx10, Orihalcum Chestplate", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, PALLADIN, 30, -1);
+			Server()->RemItem(ClientID, KINGSOUL, 10, -1);
+			Server()->RemItem(ClientID, ORIHALCUMBODY, 1, -1);
+		} break;
+		case PALLADIUMBOOTS:
+		{
+			if(Server()->GetItemCount(ClientID, PALLADIN) < 20 || Server()->GetItemCount(ClientID, KINGSOUL) < 5 || !Server()->GetItemCount(ClientID, ORIHALCUMFEET))
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Palladium orex20, King Soulx5, Orihalcum Boots", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, PALLADIN, 20, -1);
+			Server()->RemItem(ClientID, KINGSOUL, 5, -1);
+			Server()->RemItem(ClientID, ORIHALCUMFEET, 1, -1);
+		} break;
+		case IMMORTALCHEST:
+		{
+			if(Server()->GetItemCount(ClientID, IMMORTALINGOT) < 30 || Server()->GetItemCount(ClientID, KINGSOUL) < 10 || !Server()->GetItemCount(ClientID, PALLADIUMCHEST))
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Immortal ingotx30, King Soulx10, Palladium Chestplate", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, IMMORTALINGOT, 30, -1);
+			Server()->RemItem(ClientID, KINGSOUL, 10, -1);
+			Server()->RemItem(ClientID, PALLADIUMCHEST, 1, -1);
+		} break;
+		case IMMORTALBOOTS:
+		{
+			if(Server()->GetItemCount(ClientID, IMMORTALINGOT) < 20 || Server()->GetItemCount(ClientID, KINGSOUL) < 5 || !Server()->GetItemCount(ClientID, PALLADIUMBOOTS))
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Immortal ingotx20, King Soulx5, Palladium Boots", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, IMMORTALINGOT, 20, -1);
+			Server()->RemItem(ClientID, KINGSOUL, 5, -1);
+			Server()->RemItem(ClientID, PALLADIUMBOOTS, 1, -1);
 		} break;
 	}
 	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} crafted item {str:item}x{int:coun}"), "name", Server()->ClientName(ClientID), "item", Server()->GetItemName(ClientID, ItemID, false), "coun", &Count ,NULL);
@@ -3941,6 +4018,12 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 				AddNewCraftVote(ClientID, "Dragon Orex500, Woodx150", DRAGONBODY);
 				AddNewCraftVote(ClientID, "Dragon Orex400, Woodx120", DRAGONFEET);
 				AddNewCraftVote(ClientID, "Cooper Orex100, Iron Orex10", STCLASIC);
+				AddNewCraftVote(ClientID, "Orihalcum orex30, King Soulx10 Dragon Body", ORIHALCUMBODY);
+				AddNewCraftVote(ClientID, "Orihalcum orex20, King Soulx5 Dragon Feet", ORIHALCUMFEET);
+				AddNewCraftVote(ClientID, "Palladium orex30, King Soulx10, Orihalcum Chestplate", PALLADIUMCHEST);
+				AddNewCraftVote(ClientID, "Palladium orex20, King Soulx5, Orihalcum Boots", PALLADIUMBOOTS);
+				AddNewCraftVote(ClientID, "Immortal Ingotx30, King Soulx10, Palladium Chestplate", IMMORTALCHEST);
+				AddNewCraftVote(ClientID, "Immortal Ingotx20, King Soulx5, Palladium Boots", IMMORTALBOOTS);
 			}
 		}
 		else AddVote_Localization(ClientID, "null", "You are not in the Craft Room");
@@ -4336,6 +4419,15 @@ void CGameContext::OnInit(/*class IKernel *pKernel*/)
 		for (int o=0; o<12; o++,CurID++)
 			CreateBot(CurID, BOT_L3MONSTER, g_Config.m_SvCityStart);
 	}
+	else if(g_Config.m_SvCityStart == 2)
+	{
+		for (int o=0; o<11; o++,CurID++)
+			CreateBot(CurID, BOT_L1MONSTER, g_Config.m_SvCityStart);
+		for (int o=0; o<11; o++,CurID++)
+			CreateBot(CurID, BOT_L2MONSTER, g_Config.m_SvCityStart);
+		for (int o=0; o<12; o++,CurID++)
+			CreateBot(CurID, BOT_L3MONSTER, g_Config.m_SvCityStart);
+	}
 	for (int o=0; o<1; o++,CurID++)
 		CreateBot(CurID, BOT_NPC, g_Config.m_SvCityStart);
 	for (int o=0; o<3; o++, CurID++)
@@ -4496,16 +4588,19 @@ void CGameContext::UpdateBotInfo(int ClientID)
 	{
 		if(!BotSubType)	str_copy(NameSkin, "pinky", sizeof(NameSkin));
 		else if(BotSubType == 1)	str_copy(NameSkin, "twintri", sizeof(NameSkin));
+		else if(BotSubType == 2)	str_copy(NameSkin, "coala", sizeof(NameSkin));
 	}
 	else if(BotType == BOT_L2MONSTER)
 	{
 		if(!BotSubType)	str_copy(NameSkin, "cammostripes", sizeof(NameSkin));
 		else if(BotSubType == 1)	str_copy(NameSkin, "cammostripes", sizeof(NameSkin));
+		else if(BotSubType == 2)	str_copy(NameSkin, "redbopp", sizeof(NameSkin));
 	}
 	else if(BotType == BOT_L3MONSTER)
 	{
 		if(!BotSubType) str_copy(NameSkin, "twintri", sizeof(NameSkin));
 		else if(BotSubType == 1) str_copy(NameSkin, "coala", sizeof(NameSkin));
+		else if(BotSubType == 2) str_copy(NameSkin, "dragon", sizeof(NameSkin));
 	}
 	else if(BotType == BOT_NPC)
 	{
@@ -4516,6 +4611,7 @@ void CGameContext::UpdateBotInfo(int ClientID)
 	{
 		if(!BotSubType)	str_copy(NameSkin, "twinbop", sizeof(NameSkin));
 		else if(BotSubType == 1) str_copy(NameSkin, "cammostripes", sizeof(NameSkin));
+		else if(BotSubType == 2) str_copy(NameSkin, "PaladiN", sizeof(NameSkin));
 	}
 	else if(BotType == BOT_FARMER)
 	{
@@ -4728,7 +4824,7 @@ pPlayer->AccData.Exp += PackOne;
 				UpdateStats(ClientID);
 				break;
 			}
-			else if(ItemID == RANDOMCRAFTITEM || ItemID == EVENTBOX || ItemID == FARMBOX || ItemID == BOSSBOX || ItemID == BOSSBOX2)
+			else if(ItemID == RANDOMCRAFTITEM || ItemID == EVENTBOX || ItemID == FARMBOX || ItemID == BOSSBOX || ItemID == BOSSBOX2 || ItemID == BOSSBOX3)
 			{
 				Count = 1;
 				m_apPlayers[ClientID]->m_OpenBox = 210;
@@ -4895,6 +4991,8 @@ const char *CGameContext::GetBossName(int BossType)
 			return "Slime";
 		else if(g_Config.m_SvCityStart == 1)
 			return "Vampire";
+			else if(g_Config.m_SvCityStart == 2)
+			return "Dark-King";
 		else
 			return "(unknow)";
 	}

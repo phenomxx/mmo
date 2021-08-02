@@ -215,7 +215,7 @@ if(m_OpenBox && m_OpenBoxType == BOSSBOX2)
 		{
 			int Get = 1;
 			int RandGet = rand()%160;
-			if(RandGet >= 0 && RandGet <= 156)
+			if(RandGet >= 0 && RandGet <= 150)
 			{
 				int RandItem = rand()%3;
 				switch(RandItem)
@@ -243,6 +243,44 @@ if(m_OpenBox && m_OpenBoxType == BOSSBOX2)
 				Server()->GiveItem(m_ClientID, getitem, Get);
 				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x1 and get {str:get} x{int:num2}"),
 					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, BOSSBOX2, false), "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
+		
+		}
+	}
+	if(m_OpenBox && m_OpenBoxType == BOSSBOX3)
+	{
+		int getitem = 0;
+		if(m_OpenBox % 30 == 0)
+		{
+			int Get = 1;
+			int RandGet = rand()%160;
+			if(RandGet >= 0 && RandGet <= 150)
+			{
+				int RandItem = rand()%3;
+				switch(RandItem)
+				{
+					default : getitem = MONEYBAG, Get = 75; break;
+					case 1: getitem = FARMBOX, Get = 5; break;
+					case 2: getitem = RANDOMCRAFTITEM, Get = 1; break;
+				}
+			}
+			else
+			{
+				int RandItem = rand()%2;
+				switch(RandItem)
+				{
+					default: getitem = KINGSOUL, Get=2; break;
+					case 1: getitem = PRESSEDPIECE , Get = 15; break;	
+				}
+			}
+			m_OpenBox = 0;
+				m_OpenBoxType = 0;
+
+				if(m_pCharacter)
+					GameServer()->CreateDeath(m_pCharacter->m_Pos, m_ClientID);
+
+				Server()->GiveItem(m_ClientID, getitem, Get);
+				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x1 and get {str:get} x{int:num2}"),
+					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, BOSSBOX3, false), "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
 		
 		}
 	}
@@ -616,21 +654,21 @@ int CPlayer::GetNeedForUp()
 	
 	if(AccData.Level > 200) exp=1000;
 	
-	if(AccData.Level > 300) exp=3000;
+	if(AccData.Level > 300) exp=2000;
 	
-	if(AccData.Level > 400) exp=8000;
+	if(AccData.Level > 400) exp=4000;
 	
-	if(AccData.Level > 500) exp=10000;
+	if(AccData.Level > 500) exp=7000;
 	
-	if(AccData.Level > 600) exp=14000;
+	if(AccData.Level > 600) exp=10000;
 	
-	if(AccData.Level > 700) exp=18000;
+	if(AccData.Level > 700) exp=15000;
 	
-	if(AccData.Level > 1000) exp=30000;
+	if(AccData.Level > 1000) exp=20000;
 	
-	if(AccData.Level > 1100) exp=40000;
+	if(AccData.Level > 1100) exp=30000;
 	
-	if(AccData.Level > 1200) exp=50000;
+	if(AccData.Level > 1200) exp=40000;
 	
 	return exp;
 
@@ -1000,8 +1038,14 @@ void CPlayer::TryRespawn()
 		if(m_BotType == BOT_L1MONSTER)
 		{
 			m_pCharacter = new(m_ClientID) CMonster(&GameServer()->m_World);
+			if(g_Config.m_SvCityStart == 2)
+			{
+				AccData.Level = m_BigBot ? 1299+rand()%3 : 1199;
+				AccUpgrade.Health = 100+(AccData.Level*5);
+				AccUpgrade.Damage = AccData.Level+300;
+			}
 
-			if(g_Config.m_SvCityStart == 1)
+			else if(g_Config.m_SvCityStart == 1)
 			{
 				AccData.Level = m_BigBot ? 280+rand()%3 : 250;
 				AccUpgrade.Health = 300+(AccData.Level*7);
@@ -1022,8 +1066,13 @@ void CPlayer::TryRespawn()
 		else if(m_BotType == BOT_L2MONSTER)
 		{
 			m_pCharacter = new(m_ClientID) CKwah(&GameServer()->m_World);
-
-			if(g_Config.m_SvCityStart == 1)
+			if(g_Config.m_SvCityStart == 2)
+			{
+				AccData.Level = m_BigBot ? 1677+rand()%3 : 1560+rand()%3;
+				AccUpgrade.Health = 100+(AccData.Level*5);
+				AccUpgrade.Damage = AccData.Level+200;
+			}
+			else if(g_Config.m_SvCityStart == 1)
 			{
 				AccData.Level = m_BigBot ? 370+rand()%3 : 350+rand()%3;
 				AccUpgrade.Health = 300+(AccData.Level*4);
@@ -1040,7 +1089,13 @@ void CPlayer::TryRespawn()
 		{
 			m_pCharacter = new(m_ClientID) CBoomer(&GameServer()->m_World);
 
-			if(g_Config.m_SvCityStart == 1)
+			if(g_Config.m_SvCityStart == 2)
+			{
+				AccData.Level = m_BigBot ? 2050+rand()%3 : 1915+rand()%15;
+				AccUpgrade.Health = 100+(int)(AccData.Level*5);
+				AccUpgrade.Damage = (int)(AccData.Level+250);
+			}
+			else if(g_Config.m_SvCityStart == 1)
 			{
 				AccData.Level = m_BigBot ? 510+rand()%3 : 490+rand()%15;
 				AccUpgrade.Health = 300+(int)(AccData.Level*5);
@@ -1066,13 +1121,17 @@ void CPlayer::TryRespawn()
 			{
 				AccUpgrade.Damage = 180;
 				AccUpgrade.Health = (int)(AccData.Level);}
+				if(g_Config.m_SvCityStart == 2)
+			{
+				AccUpgrade.Damage = 500;
+				AccUpgrade.Health = (int)(AccData.Level*3);}
 		}
 		else if(m_BotType == BOT_NPC)
 		{
 			m_pCharacter = new(m_ClientID) CNpcSold(&GameServer()->m_World);
 			AccData.Level = 500+rand()%10;
-			AccUpgrade.Damage = (int)(AccData.Level*5);
-			AccUpgrade.Health = (int)(AccData.Level*50);
+			AccUpgrade.Damage = (int)(AccData.Level*10);
+			AccUpgrade.Health = (int)(AccData.Level*500);
 			m_BigBot = true;
 		}
 		else if(m_BotType == BOT_NPCW)

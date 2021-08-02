@@ -889,7 +889,7 @@ void CCharacter::Tick()
 		{
 			if(!g_Config.m_SvCityStart) m_Health = 10+GameServer()->GetBossLeveling()*500;
 			else if(g_Config.m_SvCityStart == 1) m_Health = 10+GameServer()->GetBossLeveling()*1000;
-
+			else if(g_Config.m_SvCityStart == 2) m_Health = 10+GameServer()->GetBossLeveling()*2000;
 			m_pPlayer->m_HealthStart = m_Health;
 		}
 
@@ -1959,6 +1959,11 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 					CreateDropRandom(ZOMBIEEYE, 1, 40, From, Force/(50+randforce));
 					CreateDropRandom(PRESSEDPIECE, 1, 80, From, Force/(50+randforce));
 				}
+				else if(g_Config.m_SvCityStart == 2)
+				{
+					CreateDropRandom(ORIHALCUM, 1, 300, From, Force/(50+randforce));
+					CreateDropRandom(PRESSEDPIECE, 1, 80, From, Force/(50+randforce));
+				}
 			}
 
 			if(pFrom && m_pPlayer->GetBotType() == BOT_L2MONSTER)
@@ -1975,6 +1980,11 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 					CreateDropRandom(SKELETSKULL, 1, 45, From, Force/(50+randforce));
 					CreateDropRandom(PRESSEDPIECE, 1, 80, From, Force/(50+randforce));
 				}
+				else if(g_Config.m_SvCityStart == 2)
+				{
+					CreateDropRandom(PALLADIN, 1, 400, From, Force/(50+randforce));
+					CreateDropRandom(PRESSEDPIECE, 1, 80, From, Force/(50+randforce));
+				}
 			}
 			if(pFrom && m_pPlayer->GetBotType() == BOT_L3MONSTER)
 			{
@@ -1988,6 +1998,11 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 					CreateDropRandom(NIMFHEART, 1, 40, From, Force/(50+randforce));
 					CreateDropRandom(NIMFEARS, 1, 40, From, Force/(50+randforce));
 					CreateDropRandom(NIMFBODY, 1, 40, From, Force/(50+randforce));
+					CreateDropRandom(PRESSEDPIECE, 1, 80, From, Force/(50+randforce));
+				}
+				else if(g_Config.m_SvCityStart == 2)
+				{
+					CreateDropRandom(IMMORTALINGOT, 1, 500, From, Force/(50+randforce));
 					CreateDropRandom(PRESSEDPIECE, 1, 80, From, Force/(50+randforce));
 				}
 			}
@@ -2025,6 +2040,15 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 							CreateDropRandom(BOOKMONEYMIN, 1, 80, i, Force/(45+randforce));
 							CreateDropRandom(CLANBOXEXP, 1, 50, i, Force/(45+randforce));
 							CreateDropRandom(BOSSBOX2, 1, false, i, Force/(45+randforce));
+						}
+						else if(g_Config.m_SvCityStart == 2)
+						{
+							CreateDropRandom(MONEYBAG, 150+rand()%20+1, false, i, Force/(50+randforce));
+							CreateDropRandom(BOOKEXPMIN, 2, 15, i, Force/(45+randforce));
+							CreateDropRandom(BOOKMONEYMIN, 2, 80, i, Force/(45+randforce));
+							CreateDropRandom(CLANBOXEXP, 10, 50, i, Force/(45+randforce));
+							CreateDropRandom(BOSSBOX3, 1, false, i, Force/(45+randforce));
+							CreateDropRandom(KINGSOUL, 1, 4, i, Force/(45+randforce));
 						}
 					}
 				}
@@ -2334,10 +2358,16 @@ void CCharacter::ClassSpawnAttributes()
 		m_Health += 1000;
 		m_Armor += 500;
 	}
+	if(Server()->GetItemSettings(m_pPlayer->GetCID(), ORIHALCUMFEET) && Server()->GetItemSettings(m_pPlayer->GetCID(), ORIHALCUMBODY))
+		m_pPlayer->AccUpgrade.Damage+=30;
+	if(Server()->GetItemSettings(m_pPlayer->GetCID(), PALLADIUMBOOTS) && Server()->GetItemSettings(m_pPlayer->GetCID(), PALLADIUMCHEST))
+		m_pPlayer->AccUpgrade.Damage+=60;
+	if(Server()->GetItemSettings(m_pPlayer->GetCID(), IMMORTALCHEST) && Server()->GetItemSettings(m_pPlayer->GetCID(), IMMORTALBOOTS))
+		m_pPlayer->AccUpgrade.Damage+=150;
 
 	// антипвп мелких уровней
 	m_pPlayer->m_AntiPvpSmall = false;
-	if(m_pPlayer->AccData.Level < 70)
+	if(m_pPlayer->AccData.Level < 50)
 	{
 		m_pPlayer->m_AntiPvpSmall = true;
 

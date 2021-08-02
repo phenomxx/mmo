@@ -123,7 +123,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 	{
 		LastChat();
 		if(g_Config.m_SvCityStart > 0)
-			return 	GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("You need registered area 1-100."), NULL);
+			return 	GameServer()->SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("You need registered area 1-250."), NULL);
 
 		char Username[256], Password[256];
 		if(sscanf(Msg->m_pMessage, "/register %s %s", Username, Password) != 2)

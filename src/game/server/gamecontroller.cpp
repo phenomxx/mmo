@@ -135,25 +135,50 @@ void IGameController::PostReset()
 void IGameController::OnPlayerInfoChange(class CPlayer *pP)
 {
 	const int aTeamColors[2] = {65387, 10223467};
-	
+
+	if(g_Config.m_SvCityStart == 1){
 	if(pP->GetBotType() == BOT_L1MONSTER && pP->GetBotSubType() == 1)
 	{
 		pP->m_TeeInfos.m_UseCustomColor = 1;
 		pP->m_TeeInfos.m_ColorBody = 65387;
 		pP->m_TeeInfos.m_ColorFeet = 65387;		
 	} 
-	if(pP->GetBotType() == BOT_L2MONSTER && pP->GetBotSubType() == 1)
+	
+	if(pP->GetBotType() == BOT_L2MONSTER && pP->GetBotSubType() == 1 )
 	{
 		pP->m_TeeInfos.m_UseCustomColor = 1;
 		pP->m_TeeInfos.m_ColorBody = 100;
 		pP->m_TeeInfos.m_ColorFeet = 100;		
 	} 
-	if(pP->GetBotType() == BOT_L3MONSTER && pP->GetBotSubType() == 1)
+	
+	if(pP->GetBotType() == BOT_L3MONSTER && pP->GetBotSubType() == 1 )
 	{
 		pP->m_TeeInfos.m_UseCustomColor = 1;
 		pP->m_TeeInfos.m_ColorBody = 15387000;
 		pP->m_TeeInfos.m_ColorFeet = 15387000;		
 	} 
+	
+	}
+	if(g_Config.m_SvCityStart == 2){
+		if(pP->GetBotType() == BOT_L1MONSTER && pP->GetBotSubType() == 2)
+	{
+		pP->m_TeeInfos.m_UseCustomColor = 1;
+		pP->m_TeeInfos.m_ColorBody = 14483456;
+		pP->m_TeeInfos.m_ColorFeet = 14483456;		
+	} 
+		if(pP->GetBotType() == BOT_L2MONSTER && pP->GetBotSubType() == 2 )
+	{
+		pP->m_TeeInfos.m_UseCustomColor = 1;
+		pP->m_TeeInfos.m_ColorBody = 6179584;
+		pP->m_TeeInfos.m_ColorFeet = 14483456;		
+	} 
+	if(pP->GetBotType() == BOT_L3MONSTER && pP->GetBotSubType() == 2)
+	{
+		pP->m_TeeInfos.m_UseCustomColor = 1;
+		pP->m_TeeInfos.m_ColorBody = 16752128;
+		pP->m_TeeInfos.m_ColorFeet = 15387000;		
+	} 
+	}
 		
 	// Тело броня
 	
@@ -214,12 +239,42 @@ void IGameController::OnPlayerInfoChange(class CPlayer *pP)
 		}
 		pP->m_TeeInfos.m_ColorBody = 15204096;
 	}
-	else 
+	else if(Server()->GetItemSettings(pP->GetCID(), ORIHALCUMBODY)) 
 	{
 		if(pP->GetCharacter())
+		{
+			pP->GetCharacter()->DeleteAllPickup();
+			pP->GetCharacter()->CreatePickupDraw(6, 0, 3, true);
+			pP->GetCharacter()->CreatePickupDraw(6, 1, 3, true);
+		}
+		pP->m_TeeInfos.m_ColorBody = 4390656;
+	}
+	else if(Server()->GetItemSettings(pP->GetCID(), PALLADIUMCHEST)) 
+	{
+		if(pP->GetCharacter())
+		{
+			pP->GetCharacter()->DeleteAllPickup();
+			pP->GetCharacter()->CreatePickupDraw(6, 0, 3, true);
+			pP->GetCharacter()->CreatePickupDraw(6, 1, 3, true);
+		}
+		pP->m_TeeInfos.m_ColorBody = 13464320;
+	}
+	else if(Server()->GetItemSettings(pP->GetCID(), IMMORTALCHEST)) 
+	{
+		if(pP->GetCharacter())
+		{
+			pP->GetCharacter()->DeleteAllPickup();
+			pP->GetCharacter()->CreatePickupDraw(6, 0, 3, true);
+			pP->GetCharacter()->CreatePickupDraw(6, 1, 3, true);
+		}
+		pP->m_TeeInfos.m_ColorBody = 16738561;
+	}
+	else 
+	{
+		if(pP->GetCharacter()){
 			pP->GetCharacter()->DeleteAllPickup();
 			
-		pP->m_TeeInfos.m_ColorBody = 1000;
+		pP->m_TeeInfos.m_ColorBody = 1000;}
 	}
 
 	// Ноги броня
@@ -235,6 +290,12 @@ void IGameController::OnPlayerInfoChange(class CPlayer *pP)
 		pP->m_TeeInfos.m_ColorFeet = 9436928;
 	else if(Server()->GetItemSettings(pP->GetCID(), DRAGONFEET)) 
 		pP->m_TeeInfos.m_ColorFeet = 15204096;
+		else if(Server()->GetItemSettings(pP->GetCID(), ORIHALCUMFEET)) 
+		pP->m_TeeInfos.m_ColorFeet = 6029056;
+		else if(Server()->GetItemSettings(pP->GetCID(), PALLADIUMBOOTS)) 
+		pP->m_TeeInfos.m_ColorFeet = 14846208;
+		else if(Server()->GetItemSettings(pP->GetCID(), IMMORTALBOOTS)) 
+		pP->m_TeeInfos.m_ColorFeet = 8704;
 	else 
 		pP->m_TeeInfos.m_ColorFeet = 1000;
 

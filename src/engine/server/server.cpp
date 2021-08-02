@@ -2081,26 +2081,31 @@ void CServer::ResetBotInfo(int ClientID, int BotType, int BotSubType)
 	{
 		if(!BotSubType) str_copy(m_aClients[ClientID].m_aName , "Pig", MAX_NAME_LENGTH);
 		else if(BotSubType == 1) str_copy(m_aClients[ClientID].m_aName , "Zombie", MAX_NAME_LENGTH);
+		else if(BotSubType == 2) str_copy(m_aClients[ClientID].m_aName , "Golem", MAX_NAME_LENGTH);
 	}
 	else if(BotType == BOT_L2MONSTER)
 	{
 		if(!BotSubType) str_copy(m_aClients[ClientID].m_aName , "Kwah", MAX_NAME_LENGTH);
 		else if(BotSubType == 1) str_copy(m_aClients[ClientID].m_aName , "Skelet", MAX_NAME_LENGTH);
+		else if(BotSubType == 2) str_copy(m_aClients[ClientID].m_aName , "Titan", MAX_NAME_LENGTH);
 	}
 	else if(BotType == BOT_L3MONSTER)
 	{
 		if(!BotSubType) str_copy(m_aClients[ClientID].m_aName , "Boom", MAX_NAME_LENGTH);
 		else if(BotSubType == 1) str_copy(m_aClients[ClientID].m_aName , "Nimfie", MAX_NAME_LENGTH);
+		else if(BotSubType == 2) str_copy(m_aClients[ClientID].m_aName , "Dragon", MAX_NAME_LENGTH);
 	}
 	else if(BotType == BOT_NPC)
 	{
 		if(!BotSubType) str_copy(m_aClients[ClientID].m_aName , "Guard", MAX_NAME_LENGTH);
 		else if(BotSubType == 1) str_copy(m_aClients[ClientID].m_aName , "Fighter", MAX_NAME_LENGTH);
+		else if(BotSubType == 2) str_copy(m_aClients[ClientID].m_aName , "Knight", MAX_NAME_LENGTH);
 	}
 	else if(BotType == BOT_BOSSSLIME)
 	{
 		if(!BotSubType) str_copy(m_aClients[ClientID].m_aName , "Slime", MAX_NAME_LENGTH);
 		else if(BotSubType == 1) str_copy(m_aClients[ClientID].m_aName , "Vampir", MAX_NAME_LENGTH);
+		else if(BotSubType == 2) str_copy(m_aClients[ClientID].m_aName , "Dark-King", MAX_NAME_LENGTH);
 	}
 	else if(BotType == BOT_FARMER)
 	{
@@ -2113,16 +2118,19 @@ void CServer::ResetBotInfo(int ClientID, int BotType, int BotSubType)
 		{
 			if(!g_Config.m_SvCityStart)	Name = "NPC:John";
 			else if(g_Config.m_SvCityStart == 1) Name = "NPC:Grem";
+			else if(g_Config.m_SvCityStart == 2) Name = "NPC:Isaac";
 		}
 		else if(BotSubType == 1)
 		{
 			if(!g_Config.m_SvCityStart) Name = "NPC:Lusi";
 			else if(g_Config.m_SvCityStart == 1) Name = "NPC:Afra";
+			else if(g_Config.m_SvCityStart == 2) Name = "NPC:Yuki";
 		}
 		else
 		{
 			if(!g_Config.m_SvCityStart) Name = "NPC:Miki";
 			else if(g_Config.m_SvCityStart == 1) Name = "NPC:Saki";
+			else if(g_Config.m_SvCityStart == 2) Name = "NPC:Yo";
 		}
 		str_copy(m_aClients[ClientID].m_aName , Name, MAX_NAME_LENGTH);
 	}
@@ -2459,6 +2467,12 @@ int CServer::GetBonusEnchant(int ClientID, int ItemID, int Armor)
 			return 300*(m_stInv[ClientID][ItemID].i_enchant+1);
 		else if(ItemID == DRAGONBODY)
 			return 500*(m_stInv[ClientID][ItemID].i_enchant+1);
+			else if(ItemID == ORIHALCUMBODY)
+			return 700*(m_stInv[ClientID][ItemID].i_enchant+1);
+			else if(ItemID == PALLADIUMCHEST)
+			return 1200*(m_stInv[ClientID][ItemID].i_enchant+1);
+			else if(ItemID == IMMORTALCHEST)
+			return 1700*(m_stInv[ClientID][ItemID].i_enchant+1);
 		return 0;
 	}
 	else if(Armor == 16)
@@ -2475,6 +2489,12 @@ int CServer::GetBonusEnchant(int ClientID, int ItemID, int Armor)
 			return 250*(m_stInv[ClientID][ItemID].i_enchant+1);
 		else if(ItemID == DRAGONFEET)
 			return 400*(m_stInv[ClientID][ItemID].i_enchant+1);
+			else if(ItemID == ORIHALCUMFEET)
+			return 600*(m_stInv[ClientID][ItemID].i_enchant+1);
+			else if(ItemID == PALLADIUMBOOTS)
+			return 1000*(m_stInv[ClientID][ItemID].i_enchant+1);
+			else if(ItemID == IMMORTALBOOTS)
+			return 1500*(m_stInv[ClientID][ItemID].i_enchant+1);
 		else return 0;
 	}
 	else if(Armor == 17)

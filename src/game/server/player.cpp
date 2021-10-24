@@ -662,13 +662,13 @@ int CPlayer::GetNeedForUp()
 	
 	if(AccData.Level > 600) exp=10000;
 	
-	if(AccData.Level > 700) exp=15000;
+	if(AccData.Level > 700) exp=12000;
 	
-	if(AccData.Level > 1000) exp=20000;
+	if(AccData.Level > 1000) exp=15000;
 	
-	if(AccData.Level > 1100) exp=30000;
+	if(AccData.Level > 1100) exp=18000;
 	
-	if(AccData.Level > 1200) exp=40000;
+	if(AccData.Level > 1200) exp=23000;
 	
 	return exp;
 
@@ -771,7 +771,7 @@ void CPlayer::ExpAdd(int Size, bool Bonus)
 	if(IsBot())
 		return;
 
-	int GetExp = Size*15, Get = 0;
+	int GetExp = Size*5, Get = 0;
 	int gete=GetExp;
 	if(Bonus && Server()->GetClanID(m_ClientID))
 	{
@@ -1053,8 +1053,8 @@ void CPlayer::TryRespawn()
 			}
 			else
 			{
-				AccData.Level = m_BigBot ? 30+rand()%3 : 20;
-				AccUpgrade.Health = AccData.Level/3;
+				AccData.Level = m_BigBot ? 15+rand()%3 : 10;
+				AccUpgrade.Health = AccData.Level;
 				if(m_BigBot)
 				{
 					Server()->SetMaxAmmo(m_ClientID, INFWEAPON_GUN, 10);

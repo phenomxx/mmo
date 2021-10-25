@@ -3188,7 +3188,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			if(Server()->GetItemCount(ClientID, MATERIAL))
 			{
 				int Count = Server()->GetItemCount(ClientID, MATERIAL);
-				int Gold = Count/5;
+				int Gold = Count/10;
 				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Materials {int:count} : You got {int:money} gold"),
 					"count", &Count, "money", &Gold, NULL);
 
@@ -3718,7 +3718,6 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "▹ Other:");
 		AddVote_Localization(ClientID, "null", "▹ CREATED DISCORD SERVER https://discord.gg/jwDP6anpKP");
 		AddVote_Localization(ClientID, "null", "▹ DELETED VIP ANTI-PVP SYSTEM");
-		AddVote_Localization(ClientID, "null", "▹ CHANGE ANTI-PVP FOR LOWLEVELS FROM 20 to 70 lvl");
 		AddVote_Localization(ClientID, "null", "▹ FIX Pizdomet now its not infinity your mana = your ammo");
 		AddVote("", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "▹ Items:");
@@ -3734,7 +3733,6 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "▹ Jobs:");
 		AddVote_Localization(ClientID, "null", "▹ Loader: Increase max amount of material from 3000 to 6000");
 		AddVote_Localization(ClientID, "null", "▹ Enchant: For enchant your armor you need 1000 material");
-		AddVote_Localization(ClientID, "null", "▹ # ~ WRITE IDEAS TO PHENOMX");
 		//AddVote_Localization(ClientID, "null", "▹ Armor & Enquip");
 		AddBack(ClientID);
 		return;

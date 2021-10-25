@@ -464,15 +464,11 @@ void CPlayer::Tick()
 				if(Server()->Tick() % (1 * Server()->TickSpeed() * 600) == 0)
 				{
 					int Type;
-					switch(rand()%9)
+					switch(rand()%5)
 					{
 						case 1: Type = COOPERPIX; break;
 						case 2: Type = WOOD; break;
-						case 3: Type = DRAGONORE; break;
-						case 4: Type = COOPERORE; break;
-						case 5: Type = IRONORE; break;
-						case 6: Type = GOLDORE; break;
-						case 7: Type = DIAMONDORE; break;
+						case 3: Type = BOOKEXPMIN; break;
 						default: Type = EVENTCUSTOMSOUL;
 					}
 
@@ -647,28 +643,28 @@ void CPlayer::Tick()
 
 int CPlayer::GetNeedForUp()
 {
-	int exp=100;
+	int exp=250;
 
 	if(AccData.Level > 100) 
-	exp=500;
+	exp=600;
 	
 	if(AccData.Level > 200) exp=1000;
 	
 	if(AccData.Level > 300) exp=2000;
 	
-	if(AccData.Level > 400) exp=4000;
+	if(AccData.Level > 400) exp=3000;
 	
-	if(AccData.Level > 500) exp=7000;
+	if(AccData.Level > 500) exp=5000;
 	
-	if(AccData.Level > 600) exp=10000;
+	if(AccData.Level > 600) exp=6000;
 	
-	if(AccData.Level > 700) exp=12000;
+	if(AccData.Level > 700) exp=8000;
 	
-	if(AccData.Level > 1000) exp=15000;
+	if(AccData.Level > 1000) exp=12000;
 	
-	if(AccData.Level > 1100) exp=18000;
+	if(AccData.Level > 1100) exp=13000;
 	
-	if(AccData.Level > 1200) exp=23000;
+	if(AccData.Level > 1200) exp=14000;
 	
 	return exp;
 
@@ -771,7 +767,7 @@ void CPlayer::ExpAdd(int Size, bool Bonus)
 	if(IsBot())
 		return;
 
-	int GetExp = Size*5, Get = 0;
+	int GetExp = Size*3, Get = 0;
 	int gete=GetExp;
 	if(Bonus && Server()->GetClanID(m_ClientID))
 	{
@@ -1080,7 +1076,7 @@ void CPlayer::TryRespawn()
 			}
 			else
 			{
-				AccData.Level = m_BigBot ? 130 : 100+rand()%3;
+				AccData.Level = m_BigBot ? 100 : 85+rand()%3;
 				AccUpgrade.Health = 100+AccData.Level;
 				AccUpgrade.Damage = AccData.Level/2;
 			}
@@ -1104,7 +1100,7 @@ void CPlayer::TryRespawn()
 			else
 			{
 				AccData.Level = m_BigBot ? 170+rand()%3 : 130+rand()%3;
-				AccUpgrade.Health = 100+AccData.Level;
+				AccUpgrade.Health = 160+AccData.Level;
 				AccUpgrade.Damage = AccData.Level;
 			}
 		}
@@ -1115,7 +1111,7 @@ void CPlayer::TryRespawn()
 
 			m_BigBot = true;
 
-			AccUpgrade.Health = (int)(AccData.Level/3);
+			AccUpgrade.Health = (int)(AccData.Level/5);
 			AccUpgrade.Damage = 10;
 			if(g_Config.m_SvCityStart == 1)
 			{

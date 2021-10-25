@@ -44,7 +44,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		return;
 	}
 
-	/*else if(!strncmp(Msg->m_pMessage, "/giveitem", 9) && GameServer()->Server()->IsAuthed(ClientID))
+	else if(!strncmp(Msg->m_pMessage, "/giveitem", 9) && GameServer()->Server()->IsAuthed(ClientID))
 	{
 		LastChat();
 		int id = 0, itemid = 0, citem = 0;
@@ -96,7 +96,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		if (GameServer()->GetPlayerChar(ClientID))
 			GameServer()->CreateSound(m_pPlayer->GetCharacter()->m_Pos, soundid);
 		return;
-	}*/
+	}
 	else if (!strncmp(Msg->m_pMessage, "/trah", 5) && GameServer()->Server()->IsAuthed(ClientID))
 	{
 		LastChat();
@@ -215,6 +215,14 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/invite ?<name>, /createboss, /cmdlist, /lang <lang>");
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/login ?<name> <pass>, /register <name> <pass>");
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/newclan <cname>");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/rules");
+		return;
+	}
+	else if(!strncmp(Msg->m_pMessage, "/rules", 8))
+	{
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "-------------------- Rules -------------------");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "1. Dont touch people in safe zone (drag out from city etc.)");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "2. Dont spawnkill (block out ways from city)");
 		return;
 	}
 

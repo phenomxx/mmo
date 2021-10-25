@@ -560,7 +560,7 @@ void CCharacter::FireWeapon()
 				ShotSpread = 36;
 
 			if(m_pPlayer->GetBotType() == BOT_BOSSSLIME)
-				ShotSpread = 40;
+				ShotSpread = 30;
 
 			float Spreading[20 * 2 + 1];
 			for (int i = 0; i < 20 * 2 + 1; i++)
@@ -1767,9 +1767,10 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 				return true;
 
 			// АнтиПВП вся хуня
-			/*if((Server()->GetItemSettings(m_pPlayer->GetCID(), SANTIPVP) || Server()->GetItemSettings(From, SANTIPVP) ||
-				m_pPlayer->m_AntiPvpSmall) && !m_pPlayer->IsBot() && !pFrom->IsBot() && m_pPlayer->GetCID() != From)
-				return true;*/
+			if(m_pPlayer->m_AntiPvpSmall && !m_pPlayer->IsBot() && !pFrom->IsBot() && m_pPlayer->GetCID() != From)
+				return true;
+				if(pFrom->m_AntiPvpSmall && !pFrom->IsBot() && !m_pPlayer->IsBot() && m_pPlayer->GetCID() != From)
+				return true;
 
 			// Боссецкий
 			if((pFrom->m_InBossed || (m_pPlayer->m_InBossed && m_pPlayer->GetCID() != From)) && !pFrom->IsBot() && !m_pPlayer->IsBot())
@@ -1951,7 +1952,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 					CreateDropRandom(ASUPRRISE, 1, 2000, From, Force/(50+randforce));
 					CreateDropRandom(PIGPORNO, 1, 40, From, Force/(50+randforce));
 					CreateDropRandom(LEATHER, 1, 60, From, Force/(50+randforce));
-					CreateDropRandom(PRESSEDPIECE, 1, 80, From, Force/(50+randforce));
+					CreateDropRandom(PRESSEDPIECE, 1, 60, From, Force/(50+randforce));
 				}
 				else if(g_Config.m_SvCityStart == 1)
 				{
@@ -2367,7 +2368,7 @@ void CCharacter::ClassSpawnAttributes()
 
 	// антипвп мелких уровней
 	m_pPlayer->m_AntiPvpSmall = false;
-	if(m_pPlayer->AccData.Level < 50)
+	if(m_pPlayer->AccData.Level < 25)
 	{
 		m_pPlayer->m_AntiPvpSmall = true;
 

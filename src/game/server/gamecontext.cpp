@@ -3905,13 +3905,13 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			{
 				int Need = QUEST3, Counts = Server()->GetItemCount(ClientID, KWAHGANDON);
 				AddVote_Localization(ClientID, "null", "Kwah [Step 1] - Kill kwah and get head [{int:get}/{int:need}]", "get", &Counts, "need", &Need);
-				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "200000exp/5000 GOLD");
+				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "60000exp/1000 GOLD");
 			}
 			else if(m_apPlayers[ClientID]->AccData.Quest == 4)
 			{
 				int Need = QUEST4, Counts = Server()->GetItemCount(ClientID, KWAHGANDON);
 				AddVote_Localization(ClientID, "null", "Kwah [Step 2] - Kill kwah and get head [{int:get}/{int:need}]", "get", &Counts, "need", &Need);
-				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "400000exp/7000 GOLD");
+				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "250000exp/2000 GOLD");
 			}
 			else if(m_apPlayers[ClientID]->AccData.Quest == 5)
 			{
@@ -3919,7 +3919,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 				int Counts = Server()->GetItemCount(ClientID, PIGPORNO);
 				int Counts2 = Server()->GetItemCount(ClientID, KWAHGANDON);
 				AddVote_Localization(ClientID, "null", "Pigs&Kwah's [Step 1] - Pig meat, Head Kwah [{int:get}/{int:need} & {int:get2}/{int:need2}]", "get", &Counts, "need", &Need, "get2", &Counts2, "need2", &Need);
-				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "Earrings Kwah, 10000 GOLD");
+				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "Earrings Kwah, 3000 GOLD");
 			}
 			else if(m_apPlayers[ClientID]->AccData.Quest == 6)
 			{
@@ -3927,7 +3927,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 				int Counts = Server()->GetItemCount(ClientID, KWAHGANDON);
 				int Counts2 = Server()->GetItemCount(ClientID, FOOTKWAH);
 				AddVote_Localization(ClientID, "null", "Kwah [Step 1] - Head Kwah, Foot Kwah [{int:get}/{int:need} & {int:get2}/{int:need2}]", "get", &Counts, "need", &Need, "get2", &Counts2, "need2", &Need);
-				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "Formula Weapon's, 10000 GOLD");
+				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "Formula Weapon's, 4000 GOLD");
 				AddVote_Localization(ClientID, "null", "+ Title ♥Quests_#");
 			}
 			else

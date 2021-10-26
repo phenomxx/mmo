@@ -1551,8 +1551,8 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 							return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Quest not complected!"), NULL);
 						else
 						{
-							m_apPlayers[ClientID]->AccData.Exp += 200000;;
-							m_apPlayers[ClientID]->MoneyAdd(50000000);
+							m_apPlayers[ClientID]->AccData.Exp += 70000;;
+							m_apPlayers[ClientID]->MoneyAdd(10000000);
 							m_apPlayers[ClientID]->AccData.Quest++;
 							Server()->RemItem(ClientID, 3, QUEST3, -1);
 							UpdateStats(ClientID);
@@ -1566,7 +1566,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						else
 						{
 							m_apPlayers[ClientID]->AccData.Exp += 250000;;
-							m_apPlayers[ClientID]->MoneyAdd(70000000);
+							m_apPlayers[ClientID]->MoneyAdd(20000000);
 							m_apPlayers[ClientID]->AccData.Quest++;
 							Server()->RemItem(ClientID, 3, QUEST4, -1);
 							UpdateStats(ClientID);
@@ -1579,7 +1579,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 							return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Quest not complected!"), NULL);
 						else
 						{
-							m_apPlayers[ClientID]->MoneyAdd(100000000);
+							m_apPlayers[ClientID]->MoneyAdd(30000000);
 							m_apPlayers[ClientID]->AccData.Quest++;
 							Server()->RemItem(ClientID, KWAHGANDON, QUEST5, -1);
 							Server()->RemItem(ClientID, PIGPORNO, QUEST5, -1);
@@ -1593,7 +1593,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 							return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Quest not complected!"), NULL);
 						else
 						{
-							m_apPlayers[ClientID]->MoneyAdd(100000000);
+							m_apPlayers[ClientID]->MoneyAdd(40000000);
 							m_apPlayers[ClientID]->AccData.Quest++;
 							Server()->RemItem(ClientID, KWAHGANDON, QUEST6, -1);
 							Server()->RemItem(ClientID, FOOTKWAH, QUEST6, -1);
@@ -4732,7 +4732,7 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 			}
 			else if(ItemID == TOMATE)
 			{
-				PackOne += 80;
+				PackOne += 60;
 				if(i == Count-1)
 				{
 					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"),
@@ -4743,7 +4743,7 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 			}
 			else if(ItemID == POTATO)
 			{
-				PackOne += 100;
+				PackOne += 80;
 				if(i == Count-1)
 				{
 					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"),

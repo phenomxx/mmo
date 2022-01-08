@@ -3466,6 +3466,24 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		CreateNewShop(ClientID, TITLEQUESTS, 1, 0, 0);
 		CreateNewShop(ClientID, X2MONEYEXPVIP, 1, 0, 0);
 		CreateNewShop(ClientID, TITLEENCHANT, 1, 0, 0);
+		AddVote("", "null", ClientID);
+		if (Server()->GetItemCount(ClientID, PIGKILLER_1)) { AddVote("☑ | Pig Killer I", "null", ClientID); } else { AddVote("☐ | Pig Killer I", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, PIGKILLER_2)) { AddVote("☑ | Pig Killer II", "null", ClientID); } else { AddVote("☐ | Pig Killer II", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, PIGKILLER_3)) { AddVote("☑ | Pig Killer III", "null", ClientID); } else { AddVote("☐ | Pig Killer III", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, PIGKILLER_4)) { AddVote("☑ | Pig Killer IV", "null", ClientID); } else { AddVote("☐ | Pig Killer IV", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, PIGKILLER_5)) { AddVote("☑ | Pig Killer V", "null", ClientID); } else { AddVote("☐ | Pig Killer V", "null", ClientID); };
+		AddVote("", "null", ClientID);
+		if (Server()->GetItemCount(ClientID, KWAHKILLER_1)) { AddVote("☑ | Kwah Killer I", "null", ClientID); } else { AddVote("☐ | Kwah Killer I", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, KWAHKILLER_2)) { AddVote("☑ | Kwah Killer II", "null", ClientID); } else { AddVote("☐ | Kwah Killer II", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, KWAHKILLER_3)) { AddVote("☑ | Kwah Killer III", "null", ClientID); } else { AddVote("☐ | Kwah Killer III", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, KWAHKILLER_4)) { AddVote("☑ | Kwah Killer IV", "null", ClientID); } else { AddVote("☐ | Kwah Killer IV", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, KWAHKILLER_5)) { AddVote("☑ | Kwah Killer V", "null", ClientID); } else { AddVote("☐ | Kwah Killer V", "null", ClientID); };
+		AddVote("", "null", ClientID);
+		if (Server()->GetItemCount(ClientID, BOOMKILLER_1)) { AddVote("☑ | Boom Killer I", "null", ClientID); } else { AddVote("☐ | Boom Killer I", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, BOOMKILLER_2)) { AddVote("☑ | Boom Killer II", "null", ClientID); } else { AddVote("☐ | Boom Killer II", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, BOOMKILLER_3)) { AddVote("☑ | Boom Killer III", "null", ClientID); } else { AddVote("☐ | Boom Killer III", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, BOOMKILLER_4)) { AddVote("☑ | Boom Killer IV", "null", ClientID); } else { AddVote("☐ | Boom Killer IV", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, BOOMKILLER_5)) { AddVote("☑ | Boom Killer V", "null", ClientID); } else { AddVote("☐ | Boom Killer V", "null", ClientID); };
 		AddBack(ClientID);
 		return;
 	}

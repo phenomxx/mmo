@@ -643,12 +643,12 @@ void CPlayer::Tick()
 
 int CPlayer::GetNeedForUp()
 {
-	int exp=300;
+	int exp=400;
 
 	if(AccData.Level > 100) 
-	exp=800;
+	exp=1000;
 	
-	if(AccData.Level > 200) exp=1000;
+	if(AccData.Level > 200) exp=1500;
 	
 	if(AccData.Level > 300) exp=2000;
 	

@@ -2473,6 +2473,14 @@ int CServer::GetBonusEnchant(int ClientID, int ItemID, int Armor)
 			return 1200*(m_stInv[ClientID][ItemID].i_enchant+1);
 			else if(ItemID == IMMORTALCHEST)
 			return 1700*(m_stInv[ClientID][ItemID].i_enchant+1);
+			else if (ItemID == MITHRIL_BODY)
+			return 700 * (m_stInv[ClientID][ItemID].i_enchant + 1);
+		else if (ItemID == ORIHALCIUM_BODY)
+			return 1000 * (m_stInv[ClientID][ItemID].i_enchant + 1);
+		else if (ItemID == TITANIUM_BODY)
+			return 1300 * (m_stInv[ClientID][ItemID].i_enchant + 1);
+		else if (ItemID == ASTRALIUM_BODY)
+			return 1600 * (m_stInv[ClientID][ItemID].i_enchant + 1);
 		return 0;
 	}
 	else if(Armor == 16)
@@ -2489,12 +2497,20 @@ int CServer::GetBonusEnchant(int ClientID, int ItemID, int Armor)
 			return 250*(m_stInv[ClientID][ItemID].i_enchant+1);
 		else if(ItemID == DRAGONFEET)
 			return 400*(m_stInv[ClientID][ItemID].i_enchant+1);
-			else if(ItemID == ORIHALCUMFEET)
+		else if(ItemID == ORIHALCUMFEET)
 			return 600*(m_stInv[ClientID][ItemID].i_enchant+1);
-			else if(ItemID == PALLADIUMBOOTS)
+		else if(ItemID == PALLADIUMBOOTS)
 			return 1000*(m_stInv[ClientID][ItemID].i_enchant+1);
-			else if(ItemID == IMMORTALBOOTS)
+		else if(ItemID == IMMORTALBOOTS)
 			return 1500*(m_stInv[ClientID][ItemID].i_enchant+1);
+		else if (ItemID == MITHRIL_FEET)
+			return 600 * (m_stInv[ClientID][ItemID].i_enchant + 1);
+		else if (ItemID == ORIHALCIUM_FEET)
+			return 900 * (m_stInv[ClientID][ItemID].i_enchant + 1);
+		else if (ItemID == TITANIUM_FEET)
+			return 1200 * (m_stInv[ClientID][ItemID].i_enchant + 1);
+		else if (ItemID == ASTRALIUM_FEET)
+			return 1500 * (m_stInv[ClientID][ItemID].i_enchant + 1);
 		else return 0;
 	}
 	else if(Armor == 17)
@@ -2663,6 +2679,11 @@ public:
 	virtual bool Job(CSqlServer* pSqlServer)
 	{
 		char aBuf[256];
+		CServer::CGameServerCmd* pCmd = new CGameServerCmd_AddLocalizeVote_Language(m_ClientID, "delallmail", _("Delete 20 Mail"));
+		m_pServer->AddGameServerCmd(pCmd);
+
+		pCmd = new CGameServerCmd_AddLocalizeVote_Language(m_ClientID, "null", _(""));
+		m_pServer->AddGameServerCmd(pCmd);
 		try
 		{
 			int iscope = 0;
@@ -2727,6 +2748,7 @@ public:
 	virtual bool Job(CSqlServer* pSqlServer)
 	{
 		char aBuf[256];
+		
 		try
 		{
 			str_format(aBuf, sizeof(aBuf),

@@ -1048,6 +1048,15 @@ void CGameContext::OnTick()
 	{
 		Server()->GetTopClanHouse();
 	}
+	if (Server()->Tick() % (1 * Server()->TickSpeed() * 610) == 0)
+	{
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("### Server Information:"), NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Warning!! New Rules:"), NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Play only one server, if play 1-250 and play 250-500"), NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Account deleted, and if you leader clan reform."), NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("Join our discord server: discord.gg/jwDP6anpKP "), NULL);
+		
+	}
 
 
 	// вывод топ листа раз в 5 минут
@@ -1322,7 +1331,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					return;
 				}
 
-				/*else if(str_comp(aCmd, "rrul") == 0)
+				else if(str_comp(aCmd, "rrul") == 0)
 				{
 					SendChatTarget(ClientID, "------- {Rules} -------");
 					SendChatTarget(ClientID, "Don't use bugs!");
@@ -1333,7 +1342,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					SendChatTarget(ClientID, "Don't buily players!");
 					SendChatTarget(ClientID, "Don't interfere, in game other's players!");
 					return;
-				}*/
+				}
 
 				else if(str_comp(aCmd, "help") == 0)
 				{
@@ -1523,7 +1532,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 							return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Quest not complected!"), NULL);
 						else
 						{
-							m_apPlayers[ClientID]->AccData.Exp += 25000;
+							m_apPlayers[ClientID]->AccData.Exp += 15000;
 							m_apPlayers[ClientID]->MoneyAdd(3000000);
 							m_apPlayers[ClientID]->AccData.Quest++;
 							Server()->RemItem(ClientID, 2, QUEST1, -1);
@@ -1636,11 +1645,11 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					if(m_apPlayers[ClientID]->GetCharacter())
 					{
 						if(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER)
-							m_apPlayers[ClientID]->m_HealthStart += Get*50;
-						else if(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK)
 							m_apPlayers[ClientID]->m_HealthStart += Get*30;
+						else if(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK)
+							m_apPlayers[ClientID]->m_HealthStart += Get*15;
 						else if(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS)
-							m_apPlayers[ClientID]->m_HealthStart += Get*40;
+							m_apPlayers[ClientID]->m_HealthStart += Get*20;
 					}
 
 					UpdateUpgrades(ClientID);
@@ -1650,27 +1659,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 
 				else if(str_comp(aCmd, "udamage") == 0)
 				{
-					int Get = 1;
-					if (pReason[0] && isdigit(pReason[0]))
-						Get = atoi (pReason);
-
-					if(m_apPlayers[ClientID]->AccUpgrade.Upgrade < Get)
-						Get = m_apPlayers[ClientID]->AccUpgrade.Upgrade;
-
-					int GetSize = 0;
-					switch(m_apPlayers[ClientID]->GetClass())
-					{
-						case PLAYERCLASS_ASSASINS: GetSize = AMAXDAMAGE-m_apPlayers[ClientID]->AccUpgrade.Damage; break;
-						case PLAYERCLASS_BERSERK: GetSize = BMAXDAMAGE-m_apPlayers[ClientID]->AccUpgrade.Damage; break;
-						case PLAYERCLASS_HEALER: GetSize = HMAXDAMAGE-m_apPlayers[ClientID]->AccUpgrade.Damage; break;
-					}
-					if(Get > GetSize)
-						Get = GetSize;
-
-					if(Get < 1 || Get > 1000)
-						Get = 1;
-
-					if(m_apPlayers[ClientID]->AccUpgrade.Upgrade <= 0)
+					if(m_apPlayers[ClientID]->AccUpgrade.Upgrade < 3)
 						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("You not upgrade count"), NULL);
 
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Damage >= BMAXDAMAGE) ||
@@ -1678,9 +1667,9 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_ASSASINS && m_apPlayers[ClientID]->AccUpgrade.Damage >= AMAXDAMAGE))
 						return SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Bought this max level"), NULL);
 
-					m_apPlayers[ClientID]->AccUpgrade.Damage += Get;
-					m_apPlayers[ClientID]->AccUpgrade.Upgrade -= Get;
-					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("You upgrade successfully {int:lv} level's"), "lv", &Get, NULL);
+					m_apPlayers[ClientID]->AccUpgrade.Damage++;
+					m_apPlayers[ClientID]->AccUpgrade.Upgrade -= 3;
+					SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("You upgrade successfully"), NULL);
 
 					if((m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_BERSERK && m_apPlayers[ClientID]->AccUpgrade.Damage > BMAXDAMAGE-1)||
 						(m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER && m_apPlayers[ClientID]->AccUpgrade.Damage > HMAXDAMAGE-1)||
@@ -2312,6 +2301,23 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						CreateItem(ClientID, i, 1);
 						return;
 					}
+				}
+
+				// Кнопка забрать всё
+				if (str_comp(aCmd, "delallmail") == 0) {
+					dbg_msg("mail", "deleted");
+
+					for (int i = 0; i < 20; i++)
+					{
+						Server()->RemMail(Server()->GetMailRewardDell(ClientID, i));
+						int ItemID = Server()->GetRewardMail(ClientID, i, 0);
+						int ItemNum = Server()->GetRewardMail(ClientID, i, 1);
+						Server()->SetRewardMail(ClientID, i, -1, -1);
+						if (ItemID != -1 && ItemNum != -1)
+							GiveItem(ClientID, ItemID, ItemNum);
+					}
+
+					ResetVotes(ClientID, MAILMENU);
 				}
 
 				for(int i = 0; i < 64; ++i)
@@ -3012,7 +3018,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 			Server()->RemItem(ClientID, COOPERORE, 100, -1);
 			Server()->RemItem(ClientID, IRONORE, 10, -1);
 		} break;
-		case ORIHALCUMBODY:
+		/*case ORIHALCUMBODY:
 		{
 			if(Server()->GetItemCount(ClientID, ORIHALCUM) < 30 || Server()->GetItemCount(ClientID, KINGSOUL) < 10 || !Server()->GetItemCount(ClientID, DRAGONBODY))
 			{
@@ -3077,6 +3083,98 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 			Server()->RemItem(ClientID, IMMORTALINGOT, 20, -1);
 			Server()->RemItem(ClientID, KINGSOUL, 5, -1);
 			Server()->RemItem(ClientID, PALLADIUMBOOTS, 1, -1);
+		} break;*/
+		case MITHRIL_BODY:
+		{
+			if (Server()->GetItemCount(ClientID, MITHRILORE) < 500 || Server()->GetItemCount(ClientID, WOOD) < 200 || Server()->GetItemCount(ClientID, DRAGONBODY) < 1)
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Mithril Orex500, Woodx200, Dragon Bodyx1", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, MITHRILORE, 500, -1);
+			Server()->RemItem(ClientID, WOOD, 150, -1);
+			Server()->RemItem(ClientID, DRAGONBODY, 1, -1);
+		} break;
+		case MITHRIL_FEET:
+		{
+			if (Server()->GetItemCount(ClientID, MITHRILORE) < 400 || Server()->GetItemCount(ClientID, WOOD) < 150 || Server()->GetItemCount(ClientID, DRAGONFEET) < 1)
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Mithril Orex400, Woodx150, Dragon Feetx1", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, MITHRILORE, 400, -1);
+			Server()->RemItem(ClientID, WOOD, 120, -1);
+			Server()->RemItem(ClientID, DRAGONFEET, 1, -1);
+		} break;
+		case ORIHALCIUM_BODY:
+		{
+			if (Server()->GetItemCount(ClientID, ORIHALCIUMORE) < 500 || Server()->GetItemCount(ClientID, WOOD) < 200 || Server()->GetItemCount(ClientID, MITHRIL_BODY) < 1 || Server()->GetItemCount(ClientID, SLIMESOUL) < 10)
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Mithril Orex500, Woodx200, Slime Soulx10, Mithril Bodyx1", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, ORIHALCIUMORE, 500, -1);
+			Server()->RemItem(ClientID, WOOD, 150, -1);
+			Server()->RemItem(ClientID, MITHRIL_BODY, 1, -1);
+			Server()->RemItem(ClientID, SLIMESOUL, 10, -1);
+		} break;
+		case ORIHALCIUM_FEET:
+		{
+			if (Server()->GetItemCount(ClientID, ORIHALCIUMORE) < 400 || Server()->GetItemCount(ClientID, WOOD) < 150 || Server()->GetItemCount(ClientID, MITHRIL_FEET) < 1 || Server()->GetItemCount(ClientID, SLIMESOUL) < 5)
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Mithril Orex400, Woodx150, Slime Soulx5, Mithril Feetx1", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, ORIHALCIUMORE, 400, -1);
+			Server()->RemItem(ClientID, WOOD, 120, -1);
+			Server()->RemItem(ClientID, MITHRIL_FEET, 1, -1);
+			Server()->RemItem(ClientID, SLIMESOUL, 5, -1);
+		} break;
+		case TITANIUM_BODY:
+		{
+			if (Server()->GetItemCount(ClientID, TITANIUMORE) < 500 || Server()->GetItemCount(ClientID, WOOD) < 200 || Server()->GetItemCount(ClientID, ORIHALCIUM_BODY) < 1)
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Mithril Orex500, Woodx200, Orihalcium Bodyx1", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, TITANIUMORE, 500, -1);
+			Server()->RemItem(ClientID, WOOD, 150, -1);
+			Server()->RemItem(ClientID, ORIHALCIUM_BODY, 1, -1);
+		} break;
+		case TITANIUM_FEET:
+		{
+			if (Server()->GetItemCount(ClientID, TITANIUMORE) < 400 || Server()->GetItemCount(ClientID, WOOD) < 150 || Server()->GetItemCount(ClientID, ORIHALCIUM_FEET) < 1)
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Mithril Orex400, Woodx150, Orihalcium Feetx1", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, TITANIUMORE, 400, -1);
+			Server()->RemItem(ClientID, WOOD, 120, -1);
+			Server()->RemItem(ClientID, ORIHALCIUM_FEET, 1, -1);
+		} break;
+		case ASTRALIUM_BODY:
+		{
+			if (Server()->GetItemCount(ClientID, ASTRALIUMORE) < 500 || Server()->GetItemCount(ClientID, WOOD) < 200 || Server()->GetItemCount(ClientID, TITANIUM_BODY) < 1 || Server()->GetItemCount(ClientID, SLIMESOUL) < 30)
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Mithril Orex500, Woodx200, Slime Soulx30, Titanium Bodyx1", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, ASTRALIUMORE, 500, -1);
+			Server()->RemItem(ClientID, WOOD, 150, -1);
+			Server()->RemItem(ClientID, TITANIUM_BODY, 1, -1);
+			Server()->RemItem(ClientID, SLIMESOUL, 30, -1);
+		} break;
+		case ASTRALIUM_FEET:
+		{
+			if (Server()->GetItemCount(ClientID, ASTRALIUMORE) < 400 || Server()->GetItemCount(ClientID, WOOD) < 150 || Server()->GetItemCount(ClientID, TITANIUM_FEET) < 1 || Server()->GetItemCount(ClientID, SLIMESOUL) < 20)
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Mithril Orex400, Woodx150, Slime Soulx20 Titanium Feetx1", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, ASTRALIUMORE, 400, -1);
+			Server()->RemItem(ClientID, WOOD, 120, -1);
+			Server()->RemItem(ClientID, TITANIUM_FEET, 20, -1);
+			Server()->RemItem(ClientID, SLIMESOUL, 20, -1);
 		} break;
 	}
 	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} crafted item {str:item}x{int:coun}"), "name", Server()->ClientName(ClientID), "item", Server()->GetItemName(ClientID, ItemID, false), "coun", &Count ,NULL);
@@ -3141,6 +3239,10 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 	{
 		AddVote_Localization(ClientID, "null", "☪ Information ( ´ ω ` )?:");
 		AddVote_Localization(ClientID, "help", "How start in game?");
+		AddVote_Localization(ClientID, "null", "- - - - - ");
+		AddVote_Localization(ClientID, "null", "rAzataz modify infClass by Kurosio");
+		AddVote_Localization(ClientID, "null", "Hosted by champloo");
+		AddVote_Localization(ClientID, "null", "All credits in 'Credits' information");
 		return;
 	}
 
@@ -3260,7 +3362,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			AddVote("", "null", ClientID);
 		}
 
-		if(m_apPlayers[ClientID]->GetWork())
+		/*if(m_apPlayers[ClientID]->GetWork())
 		{
 			AddVote("", "null", ClientID);
 			AddVote_Localization(ClientID, "null", "In reason count for sell");
@@ -3269,7 +3371,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			CreateSellWorkItem(ClientID, GOLDORE, 2);
 			CreateSellWorkItem(ClientID, DIAMONDORE, 3);
 			CreateSellWorkItem(ClientID, DRAGONORE, 5);
-		}
+		}*/
 		return;
 	}
 
@@ -3452,10 +3554,10 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "null", "Stats(Upgrade - {int:up} / SkillPoint - {int:sp})", "up", &m_apPlayers[ClientID]->AccUpgrade.Upgrade, "sp", &m_apPlayers[ClientID]->AccUpgrade.SkillPoint);
 		AddVote("············", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "♛ {str:psevdo}", "psevdo", LocalizeText(ClientID, "Upgrades"));
-		AddVote_Localization(ClientID, "uhealth", "☞ [{int:sum}] Health +40({str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Health, "bonus", m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER ? "C+10" : "C+0");
-		AddVote_Localization(ClientID, "udamage", "☞ [{int:sum}] Damage +1({str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Damage, "bonus", "C+0");
+		AddVote_Localization(ClientID, "uhealth", "☞ [{int:sum}] Health ({str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Health, "bonus", m_apPlayers[ClientID]->GetClass() == PLAYERCLASS_HEALER ? "C+10" : "C+0");
+		AddVote_Localization(ClientID, "udamage", "☞ [{int:sum}] Damage +1(UP3 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Damage, "bonus", "C+0");
 		AddVote_Localization(ClientID, "uammoregen", "☞ [{int:sum}] Ammo Regen +1({str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.AmmoRegen, "bonus", "C+0");
-		AddVote_Localization(ClientID, "uammo", "☞ [{int:sum}] Ammo +1(UP5 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Ammo, "bonus", "C+0");
+		//AddVote_Localization(ClientID, "uammo", "☞ [{int:sum}] Ammo +1(UP5 {str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Ammo, "bonus", "C+0");
 		AddVote_Localization(ClientID, "uhpregen", "☞ [{int:sum}] Health Regen +1({str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.HPRegen, "bonus", "C+0");
 		AddVote_Localization(ClientID, "uhandle", "☞ [{int:sum}] Handle +1({str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Speed, "bonus", "C+0");
 		AddVote_Localization(ClientID, "umana", "☞ [{int:sum}] Mana +1({str:bonus})", "sum", &m_apPlayers[ClientID]->AccUpgrade.Mana, "bonus", "C+0");
@@ -3893,7 +3995,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			{
 				int Need = QUEST1, Counts = Server()->GetItemCount(ClientID, PIGPORNO);
 				AddVote_Localization(ClientID, "null", "Pigs [Step 1] - Kill pig and get pig meat [{int:get}/{int:need}]", "get", &Counts, "need", &Need);
-				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "25000exp/300 GOLD");
+				AddVote_Localization(ClientID, "null", "You got {str:got}", "got", "15000exp/300 GOLD");
 			}
 			else if(m_apPlayers[ClientID]->AccData.Quest == 2)
 			{
@@ -4016,12 +4118,14 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 				AddNewCraftVote(ClientID, "Dragon Orex500, Woodx150", DRAGONBODY);
 				AddNewCraftVote(ClientID, "Dragon Orex400, Woodx120", DRAGONFEET);
 				AddNewCraftVote(ClientID, "Cooper Orex100, Iron Orex10", STCLASIC);
-				AddNewCraftVote(ClientID, "Orihalcum orex30, King Soulx10 Dragon Body", ORIHALCUMBODY);
-				AddNewCraftVote(ClientID, "Orihalcum orex20, King Soulx5 Dragon Feet", ORIHALCUMFEET);
-				AddNewCraftVote(ClientID, "Palladium orex30, King Soulx10, Orihalcum Chestplate", PALLADIUMCHEST);
-				AddNewCraftVote(ClientID, "Palladium orex20, King Soulx5, Orihalcum Boots", PALLADIUMBOOTS);
-				AddNewCraftVote(ClientID, "Immortal Ingotx30, King Soulx10, Palladium Chestplate", IMMORTALCHEST);
-				AddNewCraftVote(ClientID, "Immortal Ingotx20, King Soulx5, Palladium Boots", IMMORTALBOOTS);
+				AddNewCraftVote(ClientID, "Mithril Orex500, Woodx200, Dragon Bodyx1", MITHRIL_BODY);
+				AddNewCraftVote(ClientID, "Mithril Orex400, Woodx150, Dragon Feetx1", MITHRIL_FEET);
+				AddNewCraftVote(ClientID, "Orihalcium Orex500, Woodx200, Slime Soulx10, Mithril Bodyx1", ORIHALCIUM_BODY);
+				AddNewCraftVote(ClientID, "Orihalcium Orex400, Woodx150, Slime Soulx5, Mithril Feetx1", ORIHALCIUM_FEET);
+				AddNewCraftVote(ClientID, "Titanium Orex500, Woodx200, Orihalcium Bodyx1", TITANIUM_BODY);
+				AddNewCraftVote(ClientID, "Titanium Orex400, Woodx150, Orihalcium Feetx1", TITANIUM_FEET);
+				AddNewCraftVote(ClientID, "Astralium Orex500, Woodx200, Slime Soulx30, Titanium Bodyx1", ASTRALIUM_BODY);
+				AddNewCraftVote(ClientID, "Astralium Orex400, Woodx150, Slime Soulx20, Titanium Feetx1", ASTRALIUM_FEET);
 			}
 		}
 		else AddVote_Localization(ClientID, "null", "You are not in the Craft Room");
@@ -4047,13 +4151,13 @@ void CGameContext::AddBack(int ClientID)
 	AddVote_Localization(ClientID, "back", "- Backpage");
 }
 
-void CGameContext::CreateSellWorkItem(int ClientID, int ItemID, int Price)
+/*void CGameContext::CreateSellWorkItem(int ClientID, int ItemID, int Price)
 {
 	Server()->SetItemPrice(ClientID, ItemID, 1, Price*2);
 	int Count = Server()->GetItemCount(ClientID, ItemID);
 	AddVoteMenu_Localization(ClientID, ItemID, SELLITEMWORK, "Sell {str:name}:{int:count} [{int:price} 1unit]", "name", Server()->GetItemName(ClientID, ItemID), "count", &Count, "price", &Price);
 	return;
-}
+}*/
 
 void CGameContext::CreateNewShop(int ClientID, int ItemID, int Type, int Level, int Price)
 {

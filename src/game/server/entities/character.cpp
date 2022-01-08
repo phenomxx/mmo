@@ -1953,6 +1953,8 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 					CreateDropRandom(PIGPORNO, 1, 40, From, Force/(50+randforce));
 					CreateDropRandom(LEATHER, 1, 60, From, Force/(50+randforce));
 					CreateDropRandom(PRESSEDPIECE, 1, 60, From, Force/(50+randforce));
+
+					Server()->GiveItem(From, PIG_XP, 1);
 				}
 				else if(g_Config.m_SvCityStart == 1)
 				{
@@ -1974,6 +1976,8 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 					CreateDropRandom(KWAHGANDON, 1, 44, From, Force/(50+randforce));
 					CreateDropRandom(FOOTKWAH, 1, 44, From, Force/(40+randforce));
 					CreateDropRandom(PRESSEDPIECE, 1, 80, From, Force/(50+randforce));
+
+					Server()->GiveItem(From, KWAH_XP, 1);
 				}
 				else if(g_Config.m_SvCityStart == 1)
 				{
@@ -1993,6 +1997,8 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 				{
 					CreateDropRandom(HEADBOOMER, 1, 42, From, Force/(50+randforce));
 					CreateDropRandom(PRESSEDPIECE, 1, 80, From, Force/(50+randforce));
+
+					Server()->GiveItem(From, BOOM_XP, 1);
 				}
 				else if(g_Config.m_SvCityStart == 1)
 				{
@@ -2006,6 +2012,131 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 					CreateDropRandom(IMMORTALINGOT, 1, 500, From, Force/(50+randforce));
 					CreateDropRandom(PRESSEDPIECE, 1, 80, From, Force/(50+randforce));
 				}
+			}
+
+			if ((Server()->GetItemCount(From, PIG_XP) >= 100) && (Server()->GetItemCount(From, PIGKILLER_1) < 1)) {
+				Server()->GiveItem(From, PIGKILLER_1, 1);
+				Server()->GiveItem(From, MONEYBAG, 1000);
+
+				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
+				GameServer()->SendChatTarget(From, "Your reward:");
+				GameServer()->SendChatTarget(From, "Moneybag x1000");
+			}
+			if ((Server()->GetItemCount(From, PIG_XP) >= 500) && (Server()->GetItemCount(From, PIGKILLER_2) < 1)) {
+				Server()->GiveItem(From, PIGKILLER_2, 1);
+				Server()->GiveItem(From, MONEYBAG, 3000);
+
+				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
+				GameServer()->SendChatTarget(From, "Your reward:");
+				GameServer()->SendChatTarget(From, "Moneybag x3000");
+			}
+			if ((Server()->GetItemCount(From, PIG_XP) >= 1000) && (Server()->GetItemCount(From, PIGKILLER_3) < 1)) {
+				Server()->GiveItem(From, PIGKILLER_3, 1);
+				Server()->GiveItem(From, MONEYBAG, 5000);
+
+				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
+				GameServer()->SendChatTarget(From, "Your reward:");
+				GameServer()->SendChatTarget(From, "Moneybag x5000");
+			}
+			if ((Server()->GetItemCount(From, PIG_XP) >= 5000) && (Server()->GetItemCount(From, PIGKILLER_4) < 1)) {
+				Server()->GiveItem(From, PIGKILLER_4, 1);
+				Server()->GiveItem(From, MONEYBAG, 7000);
+
+				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
+				GameServer()->SendChatTarget(From, "Your reward:");
+				GameServer()->SendChatTarget(From, "Moneybag x7000");
+			}
+			if ((Server()->GetItemCount(From, PIG_XP) >= 10000) && (Server()->GetItemCount(From, PIGKILLER_5) < 1)) {
+				Server()->GiveItem(From, PIGKILLER_5, 1);
+				Server()->GiveItem(From, MONEYBAG, 11000);
+
+				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
+				GameServer()->SendChatTarget(From, "Your reward:");
+				GameServer()->SendChatTarget(From, "Moneybag x11000");
+			}
+
+			// Kwah
+			if ((Server()->GetItemCount(From, KWAH_XP) >= 100) && (Server()->GetItemCount(From, KWAHKILLER_1) < 1)) {
+				Server()->GiveItem(From, KWAHKILLER_1, 1);
+				Server()->GiveItem(From, MONEYBAG, 1000);
+
+				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
+				GameServer()->SendChatTarget(From, "Your reward:");
+				GameServer()->SendChatTarget(From, "Moneybag x1000");
+			}
+			if ((Server()->GetItemCount(From, KWAH_XP) >= 500) && (Server()->GetItemCount(From, KWAHKILLER_2) < 1)) {
+				Server()->GiveItem(From, KWAHKILLER_2, 1);
+				Server()->GiveItem(From, MONEYBAG, 3000);
+
+				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
+				GameServer()->SendChatTarget(From, "Your reward:");
+				GameServer()->SendChatTarget(From, "Moneybag x3000");
+			}
+			if ((Server()->GetItemCount(From, KWAH_XP) >= 1000) && (Server()->GetItemCount(From, KWAHKILLER_3) < 1)) {
+				Server()->GiveItem(From, KWAHKILLER_3, 1);
+				Server()->GiveItem(From, MONEYBAG, 5000);
+
+				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
+				GameServer()->SendChatTarget(From, "Your reward:");
+				GameServer()->SendChatTarget(From, "Moneybag x5000");
+			}
+			if ((Server()->GetItemCount(From, KWAH_XP) >= 5000) && (Server()->GetItemCount(From, KWAHKILLER_4) < 1)) {
+				Server()->GiveItem(From, KWAHKILLER_4, 1);
+				Server()->GiveItem(From, MONEYBAG, 7000);
+
+				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
+				GameServer()->SendChatTarget(From, "Your reward:");
+				GameServer()->SendChatTarget(From, "Moneybag x7000");
+			}
+			if ((Server()->GetItemCount(From, KWAH_XP) >= 10000) && (Server()->GetItemCount(From, KWAHKILLER_5) < 1)) {
+				Server()->GiveItem(From, KWAHKILLER_5, 1);
+				Server()->GiveItem(From, MONEYBAG, 11000);
+
+				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
+				GameServer()->SendChatTarget(From, "Your reward:");
+				GameServer()->SendChatTarget(From, "Moneybag x11000");
+			}
+
+			// Boom
+			if ((Server()->GetItemCount(From, BOOM_XP) >= 100) && (Server()->GetItemCount(From, BOOMKILLER_1) < 1)) {
+				Server()->GiveItem(From, BOOMKILLER_1, 1);
+				Server()->GiveItem(From, MONEYBAG, 3000);
+
+				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
+				GameServer()->SendChatTarget(From, "Your reward:");
+				GameServer()->SendChatTarget(From, "Moneybag x3000");
+			}
+			if ((Server()->GetItemCount(From, BOOM_XP) >= 500) && (Server()->GetItemCount(From, BOOMKILLER_2) < 1)) {
+				Server()->GiveItem(From, BOOMKILLER_2, 1);
+				Server()->GiveItem(From, MONEYBAG, 5000);
+
+				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
+				GameServer()->SendChatTarget(From, "Your reward:");
+				GameServer()->SendChatTarget(From, "Moneybag x5000");
+			}
+			if ((Server()->GetItemCount(From, BOOM_XP) >= 1000) && (Server()->GetItemCount(From, BOOMKILLER_3) < 1)) {
+				Server()->GiveItem(From, BOOMKILLER_3, 1);
+				Server()->GiveItem(From, MONEYBAG, 7000);
+
+				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
+				GameServer()->SendChatTarget(From, "Your reward:");
+				GameServer()->SendChatTarget(From, "Moneybag x7000");
+			}
+			if ((Server()->GetItemCount(From, BOOM_XP) >= 5000) && (Server()->GetItemCount(From, BOOMKILLER_4) < 1)) {
+				Server()->GiveItem(From, BOOMKILLER_4, 1);
+				Server()->GiveItem(From, MONEYBAG, 11000);
+
+				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
+				GameServer()->SendChatTarget(From, "Your reward:");
+				GameServer()->SendChatTarget(From, "Moneybag x11000");
+			}
+			if ((Server()->GetItemCount(From, BOOM_XP) >= 10000) && (Server()->GetItemCount(From, BOOMKILLER_5) < 1)) {
+				Server()->GiveItem(From, BOOMKILLER_5, 1);
+				Server()->GiveItem(From, MONEYBAG, 16000);
+
+				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
+				GameServer()->SendChatTarget(From, "Your reward:");
+				GameServer()->SendChatTarget(From, "Moneybag x16000");
 			}
 		}
 
@@ -2033,6 +2164,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 							CreateDropRandom(FORMULAWEAPON, 1, 90, i, Force/(40+randforce));
 							CreateDropRandom(RANDOMCRAFTITEM, 1, 15, i, Force/(45+randforce));
 							CreateDropRandom(BOSSBOX, 1, false, i, Force/(45+randforce));
+							CreateDropRandom(SLIMESOUL, 1, 30, i, Force / (45 + randforce));
 						}
 						else if(g_Config.m_SvCityStart == 1)
 						{

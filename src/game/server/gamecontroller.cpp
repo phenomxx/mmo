@@ -269,6 +269,46 @@ void IGameController::OnPlayerInfoChange(class CPlayer *pP)
 		}
 		pP->m_TeeInfos.m_ColorBody = 16738561;
 	}
+	else if (Server()->GetItemSettings(pP->GetCID(), MITHRIL_BODY))
+	{
+		if (pP->GetCharacter())
+		{
+			pP->GetCharacter()->DeleteAllPickup();
+			pP->GetCharacter()->CreatePickupDraw(6, 0, 3, true);
+			pP->GetCharacter()->CreatePickupDraw(6, 1, 3, true);
+		}
+		pP->m_TeeInfos.m_ColorBody = 7466539;
+	}
+	else if (Server()->GetItemSettings(pP->GetCID(), ORIHALCIUM_BODY))
+	{
+		if (pP->GetCharacter())
+		{
+			pP->GetCharacter()->DeleteAllPickup();
+			pP->GetCharacter()->CreatePickupDraw(8, 0, 3, true);
+			pP->GetCharacter()->CreatePickupDraw(8, 1, 3, true);
+		}
+		pP->m_TeeInfos.m_ColorBody = 13299243;
+	}
+	else if (Server()->GetItemSettings(pP->GetCID(), TITANIUM_BODY))
+	{
+		if (pP->GetCharacter())
+		{
+			pP->GetCharacter()->DeleteAllPickup();
+			pP->GetCharacter()->CreatePickupDraw(10, 0, 3, true);
+			pP->GetCharacter()->CreatePickupDraw(10, 1, 3, true);
+		}
+		pP->m_TeeInfos.m_ColorBody = 111;
+	}
+	else if (Server()->GetItemSettings(pP->GetCID(), ASTRALIUM_BODY))
+	{
+		if (pP->GetCharacter())
+		{
+			pP->GetCharacter()->DeleteAllPickup();
+			pP->GetCharacter()->CreatePickupDraw(10, 0, 3, true);
+			pP->GetCharacter()->CreatePickupDraw(10, 1, 3, true);
+		}
+		pP->m_TeeInfos.m_ColorBody = 11075328;
+	}
 	else 
 	{
 		if(pP->GetCharacter()){
@@ -290,12 +330,20 @@ void IGameController::OnPlayerInfoChange(class CPlayer *pP)
 		pP->m_TeeInfos.m_ColorFeet = 9436928;
 	else if(Server()->GetItemSettings(pP->GetCID(), DRAGONFEET)) 
 		pP->m_TeeInfos.m_ColorFeet = 15204096;
-		else if(Server()->GetItemSettings(pP->GetCID(), ORIHALCUMFEET)) 
+	else if(Server()->GetItemSettings(pP->GetCID(), ORIHALCUMFEET)) 
 		pP->m_TeeInfos.m_ColorFeet = 6029056;
-		else if(Server()->GetItemSettings(pP->GetCID(), PALLADIUMBOOTS)) 
+	else if(Server()->GetItemSettings(pP->GetCID(), PALLADIUMBOOTS)) 
 		pP->m_TeeInfos.m_ColorFeet = 14846208;
-		else if(Server()->GetItemSettings(pP->GetCID(), IMMORTALBOOTS)) 
+	else if(Server()->GetItemSettings(pP->GetCID(), IMMORTALBOOTS)) 
 		pP->m_TeeInfos.m_ColorFeet = 8704;
+	else if (Server()->GetItemSettings(pP->GetCID(), MITHRIL_FEET))
+		pP->m_TeeInfos.m_ColorFeet = 7466539;
+	else if (Server()->GetItemSettings(pP->GetCID(), ORIHALCIUM_FEET))
+		pP->m_TeeInfos.m_ColorFeet = 13299243;
+	else if (Server()->GetItemSettings(pP->GetCID(), TITANIUM_FEET))
+		pP->m_TeeInfos.m_ColorFeet = 111;
+	else if (Server()->GetItemSettings(pP->GetCID(), ASTRALIUM_FEET))
+		pP->m_TeeInfos.m_ColorFeet = 11075328;	
 	else 
 		pP->m_TeeInfos.m_ColorFeet = 1000;
 

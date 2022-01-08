@@ -374,7 +374,7 @@ void CPlayer::BasicAuthedTick()
 		AccData.Exp -= AccData.Level*GetNeedForUp();
 		AccData.Level++;
 		AccUpgrade.SkillPoint += 1;
-		AccUpgrade.Upgrade += 2;
+		AccUpgrade.Upgrade += 1;
 
 		int GetBag = Server()->GetItemCount(m_ClientID, AMULETCLEEVER) ? 2 : 1;
 		GameServer()->GiveItem(m_ClientID, MONEYBAG, GetBag);
@@ -1049,8 +1049,8 @@ void CPlayer::TryRespawn()
 			}
 			else
 			{
-				AccData.Level = m_BigBot ? 15+rand()%3 : 10;
-				AccUpgrade.Health = AccData.Level;
+				AccData.Level = m_BigBot ? 10+rand()%3 : 5;
+				AccUpgrade.Health = 1;
 				if(m_BigBot)
 				{
 					Server()->SetMaxAmmo(m_ClientID, INFWEAPON_GUN, 10);
@@ -1077,7 +1077,7 @@ void CPlayer::TryRespawn()
 			else
 			{
 				AccData.Level = m_BigBot ? 100 : 85+rand()%3;
-				AccUpgrade.Health = 100+AccData.Level;
+				AccUpgrade.Health = AccData.Level;
 				AccUpgrade.Damage = AccData.Level/2;
 			}
 		}
@@ -1100,18 +1100,18 @@ void CPlayer::TryRespawn()
 			else
 			{
 				AccData.Level = m_BigBot ? 170+rand()%3 : 130+rand()%3;
-				AccUpgrade.Health = 160+AccData.Level;
+				AccUpgrade.Health = 50+AccData.Level;
 				AccUpgrade.Damage = AccData.Level;
 			}
 		}
 		else if(m_BotType == BOT_BOSSSLIME)
 		{
 			m_pCharacter = new(m_ClientID) CBossSlime(&GameServer()->m_World);
-			AccData.Level = 1000+rand()%3;
+			AccData.Level = 300+rand()%3;
 
 			m_BigBot = true;
 
-			AccUpgrade.Health = (int)(AccData.Level/5);
+			AccUpgrade.Health = (int)(AccData.Level);
 			AccUpgrade.Damage = 10;
 			if(g_Config.m_SvCityStart == 1)
 			{

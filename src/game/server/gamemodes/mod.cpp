@@ -18,7 +18,7 @@
 CGameControllerMOD::CGameControllerMOD(class CGameContext *pGameServer)
 : IGameController(pGameServer)
 {
-	m_pGameType = "MMOTEE-Azataz";
+	m_pGameType = "RPG";
 	m_pHeroFlag = 0;
 }
 
@@ -187,7 +187,7 @@ int CGameControllerMOD::OnCharacterDeath(class CCharacter *pVictim, class CPlaye
 	CPlayer* pVictimPlayer = pVictim->GetPlayer();
 	if(pVictimPlayer && pVictimPlayer != pKiller)
 	{
-		pKiller->ExpAdd(pVictimPlayer->AccData.Level);
+		pKiller->ExpAdd(pVictimPlayer->AccData.Level/2);
 	}
 	
 	if(Weapon == WEAPON_SELF)

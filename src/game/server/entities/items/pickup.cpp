@@ -226,13 +226,17 @@ void CPickup::StartFarm(int ClientID)
 				case 3: GameServer()->GiveItem(ClientID, IRONORE, 1+LevelItem/15); break; 
 				case 4: GameServer()->GiveItem(ClientID, GOLDORE, 1+LevelItem/15); break; 
 				case 5: GameServer()->GiveItem(ClientID, DIAMONDORE, 1+LevelItem/15); break; 
-				case 7: GameServer()->GiveItem(ClientID, DRAGONORE, 1); break; 
+				case 7: GameServer()->GiveItem(ClientID, DRAGONORE, 1); break;
+				case 9: GameServer()->GiveItem(ClientID, MITHRILORE, 1); break;
+				case 11: GameServer()->GiveItem(ClientID, ORIHALCIUMORE, 1); break;
+				case 13: GameServer()->GiveItem(ClientID, TITANIUMORE, 1); break;
+				case 15: GameServer()->GiveItem(ClientID, ASTRALIUMORE, 1); break; 
 				default: GameServer()->GiveItem(ClientID, COOPERORE, 1+LevelItem/15); break;
 			}
 			GameServer()->GiveItem(ClientID, MINEREXP, 1);
 
 			// ОПЫТ ГНИДАМ
-			GameServer()->m_apPlayers[ClientID]->AccData.Exp += 10+LevelItem;
+			//GameServer()->m_apPlayers[ClientID]->AccData.Exp += 10+LevelItem;
 			GameServer()->SendChatTarget_Localization(ClientID, -1, _("[Player] EXP +10+{int:bonus} Level Work"), "bonus", &LevelItem, NULL);
 		}
 	}

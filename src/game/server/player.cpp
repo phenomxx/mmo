@@ -1246,9 +1246,9 @@ void CPlayer::ResetUpgrade(int ClientID)
 {
 	if(Server()->IsClientLogged(m_ClientID))
 	{
-		int Back = AccUpgrade.Speed + AccUpgrade.Health + AccUpgrade.Damage + AccUpgrade.HPRegen +  AccUpgrade.Mana + AccUpgrade.AmmoRegen + (AccUpgrade.Ammo*5 + AccUpgrade.Spray*10);
+		int Back = AccUpgrade.Speed + AccUpgrade.Health + AccUpgrade.HPRegen + AccUpgrade.Mana + AccUpgrade.AmmoRegen + (AccUpgrade.Damage*3 + AccUpgrade.Ammo*5 + AccUpgrade.Spray*10);
 		AccUpgrade.Speed = AccUpgrade.Health = AccUpgrade.Damage = AccUpgrade.HPRegen = AccUpgrade.Mana = 0;
-		AccUpgrade.AmmoRegen =AccUpgrade.Ammo = AccUpgrade.Spray = 0;
+		AccUpgrade.AmmoRegen = AccUpgrade.Ammo = AccUpgrade.Spray = 0;
 
 		AccUpgrade.Upgrade += Back;
 		GameServer()->UpdateUpgrades(ClientID);

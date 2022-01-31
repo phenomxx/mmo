@@ -1504,7 +1504,6 @@ void CCharacter::Tick()
 			}
 		}
 	}
-
 	m_PrevInput = m_Input;
 	return;
 }
@@ -1897,9 +1896,6 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 		if(Server()->GetItemEnquip(m_pPlayer->GetCID(), 17))
 			Dmg += Server()->GetBonusEnchant(m_pPlayer->GetCID(), Server()->GetItemEnquip(m_pPlayer->GetCID(), 17), 17);
 
-		float d = Dmg / 100;
-		Dmg += d * (Server()->GetItemCount(m_pPlayer->GetCID(), UP_BONUS_DMG) * 3);
-
 		if(m_Armor)
 		{
 			if(Dmg <= m_Armor)
@@ -1945,23 +1941,18 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			if(g_Config.m_SvEventSummer)
 				CreateDropRandom(ESUMMER, 1, 45, From, Force/(50+randforce));
 
-			// Хуй кто Игроя получит :D
-			CreateDropRandom(PET_IGOR, 1, 200000, From, Force/(50+randforce));
-
 			if(m_pPlayer->GetBotType() == BOT_L1MONSTER)
 			{
 				if(!g_Config.m_SvCityStart)
 				{
-					CreateDropRandom(AHAPPY, 1, (Server()->GetItemEnquip(From, 18) == PET_PIGGY) ? 1500 : 2000, From, Force/(50+randforce));
-					CreateDropRandom(AEVIL, 1, (Server()->GetItemEnquip(From, 18) == PET_PIGGY) ? 1500 : 2000, From, Force/(50+randforce));
-					CreateDropRandom(APAIN, 1, (Server()->GetItemEnquip(From, 18) == PET_PIGGY) ? 1500 : 2000, From, Force/(50+randforce));
-					CreateDropRandom(ABLINK, 1, (Server()->GetItemEnquip(From, 18) == PET_PIGGY) ? 1500 : 2000, From, Force/(50+randforce));
-					CreateDropRandom(ASUPRRISE, 1, (Server()->GetItemEnquip(From, 18) == PET_PIGGY) ? 1500 : 2000, From, Force/(50+randforce));
-					CreateDropRandom(PIGPORNO, 1, (Server()->GetItemEnquip(From, 18) == PET_PIGGY) ? 30 : 40, From, Force/(50+randforce));
-					CreateDropRandom(LEATHER, 1, (Server()->GetItemEnquip(From, 18) == PET_PIGGY) ? 45 : 60, From, Force/(50+randforce));
-					CreateDropRandom(PRESSEDPIECE, 1, (Server()->GetItemEnquip(From, 18) == PET_PIGGY) ? 45 : 60, From, Force/(50+randforce));
-
-					CreateDropRandom(PET_PIGGY, 1, 5000, From, Force / (50 + randforce));
+					CreateDropRandom(AHAPPY, 1, 2000, From, Force/(50+randforce));
+					CreateDropRandom(AEVIL, 1, 2000, From, Force/(50+randforce));
+					CreateDropRandom(APAIN, 1, 2000, From, Force/(50+randforce));
+					CreateDropRandom(ABLINK, 1, 2000, From, Force/(50+randforce));
+					CreateDropRandom(ASUPRRISE, 1, 2000, From, Force/(50+randforce));
+					CreateDropRandom(PIGPORNO, 1, 40, From, Force/(50+randforce));
+					CreateDropRandom(LEATHER, 1, 60, From, Force/(50+randforce));
+					CreateDropRandom(PRESSEDPIECE, 1, 60, From, Force/(50+randforce));
 
 					Server()->GiveItem(From, PIG_XP, 1);
 				}
@@ -1982,11 +1973,9 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			{
 				if(!g_Config.m_SvCityStart)
 				{
-					CreateDropRandom(KWAHGANDON, 1, (Server()->GetItemEnquip(From, 18) == PET_FROG) ? 37 : 44, From, Force/(50+randforce));
-					CreateDropRandom(FOOTKWAH, 1, (Server()->GetItemEnquip(From, 18) == PET_FROG) ? 37 : 44, From, Force/(40+randforce));
-					CreateDropRandom(PRESSEDPIECE, 1, (Server()->GetItemEnquip(From, 18) == PET_FROG) ? 65 : 80, From, Force/(50+randforce));
-
-					CreateDropRandom(PET_FROG, 1, 5000, From, Force / (50 + randforce));
+					CreateDropRandom(KWAHGANDON, 1, 44, From, Force/(50+randforce));
+					CreateDropRandom(FOOTKWAH, 1, 44, From, Force/(40+randforce));
+					CreateDropRandom(PRESSEDPIECE, 1, 80, From, Force/(50+randforce));
 
 					Server()->GiveItem(From, KWAH_XP, 1);
 				}
@@ -2006,10 +1995,8 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			{
 				if(!g_Config.m_SvCityStart)
 				{
-					CreateDropRandom(HEADBOOMER, 1, (Server()->GetItemEnquip(From, 18) == PET_BOMB) ? 33 : 42, From, Force/(50+randforce));
-					CreateDropRandom(PRESSEDPIECE, 1, (Server()->GetItemEnquip(From, 18) == PET_BOMB) ? 65 : 80, From, Force/(50+randforce));
-
-					CreateDropRandom(PET_BOMB, 1, 5000, From, Force / (50 + randforce));
+					CreateDropRandom(HEADBOOMER, 1, 42, From, Force/(50+randforce));
+					CreateDropRandom(PRESSEDPIECE, 1, 80, From, Force/(50+randforce));
 
 					Server()->GiveItem(From, BOOM_XP, 1);
 				}
@@ -2030,7 +2017,6 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			if ((Server()->GetItemCount(From, PIG_XP) >= 100) && (Server()->GetItemCount(From, PIGKILLER_1) < 1)) {
 				Server()->GiveItem(From, PIGKILLER_1, 1);
 				Server()->GiveItem(From, MONEYBAG, 1000);
-				Server()->GiveItem(From, ACHIEVMENT_POINT, 1);
 
 				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
 				GameServer()->SendChatTarget(From, "Your reward:");
@@ -2039,17 +2025,14 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			if ((Server()->GetItemCount(From, PIG_XP) >= 500) && (Server()->GetItemCount(From, PIGKILLER_2) < 1)) {
 				Server()->GiveItem(From, PIGKILLER_2, 1);
 				Server()->GiveItem(From, MONEYBAG, 3000);
-				Server()->GiveItem(From, ACHIEVMENT_POINT, 1);
 
 				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
 				GameServer()->SendChatTarget(From, "Your reward:");
-				GameServer()->SendChatTarget(From, "Moneybag x3000"); 
-				Server()->GiveItem(From, ACHIEVMENT_POINT, 1);
+				GameServer()->SendChatTarget(From, "Moneybag x3000");
 			}
 			if ((Server()->GetItemCount(From, PIG_XP) >= 1000) && (Server()->GetItemCount(From, PIGKILLER_3) < 1)) {
 				Server()->GiveItem(From, PIGKILLER_3, 1);
 				Server()->GiveItem(From, MONEYBAG, 5000);
-				Server()->GiveItem(From, ACHIEVMENT_POINT, 1);
 
 				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
 				GameServer()->SendChatTarget(From, "Your reward:");
@@ -2058,7 +2041,6 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			if ((Server()->GetItemCount(From, PIG_XP) >= 5000) && (Server()->GetItemCount(From, PIGKILLER_4) < 1)) {
 				Server()->GiveItem(From, PIGKILLER_4, 1);
 				Server()->GiveItem(From, MONEYBAG, 7000);
-				Server()->GiveItem(From, ACHIEVMENT_POINT, 1);
 
 				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
 				GameServer()->SendChatTarget(From, "Your reward:");
@@ -2067,7 +2049,6 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			if ((Server()->GetItemCount(From, PIG_XP) >= 10000) && (Server()->GetItemCount(From, PIGKILLER_5) < 1)) {
 				Server()->GiveItem(From, PIGKILLER_5, 1);
 				Server()->GiveItem(From, MONEYBAG, 11000);
-				Server()->GiveItem(From, ACHIEVMENT_POINT, 1);
 
 				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
 				GameServer()->SendChatTarget(From, "Your reward:");
@@ -2078,7 +2059,6 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			if ((Server()->GetItemCount(From, KWAH_XP) >= 100) && (Server()->GetItemCount(From, KWAHKILLER_1) < 1)) {
 				Server()->GiveItem(From, KWAHKILLER_1, 1);
 				Server()->GiveItem(From, MONEYBAG, 1000);
-				Server()->GiveItem(From, ACHIEVMENT_POINT, 1);
 
 				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
 				GameServer()->SendChatTarget(From, "Your reward:");
@@ -2087,7 +2067,6 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			if ((Server()->GetItemCount(From, KWAH_XP) >= 500) && (Server()->GetItemCount(From, KWAHKILLER_2) < 1)) {
 				Server()->GiveItem(From, KWAHKILLER_2, 1);
 				Server()->GiveItem(From, MONEYBAG, 3000);
-				Server()->GiveItem(From, ACHIEVMENT_POINT, 1);
 
 				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
 				GameServer()->SendChatTarget(From, "Your reward:");
@@ -2096,7 +2075,6 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			if ((Server()->GetItemCount(From, KWAH_XP) >= 1000) && (Server()->GetItemCount(From, KWAHKILLER_3) < 1)) {
 				Server()->GiveItem(From, KWAHKILLER_3, 1);
 				Server()->GiveItem(From, MONEYBAG, 5000);
-				Server()->GiveItem(From, ACHIEVMENT_POINT, 1);
 
 				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
 				GameServer()->SendChatTarget(From, "Your reward:");
@@ -2105,7 +2083,6 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			if ((Server()->GetItemCount(From, KWAH_XP) >= 5000) && (Server()->GetItemCount(From, KWAHKILLER_4) < 1)) {
 				Server()->GiveItem(From, KWAHKILLER_4, 1);
 				Server()->GiveItem(From, MONEYBAG, 7000);
-				Server()->GiveItem(From, ACHIEVMENT_POINT, 1);
 
 				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
 				GameServer()->SendChatTarget(From, "Your reward:");
@@ -2114,7 +2091,6 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			if ((Server()->GetItemCount(From, KWAH_XP) >= 10000) && (Server()->GetItemCount(From, KWAHKILLER_5) < 1)) {
 				Server()->GiveItem(From, KWAHKILLER_5, 1);
 				Server()->GiveItem(From, MONEYBAG, 11000);
-				Server()->GiveItem(From, ACHIEVMENT_POINT, 1);
 
 				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
 				GameServer()->SendChatTarget(From, "Your reward:");
@@ -2125,7 +2101,6 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			if ((Server()->GetItemCount(From, BOOM_XP) >= 100) && (Server()->GetItemCount(From, BOOMKILLER_1) < 1)) {
 				Server()->GiveItem(From, BOOMKILLER_1, 1);
 				Server()->GiveItem(From, MONEYBAG, 3000);
-				Server()->GiveItem(From, ACHIEVMENT_POINT, 1);
 
 				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
 				GameServer()->SendChatTarget(From, "Your reward:");
@@ -2134,7 +2109,6 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			if ((Server()->GetItemCount(From, BOOM_XP) >= 500) && (Server()->GetItemCount(From, BOOMKILLER_2) < 1)) {
 				Server()->GiveItem(From, BOOMKILLER_2, 1);
 				Server()->GiveItem(From, MONEYBAG, 5000);
-				Server()->GiveItem(From, ACHIEVMENT_POINT, 1);
 
 				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
 				GameServer()->SendChatTarget(From, "Your reward:");
@@ -2143,7 +2117,6 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			if ((Server()->GetItemCount(From, BOOM_XP) >= 1000) && (Server()->GetItemCount(From, BOOMKILLER_3) < 1)) {
 				Server()->GiveItem(From, BOOMKILLER_3, 1);
 				Server()->GiveItem(From, MONEYBAG, 7000);
-				Server()->GiveItem(From, ACHIEVMENT_POINT, 1);
 
 				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
 				GameServer()->SendChatTarget(From, "Your reward:");
@@ -2152,7 +2125,6 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			if ((Server()->GetItemCount(From, BOOM_XP) >= 5000) && (Server()->GetItemCount(From, BOOMKILLER_4) < 1)) {
 				Server()->GiveItem(From, BOOMKILLER_4, 1);
 				Server()->GiveItem(From, MONEYBAG, 11000);
-				Server()->GiveItem(From, ACHIEVMENT_POINT, 1);
 
 				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
 				GameServer()->SendChatTarget(From, "Your reward:");
@@ -2161,7 +2133,6 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon, int Mode)
 			if ((Server()->GetItemCount(From, BOOM_XP) >= 10000) && (Server()->GetItemCount(From, BOOMKILLER_5) < 1)) {
 				Server()->GiveItem(From, BOOMKILLER_5, 1);
 				Server()->GiveItem(From, MONEYBAG, 16000);
-				Server()->GiveItem(From, ACHIEVMENT_POINT, 1);
 
 				GameServer()->SendChatTarget_Localization(From, 0, "Achievment unlocked!");
 				GameServer()->SendChatTarget(From, "Your reward:");

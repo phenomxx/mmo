@@ -66,8 +66,6 @@ public:
 	int m_ExperienceAdd;
 	int m_OpenBox;
 	int m_OpenBoxType;
-	bool m_OpeningBox;
-	std::string m_GetFromBox;
 	bool m_BigBot;
 	int m_InviteClanID;
 	bool m_ActiveChair;
@@ -185,8 +183,6 @@ public:
 	int GetNeedForUp();
 	int GetNeedForUpClan();
 	int GetNeedForUpgClan(int Type);
-	int GetBonusExp(int ExpCount);
-	int GetBonusMoney(int MoneyCount);
 	int m_MapMenuItem;
 	 
 	CTuningParams m_PrevTuningParams;

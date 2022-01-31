@@ -25,8 +25,6 @@ private:
 	int m_Type;
 	int m_SubType;
 	int m_Drop;
-
-	vec2 m_MoveDirection;
 };
 
 #endif

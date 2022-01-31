@@ -53,9 +53,6 @@ void CDropItem::Tick()
 	if(m_HowID != -1 && !GameServer()->m_apPlayers[m_HowID])
 		m_HowID = -1;	
 	
-	if (m_ItemID == ACHIEVMENT_POINT)
-		GameServer()->m_World.DestroyEntity(this);
-
 	if(m_LifeSpan < 100)
 	{
 		m_Flashing = true;
@@ -133,14 +130,6 @@ void CDropItem::Tick()
 		m_StartTick = Server()->Tick();
 		
 		m_ActualDir = normalize(m_Direction);
-	}
-
-	// Игорь - имба
-	if (m_HowID >= 0) {
-		if (Server()->GetItemSettings(m_HowID, PET_IGOR)) {
-			TakeItem(m_HowID); // Выдаём предмет
-			GameServer()->m_World.DestroyEntity(this); // Ручками уничтожаем к хуям
-		}
 	}
 }
 

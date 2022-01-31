@@ -88,213 +88,251 @@ bool CPlayer::GetWork()
 
 void CPlayer::RandomBoxTick()
 {
-	m_OpeningBox = 0;
-	m_GetFromBox = "";
-
-	for (int i = m_OpenBox; i != 0; i--) {
-		m_OpeningBox = 1;
-
-		if (m_OpenBox && m_OpenBoxType == RANDOMCRAFTITEM)
+	if(m_OpenBox && m_OpenBoxType == RANDOMCRAFTITEM)
+	{
+		int get = 1;
+		int getitem = 0;
+		if(m_OpenBox % 30 == 0)
 		{
-			int get = 1;
-			int getitem = 0;
-
-			int RandGet = rand() % 100;
-			if (RandGet >= 0 && RandGet <= 95)
+			int RandGet = rand()%100;
+			if(RandGet >= 0 && RandGet <= 95)
 			{
-				int RandItem = rand() % 3;
-				switch (RandItem)
+				int RandItem = rand()%3;
+				switch(RandItem)
 				{
-				default: getitem = FOOTKWAH; break;
-				case 1: getitem = HEADBOOMER; break;
-				case 2: getitem = PRESSEDPIECE; break;
+					default: getitem = FOOTKWAH; break;
+					case 1: getitem = HEADBOOMER; break;
+					case 2: getitem = PRESSEDPIECE; break;
 				}
 			}
 			else
 			{
-				int RandItem = rand() % 4;
-				switch (RandItem)
+				int RandItem = rand()%4;
+				switch(RandItem)
 				{
-				default: getitem = FORMULAEARRINGS; break;
-				case 1: getitem = FORMULAFORRING; break;
-				case 2: getitem = FORMULAWEAPON; break;
-				case 3: getitem = RARESLIMEDIRT; break;
-
+					default: getitem = FORMULAEARRINGS; break;
+					case 1: getitem = FORMULAFORRING; break;
+					case 2: getitem = FORMULAWEAPON; break;
+					case 3: getitem = RARESLIMEDIRT; break;
+					
 				}
 			}
+			//if(m_pCharacter)
+			//	GameServer()->CreateLolText(m_pCharacter, false, vec2(0,-75), vec2 (0,-1), 1, Server()->GetItemName(m_ClientID, getitem, false));
 
-			int Get = 1;
-			Server()->GiveItem(m_ClientID, getitem, Get);
-			//GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {str:get} x{int:num2}"),
-			//	"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, RANDOMCRAFTITEM, false), "num", &Get, "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
+			//if(m_OpenBox == 30)
+			//{
+				m_OpenBox = 0;
+				m_OpenBoxType = 0;
 
-			m_GetFromBox += Server()->GetItemName(m_ClientID, getitem, false);
-			m_GetFromBox += ", ";
+				if(m_pCharacter)
+					GameServer()->CreateDeath(m_pCharacter->m_Pos, m_ClientID);
+
+				int Get = 1;
+				Server()->GiveItem(m_ClientID, getitem, Get);
+				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {str:get} x{int:num2}"),
+					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, RANDOMCRAFTITEM, false), "num", &Get, "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
+
+			//}
 		}
+	}
 
-		if (m_OpenBox && m_OpenBoxType == EVENTBOX)
+	if(m_OpenBox && m_OpenBoxType == EVENTBOX)
+	{
+		int getitem = 0;
+		
+		if(m_OpenBox % 30 == 0)
 		{
-			int getitem = 0;
-
-			int RandGet = rand() % 160;
-			if (RandGet >= 0 && RandGet <= 154) getitem = MONEYBAG;
+			int RandGet = rand()%160;
+			if(RandGet >= 0 && RandGet <= 154) getitem = MONEYBAG;
 			else getitem = RAREEVENTHAMMER;
 
-			int Get = 1;
-			Server()->GiveItem(m_ClientID, getitem, Get);
-			//GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {str:get} x{int:num2}"),
-			//	"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, EVENTBOX, false), "num", &Get, "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
+				m_OpenBox = 0;
+				m_OpenBoxType = 0;
+			
+			
+			
+			//if(= 30)
+			//{
+				//m_OpenBox = 0;
+				//m_OpenBoxType = 0;
+				if(m_pCharacter)
+				GameServer()->CreateDeath(m_pCharacter->m_Pos, m_ClientID);
 
-			m_GetFromBox += Server()->GetItemName(m_ClientID, getitem, false);
-			m_GetFromBox += ", ";
+				int Get = 1;
+				Server()->GiveItem(m_ClientID, getitem, Get);
+				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {str:get} x{int:num2}"),
+					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, EVENTBOX, false), "num", &Get, "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
+
+			//}
+			
 		}
-		if (m_OpenBox && m_OpenBoxType == BOSSBOX)
+		
+	}
+	if(m_OpenBox && m_OpenBoxType == BOSSBOX)
+	{
+		int getitem = 0;
+		if(m_OpenBox % 30 == 0)
 		{
-			int getitem = 0;
 			int Get = 1;
-			int RandGet = rand() % 160;
-			if (RandGet >= 0 && RandGet <= 156)
+			int RandGet = rand()%160;
+			if(RandGet >= 0 && RandGet <= 156)
 			{
-				int RandItem = rand() % 3;
-				switch (RandItem)
+				int RandItem = rand()%3;
+				switch(RandItem)
 				{
-				default: getitem = MONEYBAG, Get = 50; break;
-				case 1: getitem = FARMBOX, Get = 5; break;
-				case 2: getitem = RANDOMCRAFTITEM, Get = 1; break;
+					default : getitem = MONEYBAG, Get = 50; break;
+					case 1: getitem = FARMBOX, Get = 5; break;
+					case 2: getitem = RANDOMCRAFTITEM, Get = 1; break;
 				}
 			}
 			else
 			{
-				int RandItem = rand() % 2;
-				switch (RandItem)
+				int RandItem = rand()%2;
+				switch(RandItem)
 				{
-				default: getitem = SLIMENECKLACKE; break;
-				case 1: getitem = SLIMESPHERE; break;
+					default: getitem = SLIMENECKLACKE; break;
+					case 1: getitem = SLIMESPHERE; break;	
 				}
 			}
+			m_OpenBox = 0;
+				m_OpenBoxType = 0;
 
-			Server()->GiveItem(m_ClientID, getitem, Get);
-			//GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x1 and get {str:get} x{int:num2}"),
-			//	"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, BOSSBOX, false), "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
+				if(m_pCharacter)
+					GameServer()->CreateDeath(m_pCharacter->m_Pos, m_ClientID);
 
-			m_GetFromBox += Server()->GetItemName(m_ClientID, getitem, false);
-			m_GetFromBox += ", ";
-		}
-
-		if (m_OpenBox && m_OpenBoxType == BOSSBOX2)
-		{
-			int getitem = 0;
-
-			int Get = 1;
-			int RandGet = rand() % 160;
-			if (RandGet >= 0 && RandGet <= 150)
-			{
-				int RandItem = rand() % 3;
-				switch (RandItem)
-				{
-				default: getitem = MONEYBAG, Get = 50; break;
-				case 1: getitem = FARMBOX, Get = 5; break;
-				case 2: getitem = RANDOMCRAFTITEM, Get = 1; break;
-				}
-			}
-			else
-			{
-				int RandItem = rand() % 2;
-				switch (RandItem)
-				{
-				default: getitem = VAMPIREFANG; break;
-				case 1: getitem = PRESSEDPIECE, Get = 10; break;
-				}
-			}
-
-			Server()->GiveItem(m_ClientID, getitem, Get);
-			//GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x1 and get {str:get} x{int:num2}"),
-			//	"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, BOSSBOX2, false), "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
-
-			m_GetFromBox += Server()->GetItemName(m_ClientID, getitem, false);
-			m_GetFromBox += ", ";
-		}
-		if (m_OpenBox && m_OpenBoxType == BOSSBOX3)
-		{
-			int getitem = 0;
-
-			int Get = 1;
-			int RandGet = rand() % 160;
-			if (RandGet >= 0 && RandGet <= 150)
-			{
-				int RandItem = rand() % 3;
-				switch (RandItem)
-				{
-				default: getitem = MONEYBAG, Get = 75; break;
-				case 1: getitem = FARMBOX, Get = 5; break;
-				case 2: getitem = RANDOMCRAFTITEM, Get = 1; break;
-				}
-			}
-			else
-			{
-				int RandItem = rand() % 2;
-				switch (RandItem)
-				{
-				default: getitem = KINGSOUL, Get = 2; break;
-				case 1: getitem = PRESSEDPIECE, Get = 15; break;
-				}
-			}
-
-			Server()->GiveItem(m_ClientID, getitem, Get);
-			//GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x1 and get {str:get} x{int:num2}"),
-			//	"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, BOSSBOX3, false), "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
-
-			m_GetFromBox += Server()->GetItemName(m_ClientID, getitem, false);
-			m_GetFromBox += ", ";
-		}
-
-
-		if (m_OpenBox && m_OpenBoxType == FARMBOX)
-		{
-			int getitem = 0;
-
-			int Get = 1;
-			int RandGet = rand() % 100;
-			if (RandGet >= 0 && RandGet <= 92)
-			{
-				int RandItem = rand() % 3;
-				switch (RandItem)
-				{
-				default: getitem = FARMLEVEL, Get = 5; break;
-				case 1: getitem = MONEYBAG, Get = 2; break;
-				case 2: getitem = EVENTBOX, Get = 5; break;
-				}
-			}
-			else
-			{
-				int RandItem = rand() % 4;
-				switch (RandItem)
-				{
-				default: getitem = JUMPIMPULS; break;
-				case 1: getitem = FREEAZER; break;
-				case 3: getitem = RARESLIMEDIRT; break;
-				}
-
-				//GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x1 and get {str:get} x{int:num2}"),
-				//	"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, FARMBOX, false), "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
-			}
-
-			Server()->GiveItem(m_ClientID, getitem, Get);
-
-			m_GetFromBox += Server()->GetItemName(m_ClientID, getitem, false);
-			m_GetFromBox += ", ";
+				Server()->GiveItem(m_ClientID, getitem, Get);
+				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x1 and get {str:get} x{int:num2}"),
+					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, BOSSBOX, false), "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
+		
 		}
 	}
 
-	if (m_OpeningBox) {
-		if (m_pCharacter)
-			GameServer()->CreateDeath(m_pCharacter->m_Pos, m_ClientID);
+if(m_OpenBox && m_OpenBoxType == BOSSBOX2)
+	{
+		int getitem = 0;
+		if(m_OpenBox % 30 == 0)
+		{
+			int Get = 1;
+			int RandGet = rand()%160;
+			if(RandGet >= 0 && RandGet <= 150)
+			{
+				int RandItem = rand()%3;
+				switch(RandItem)
+				{
+					default : getitem = MONEYBAG, Get = 50; break;
+					case 1: getitem = FARMBOX, Get = 5; break;
+					case 2: getitem = RANDOMCRAFTITEM, Get = 1; break;
+				}
+			}
+			else
+			{
+				int RandItem = rand()%2;
+				switch(RandItem)
+				{
+					default: getitem = VAMPIREFANG; break;
+					case 1: getitem = PRESSEDPIECE , Get = 10; break;	
+				}
+			}
+			m_OpenBox = 0;
+				m_OpenBoxType = 0;
 
-		GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:count} and get {str:get}"),
-			"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, m_OpenBoxType, false), "count", &m_OpenBox, "get", m_GetFromBox.c_str(), NULL);
+				if(m_pCharacter)
+					GameServer()->CreateDeath(m_pCharacter->m_Pos, m_ClientID);
+
+				Server()->GiveItem(m_ClientID, getitem, Get);
+				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x1 and get {str:get} x{int:num2}"),
+					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, BOSSBOX2, false), "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
+		
+		}
 	}
+	if(m_OpenBox && m_OpenBoxType == BOSSBOX3)
+	{
+		int getitem = 0;
+		if(m_OpenBox % 30 == 0)
+		{
+			int Get = 1;
+			int RandGet = rand()%160;
+			if(RandGet >= 0 && RandGet <= 150)
+			{
+				int RandItem = rand()%3;
+				switch(RandItem)
+				{
+					default : getitem = MONEYBAG, Get = 75; break;
+					case 1: getitem = FARMBOX, Get = 5; break;
+					case 2: getitem = RANDOMCRAFTITEM, Get = 1; break;
+				}
+			}
+			else
+			{
+				int RandItem = rand()%2;
+				switch(RandItem)
+				{
+					default: getitem = KINGSOUL, Get=2; break;
+					case 1: getitem = PRESSEDPIECE , Get = 15; break;	
+				}
+			}
+			m_OpenBox = 0;
+				m_OpenBoxType = 0;
 
-	m_OpenBox = 0;
+				if(m_pCharacter)
+					GameServer()->CreateDeath(m_pCharacter->m_Pos, m_ClientID);
+
+				Server()->GiveItem(m_ClientID, getitem, Get);
+				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x1 and get {str:get} x{int:num2}"),
+					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, BOSSBOX3, false), "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
+		
+		}
+	}
+	
+	
+	if(m_OpenBox && m_OpenBoxType == FARMBOX)
+	{
+		int getitem = 0;
+		if(m_OpenBox % 30 == 0)
+		{
+			int Get = 1;
+			int RandGet = rand()%100;
+			if(RandGet >= 0 && RandGet <= 92)
+			{
+				int RandItem = rand()%3;
+				switch(RandItem)
+				{
+					default: getitem = FARMLEVEL, Get = 5; break;
+					case 1: getitem = MONEYBAG, Get = 2; break;
+					case 2: getitem = EVENTBOX, Get = 5; break;
+				}
+			}
+			else
+			{
+				int RandItem = rand()%4;
+				switch(RandItem)
+				{
+					default: getitem = JUMPIMPULS; break;
+					case 1: getitem = FREEAZER; break;
+					case 3: getitem = RARESLIMEDIRT; break;
+				}
+			}
+			//if(m_pCharacter)
+				//GameServer()->CreateLolText(m_pCharacter, false, vec2(0,-75), vec2 (0,-1), 3, Server()->GetItemName(m_ClientID, getitem, false));
+
+			//if(m_OpenBox == 30)
+			//{
+				m_OpenBox = 0;
+				m_OpenBoxType = 0;
+
+				if(m_pCharacter)
+					GameServer()->CreateDeath(m_pCharacter->m_Pos, m_ClientID);
+
+				Server()->GiveItem(m_ClientID, getitem, Get);
+				GameServer()->SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x1 and get {str:get} x{int:num2}"),
+					"name", Server()->ClientName(m_ClientID), "used", Server()->GetItemName(m_ClientID, FARMBOX, false), "get", Server()->GetItemName(m_ClientID, getitem, false), "num2", &Get, NULL);
+
+			//}
+		}
+	}
+	if(m_OpenBox)
+		m_OpenBox--;
 }
 
 void CPlayer::BasicAuthedTick()
@@ -599,8 +637,8 @@ void CPlayer::Tick()
 		++m_DieTick;
 		++m_ScoreStartTick;
 		++m_LastActionTick;
-	}
-	HandleTuningParams();
+ 	}
+ 	HandleTuningParams();
 }
 
 int CPlayer::GetNeedForUp()
@@ -611,13 +649,21 @@ int CPlayer::GetNeedForUp()
 	exp=1000;
 	
 	if(AccData.Level > 200) exp=1500;
+	
 	if(AccData.Level > 300) exp=2000;
+	
 	if(AccData.Level > 400) exp=3000;
+	
 	if(AccData.Level > 500) exp=5000;
+	
 	if(AccData.Level > 600) exp=6000;
+	
 	if(AccData.Level > 700) exp=8000;
+	
 	if(AccData.Level > 1000) exp=12000;
+	
 	if(AccData.Level > 1100) exp=13000;
+	
 	if(AccData.Level > 1200) exp=14000;
 	
 	return exp;
@@ -691,8 +737,6 @@ void CPlayer::MoneyAdd(int Size, bool ClanBonus, bool MoneyDouble)
 	if(ClanBonus && Server()->GetClanID(m_ClientID))
 		GetMoney = (Size+Server()->GetClan(DADDMONEY, Server()->GetClanID(m_ClientID))*100);
 
-	GetMoney += (GetMoney / 100) * (5 * Server()->GetItemCount(m_ClientID, UP_BONUS_SILVER));
-
 	if(MoneyDouble)
 	{
 		if(Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP))
@@ -750,8 +794,6 @@ void CPlayer::ExpAdd(int Size, bool Bonus)
 	
 	if(Server()->GetItemCount(m_ClientID, X2MONEYEXPVIP)&& m_ExperienceAdd && Server()->GetClanID(m_ClientID) && Bonus)	
 	GetExp = gete*4+Server()->GetClan(DADDEXP, Server()->GetClanID(m_ClientID));
-
-	GetExp += (gete / 100) * (5 * Server()->GetItemCount(m_ClientID, UP_BONUS_XP));
 	
 	if(Server()->GetClanID(m_ClientID) &&
 		Server()->GetClan(DEXP, Server()->GetClanID(m_ClientID)) >= Server()->GetClan(DLEVEL, Server()->GetClanID(m_ClientID))*GetNeedForUpClan())
@@ -762,12 +804,10 @@ void CPlayer::ExpAdd(int Size, bool Bonus)
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), MINUS, "Exp", warpminus, true);
 		Server()->InitClanID(Server()->GetClanID(m_ClientID), PLUS, "Level", 1, true);
 	}
-
-	GetExp += (GetExp / 100) * (Server()->GetItemCount(m_ClientID, UP_BONUS_XP) * 5);
 	
 	GameServer()->SendBroadcast_LStat(m_ClientID, BROADCAST_PRIORITY_GAMEANNOUNCE, 100, Server()->GetClanID(m_ClientID) > 0 ? INADDCEXP : INADDEXP, GetExp, Get);
 	AccData.Exp += GetExp;
-	if(rand()%4 == 1)
+	if(rand()%8 == 1)
 		GameServer()->UpdateStats(m_ClientID);
 
 	return;
@@ -901,7 +941,7 @@ void CPlayer::OnDirectInput(CNetObj_PlayerInput *NewInput)
 			m_pCharacter->ResetInput();
 
 		m_PlayerFlags = NewInput->m_PlayerFlags;
-		return;
+ 		return;
 	}
 
 	m_PlayerFlags = NewInput->m_PlayerFlags;
@@ -985,12 +1025,12 @@ void CPlayer::TryRespawn()
 	m_Spawning = false;
 
 	if (IsBot())
-	{
+    {
 		// жирный бот рандом
 		if(rand()% 20 == 10) m_BigBot = true;
 		else m_BigBot = false;
 
-		GameServer()->UpdateBotInfo(m_ClientID);
+        GameServer()->UpdateBotInfo(m_ClientID);
 		if(m_BotType == BOT_L1MONSTER)
 		{
 			m_pCharacter = new(m_ClientID) CMonster(&GameServer()->m_World);
@@ -1264,12 +1304,4 @@ void CPlayer::SetMoveChar()
 	str_format(aBuf, sizeof(aBuf), "%s | %s", Server()->ClientClan(m_ClientID), TitleGot());
 	str_copy(pTitle, aBuf, sizeof(pTitle));
 	tickstr = 90;
-}
-
-int CPlayer::GetBonusExp(int ExpCount) {
-	return ExpCount + (ExpCount / 100) * (Server()->GetItemCount(m_ClientID, UP_BONUS_XP) * 5);
-}
-
-int CPlayer::GetBonusMoney(int MoneyCount) {
-	return MoneyCount + (MoneyCount / 100) * (Server()->GetItemCount(m_ClientID, UP_BONUS_SILVER) * 5);
 }

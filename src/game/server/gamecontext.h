@@ -287,10 +287,6 @@ public:
 	virtual void SendChatTarget_Localization_P(int To, int Category, int Number, const char* pText, ...);
 	virtual void SendChatClan(int ClanID, const char* pText, ...);
 
-	// Сезоны
-	int m_Season;
-	void SeasonTick();
-
 	// Основные функции
 	void SendChat(int ClientID, int Team, const char *pText);
 	void SendEmoticon(int ClientID, int Emoticon);

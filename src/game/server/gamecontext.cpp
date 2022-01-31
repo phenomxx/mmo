@@ -1092,14 +1092,14 @@ void CGameContext::OnTick()
 	BossTick();
 	SeasonTick();
 
-	if (Server()->Tick() % Server()->TickSpeed() * 5 == 0) {
+	/*if (Server()->Tick() % Server()->TickSpeed() * 5 == 0) {
 		for (int i = 0; i < MAX_CLIENTS; i++)
 			if (m_apPlayers[i])
 				if (m_apPlayers[i]->GetCharacter())
 					if (Server()->GetItemEnquip(i, 18) == PET_CLEVER)
 						if (m_apPlayers[i]->m_Health < m_apPlayers[i]->m_HealthStart)
 							m_apPlayers[i]->GetCharacter()->m_Health += 100;
-	}
+	}*/
 
 #ifdef CONF_DEBUG
 	if(g_Config.m_DbgDummies)

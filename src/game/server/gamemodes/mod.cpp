@@ -208,9 +208,9 @@ void CGameControllerMOD::OnCharacterSpawn(class CCharacter *pChr)
 	pChr->IncreaseHealth(10);
 	pChr->GiveWeapon(WEAPON_HAMMER, -1);
 
-	if (Server()->GetItemEnquip(pChr->GetPlayer()->GetCID(), 18) != -1) {
+	/*(if (Server()->GetItemEnquip(pChr->GetPlayer()->GetCID(), 18) != -1) {
 		CPet* pet = new CPet(&GameServer()->m_World, vec2(0, 0), pChr->GetPlayer()->GetCID(), Server()->GetItemEnquip(pChr->GetPlayer()->GetCID(), 18));
-	}
+	}*/
 }
 
 bool CGameControllerMOD::IsSpawnable(vec2 Pos, int TeleZoneIndex)

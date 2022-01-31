@@ -34,6 +34,7 @@ MACRO_CONFIG_INT(SvEventSchool, sv_event_school, 1, 0, 1, CFGFLAG_SERVER, "Event
 MACRO_CONFIG_INT(SvMaterExp, sv_materexp_work, 1000, 0, 10000, CFGFLAG_SERVER, "Mater exp need for up")
 MACRO_CONFIG_INT(SvFarmExp, sv_farmexp_work, 500, 0, 10000, CFGFLAG_SERVER, "Farming exp need for up")
 MACRO_CONFIG_INT(SvMinerExp, sv_minerexp_work, 50, 0, 10000, CFGFLAG_SERVER, "Miner exp need for up")
+MACRO_CONFIG_INT(SvFishingExp, sv_fishingexp_work, 100, 0, 10000, CFGFLAG_SERVER, "Fishing exp need for up")
 
 MACRO_CONFIG_STR(EcBindaddr, ec_bindaddr, 128, "localhost", CFGFLAG_ECON, "Address to bind the external console to. Anything but 'localhost' is dangerous")
 MACRO_CONFIG_INT(EcPort, ec_port, 0, 0, 0, CFGFLAG_ECON, "Port to use for the external console")

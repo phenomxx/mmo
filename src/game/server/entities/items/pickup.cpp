@@ -15,6 +15,10 @@ CPickup::CPickup(CGameWorld *pGameWorld, int Type, vec2 Pos, int SubType)
 	m_SubType = SubType;
 	m_Drop = 0;
 
+	if (m_SubType == 6) {
+		m_MoveDirection = vec2(1.5f, 0);
+	}
+
 	Reset();
 
 	GameWorld()->InsertEntity(this);
@@ -53,7 +57,7 @@ void CPickup::Tick()
 			switch (m_Type)
 			{
 				case 0:
-					if(m_SubType != 3 && m_SubType != 4 && m_SubType != 5)
+					if(m_SubType != 3 && m_SubType != 4 && m_SubType != 5 && m_SubType != 6)
 					{
 						GameServer()->CreateSound(m_Pos, SOUND_PICKUP_HEALTH);
 						Picking(0);
@@ -80,12 +84,24 @@ void CPickup::Tick()
 					Picking(0);
 					break;
 
+				case 6:
+					Picking(0);
+					break;
+
 				default:
 					break;
 			};
 
 		}
 	}
+
+	// Двигаем рыбок
+	vec2 NextPos = m_Pos + m_MoveDirection;
+	if (GameServer()->Collision()->CheckPoint(NextPos)) {
+		m_MoveDirection = vec2(-m_MoveDirection.x, -m_MoveDirection.y);
+	}
+
+	m_Pos += m_MoveDirection;
 }
 
 void CPickup::Picking(int Time)
@@ -217,32 +233,48 @@ void CPickup::StartFarm(int ClientID)
 
 		if(m_Drop >= 100)
 		{
-			int ItemDrop = 3+LevelItem/g_Config.m_SvMinerExp;
-			if(ItemDrop > 11)
-				ItemDrop = 11;
+			int a = 1;
+			if (LevelItem/g_Config.m_SvMinerExp >= 50)
+				a = 2;
+			if (LevelItem / g_Config.m_SvMinerExp >= 100)
+				a = 3;
+			if (LevelItem / g_Config.m_SvMinerExp >= 150)
+				a = 4;
+			if (LevelItem / g_Config.m_SvMinerExp >= 250)
+				a = 5;
+			if (LevelItem / g_Config.m_SvMinerExp >= 400)
+				a = 6;
+			if (LevelItem / g_Config.m_SvMinerExp >= 1000)
+				if (Server()->GetItemEnquip(ClientID, 18) == PET_MITHRIL_GOLEM) a = 7;
+
+			int ItemDrop = 3 + a;
+
+			//dbg_msg("a", "%d %d", ItemDrop, a);
 
 			switch(rand()%ItemDrop)
 			{
-				case 3: GameServer()->GiveItem(ClientID, IRONORE, 1+LevelItem/15); break; 
-				case 4: GameServer()->GiveItem(ClientID, GOLDORE, 1+LevelItem/15); break; 
-				case 5: GameServer()->GiveItem(ClientID, DIAMONDORE, 1+LevelItem/15); break; 
+				case 4: GameServer()->GiveItem(ClientID, IRONORE, 1+LevelItem/15); break; 
+				case 5: GameServer()->GiveItem(ClientID, GOLDORE, 1+LevelItem/15); break; 
+				case 6: GameServer()->GiveItem(ClientID, DIAMONDORE, 1+LevelItem/15); break; 
 				case 7: GameServer()->GiveItem(ClientID, DRAGONORE, 1); break;
-				case 9: GameServer()->GiveItem(ClientID, MITHRILORE, 1); break;
-				case 11: GameServer()->GiveItem(ClientID, ORIHALCIUMORE, 1); break;
-				case 13: GameServer()->GiveItem(ClientID, TITANIUMORE, 1); break;
-				case 15: GameServer()->GiveItem(ClientID, ASTRALIUMORE, 1); break; 
+				case 8: GameServer()->GiveItem(ClientID, MITHRILORE, 1); break;
+				case 9: GameServer()->GiveItem(ClientID, ORIHALCIUMORE, 1); break;
+				case 10: GameServer()->GiveItem(ClientID, TITANIUMORE, 1); break;
+				case 11: GameServer()->GiveItem(ClientID, ASTRALIUMORE, 1); break; 
 				default: GameServer()->GiveItem(ClientID, COOPERORE, 1+LevelItem/15); break;
 			}
 			GameServer()->GiveItem(ClientID, MINEREXP, 1);
 
 			// ОПЫТ ГНИДАМ
 			//GameServer()->m_apPlayers[ClientID]->AccData.Exp += 10+LevelItem;
-			GameServer()->SendChatTarget_Localization(ClientID, -1, _("[Player] EXP +10+{int:bonus} Level Work"), "bonus", &LevelItem, NULL);
+			//GameServer()->SendChatTarget_Localization(ClientID, -1, _("[Player] EXP +10+{int:bonus} Level Work"), "bonus", &LevelItem, NULL);
 		}
 	}
-	else if(m_SubType == 3) // ########################### WOOOD
+	else if(m_SubType == 3) // ########################### WOOD
 	{
-		m_Drop += 10+rand()%25;
+		int bonus = 0;
+		if (Server()->GetItemEnquip(ClientID, 18) == PET_MONKEY) bonus = 25;
+		m_Drop += 10 + rand() % 25 + bonus;
 		GameServer()->CreateSound(m_Pos, 20); 
 
 		float getlv = (m_Drop*100.0)/100;
@@ -253,7 +285,9 @@ void CPickup::StartFarm(int ClientID)
 
 		if(m_Drop >= 100)
 		{
-			GameServer()->GiveItem(ClientID, WOOD, 1);
+			GameServer()->GiveItem(ClientID, WOOD, 1 + bonus / 5);
+			if (rand() % 500 == 0)
+				GameServer()->GiveItem(ClientID, PET_MONKEY, 1);
 		
 			// ОПЫТ ГНИДАМ
 			GameServer()->m_apPlayers[ClientID]->AccData.Exp += 10;
@@ -269,6 +303,59 @@ void CPickup::StartFarm(int ClientID)
 	else if(m_SubType == 5) // ########################### LOADER FARM
 	{
 		MaterFarm(ClientID, 2);
+	}
+
+	else if (m_SubType == 6) // ########################### FISHING
+	{
+		m_Drop += 20;
+		GameServer()->CreateSound(m_Pos, 20); 
+
+		int LevelItem = 1+Server()->GetItemCount(ClientID, FISHINGLEVEL)/g_Config.m_SvFishingExp;
+		int NeedExp = LevelItem*g_Config.m_SvFishingExp;
+		int Exp = Server()->GetItemCount(ClientID, FISHINGLEVEL);
+
+		float getlv = (m_Drop*100.0)/100;
+		const char *Pick = GameServer()->LevelString(100, (int)getlv, 10, ':', ' ');
+		GameServer()->SendBroadcast_Localization(ClientID, 1000, 100, _("Job Fishing: {int:lvl} Level : {int:exp}/{int:expneed}EXP\nBonus: 1+{int:bonus} Item : Pick: {str:got} / {int:gotp}%"), 
+			"lvl", &LevelItem, "exp", &Exp, "expneed", &NeedExp, "bonus", &LevelItem, "got", Pick, "gotp", &m_Drop, NULL);
+		delete Pick;
+
+		if(m_Drop == 100)
+		{
+			// Даём рыбу
+			int r = rand() % 100;
+			int bonus = (Server()->GetItemEnquip(ClientID, 18) == PET_DOLPHIN) ? 5 : 0;
+			if (r > 10) bonus = 0;
+			if (r >= 0 && r <= 50)
+				GameServer()->GiveItem(ClientID, COMMON_FISH, 1 + (LevelItem - 1) / 5 + bonus);
+			if (r >= 51 && r <= 70)
+				GameServer()->GiveItem(ClientID, UNCOMMON_FISH, (1 + (LevelItem - 1) / 10) + bonus);
+			if (r >= 71 && r <= 85)
+				GameServer()->GiveItem(ClientID, RARE_FISH, (1 + (LevelItem - 1) / 15) + bonus);
+			if (r >= 86 && r <= 95)
+				GameServer()->GiveItem(ClientID, EPIC_FISH, (1 + (LevelItem - 1) / 20) + bonus);
+			if (r >= 96 && r <= 100)
+				GameServer()->GiveItem(ClientID, LEGENDARY_FISH, (1 + (LevelItem - 1) / 25) + bonus);
+
+			if (Server()->GetItemCount(ClientID, LEGENDARY_FISH))
+				if (rand() % 1000 == 0)
+					GameServer()->GiveItem(ClientID, PET_DOLPHIN, 1);
+
+			if ((GameServer()->m_Season == 11) || (GameServer()->m_Season <= 1))
+				if (rand() % 3000 == 0)
+					GameServer()->GiveItem(ClientID, PET_ICE_FISH, 1);
+				else
+					if (Server()->GetItemEnquip(ClientID, 18) == PET_ICE_FISH)
+						if (rand() % 100 <= 20)
+							GameServer()->GiveItem(ClientID, ICE_FISH, 1 + (rand() % 100 <= 10) ? bonus : 0);
+
+			if(Server()->GetItemCount(ClientID, FISHINGLEVEL) % g_Config.m_SvFishingExp == 0)
+			{
+				GameServer()->SendChatTarget_Localization(ClientID, -1, _("~ Fishing Level UP +1"), NULL);
+			}
+
+			GameServer()->GiveItem(ClientID, FISHINGLEVEL, 1);
+		}
 	}
 
 	if(m_Drop >= 100)

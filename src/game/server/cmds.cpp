@@ -274,6 +274,20 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		}
 		return;
 	}
+	else if (!strncmp(Msg->m_pMessage, "/pets", 8))
+	{
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "--- Pet list ---");
+		for (int i = 0; i < 9; i++) {
+			if (!GameServer()->Server()->GetItemCount(ClientID, i))
+				continue;
+
+			char aBuf[256];
+			str_format(aBuf, 256, "%d. %s x%d", i + 1, GameServer()->Server()->GetItemName(ClientID, 190 + i), GameServer()->Server()->GetItemCount(ClientID, 190 + i));
+			GameServer()->SendChatTarget(ClientID, aBuf);
+		}
+		
+		return;
+	}
 
 	if(!strncmp(Msg->m_pMessage, "/", 1))
 	{

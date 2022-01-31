@@ -239,36 +239,6 @@ void IGameController::OnPlayerInfoChange(class CPlayer *pP)
 		}
 		pP->m_TeeInfos.m_ColorBody = 15204096;
 	}
-	else if(Server()->GetItemSettings(pP->GetCID(), ORIHALCUMBODY)) 
-	{
-		if(pP->GetCharacter())
-		{
-			pP->GetCharacter()->DeleteAllPickup();
-			pP->GetCharacter()->CreatePickupDraw(6, 0, 3, true);
-			pP->GetCharacter()->CreatePickupDraw(6, 1, 3, true);
-		}
-		pP->m_TeeInfos.m_ColorBody = 4390656;
-	}
-	else if(Server()->GetItemSettings(pP->GetCID(), PALLADIUMCHEST)) 
-	{
-		if(pP->GetCharacter())
-		{
-			pP->GetCharacter()->DeleteAllPickup();
-			pP->GetCharacter()->CreatePickupDraw(6, 0, 3, true);
-			pP->GetCharacter()->CreatePickupDraw(6, 1, 3, true);
-		}
-		pP->m_TeeInfos.m_ColorBody = 13464320;
-	}
-	else if(Server()->GetItemSettings(pP->GetCID(), IMMORTALCHEST)) 
-	{
-		if(pP->GetCharacter())
-		{
-			pP->GetCharacter()->DeleteAllPickup();
-			pP->GetCharacter()->CreatePickupDraw(6, 0, 3, true);
-			pP->GetCharacter()->CreatePickupDraw(6, 1, 3, true);
-		}
-		pP->m_TeeInfos.m_ColorBody = 16738561;
-	}
 	else if (Server()->GetItemSettings(pP->GetCID(), MITHRIL_BODY))
 	{
 		if (pP->GetCharacter())
@@ -330,12 +300,6 @@ void IGameController::OnPlayerInfoChange(class CPlayer *pP)
 		pP->m_TeeInfos.m_ColorFeet = 9436928;
 	else if(Server()->GetItemSettings(pP->GetCID(), DRAGONFEET)) 
 		pP->m_TeeInfos.m_ColorFeet = 15204096;
-	else if(Server()->GetItemSettings(pP->GetCID(), ORIHALCUMFEET)) 
-		pP->m_TeeInfos.m_ColorFeet = 6029056;
-	else if(Server()->GetItemSettings(pP->GetCID(), PALLADIUMBOOTS)) 
-		pP->m_TeeInfos.m_ColorFeet = 14846208;
-	else if(Server()->GetItemSettings(pP->GetCID(), IMMORTALBOOTS)) 
-		pP->m_TeeInfos.m_ColorFeet = 8704;
 	else if (Server()->GetItemSettings(pP->GetCID(), MITHRIL_FEET))
 		pP->m_TeeInfos.m_ColorFeet = 7466539;
 	else if (Server()->GetItemSettings(pP->GetCID(), ORIHALCIUM_FEET))

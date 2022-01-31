@@ -1090,6 +1090,16 @@ void CGameContext::OnTick()
 
 	AreaTick();
 	BossTick();
+	SeasonTick();
+
+	if (Server()->Tick() % Server()->TickSpeed() * 5 == 0) {
+		for (int i = 0; i < MAX_CLIENTS; i++)
+			if (m_apPlayers[i])
+				if (m_apPlayers[i]->GetCharacter())
+					if (Server()->GetItemEnquip(i, 18) == PET_CLEVER)
+						if (m_apPlayers[i]->m_Health < m_apPlayers[i]->m_HealthStart)
+							m_apPlayers[i]->GetCharacter()->m_Health += 100;
+	}
 
 #ifdef CONF_DEBUG
 	if(g_Config.m_DbgDummies)
@@ -1102,6 +1112,27 @@ void CGameContext::OnTick()
 		}
 	}
 #endif
+}
+
+void CGameContext::SeasonTick() {
+	time_t t = time(NULL);
+	struct tm* aTime = localtime(&t);
+
+	if (Server()->Tick() % (Server()->TickSpeed() * 30) == 0) {
+		m_Season = aTime->tm_mon;
+		dbg_msg("seasons", "season: %d", aTime->tm_mon);
+
+		// Changing map. Эта херня крашит ии мобов из-за чего они не видят игрока
+		/*if (m_Season == 11 || m_Season <= 2) {
+			str_copy(g_Config.m_SvMap, "mmotee-winter", 256);
+			dbg_msg("map", "changing map to mmotee-winter");
+		}
+			
+		if (m_Season >= 6 && m_Season <= 8) {
+			str_copy(g_Config.m_SvMap, "mmotee-summer", 256);
+			dbg_msg("map", "changing map to mmotee-summer");
+		}*/
+	}
 }
 
 // Server hooks
@@ -1213,7 +1244,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 			const char *p = pMsg->m_pMessage;
 			const char *pEnd = 0;
 			while(*p)
- 			{
+			{
 				const char *pStrOld = p;
 				int Code = str_utf8_decode(&p);
 
@@ -1232,7 +1263,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					*(const_cast<char *>(p)) = 0;
 					break;
 				}
- 			}
+			}
 			if(pEnd != 0)
 				*(const_cast<char *>(pEnd)) = 0;
 
@@ -2071,9 +2102,9 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					int SelectItem = m_apPlayers[ClientID]->m_SelectItem;
 
 					int Get = chartoint(pReason, 100000);
-					if(SelectItem == RANDOMCRAFTITEM || SelectItem == EVENTBOX || SelectItem == FARMBOX ||
+					if (SelectItem == RANDOMCRAFTITEM || SelectItem == EVENTBOX || SelectItem == FARMBOX ||
 						SelectItem == RESETINGUPGRADE || SelectItem == RESETINGSKILL || SelectItem == VIPPACKAGE || SelectItem == BOSSBOX || SelectItem == BOSSBOX2 || SelectItem == BOSSBOX3)
-						Get = 1;
+						Get = chartoint(pReason, 15);
 
 					Server()->RemItem(ClientID, SelectItem, Get, USEDUSE);
 					m_apPlayers[ClientID]->m_SelectItem = -1;
@@ -2218,7 +2249,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 					}
 				}
 
-				for(int i = 1; i < 4; i++)
+				for(int i = 1; i < 5; i++)
 				{
 					char aBuf[16];
 					str_format(aBuf, sizeof(aBuf), "armor%d", i);
@@ -2305,7 +2336,7 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 
 				// Кнопка забрать всё
 				if (str_comp(aCmd, "delallmail") == 0) {
-					dbg_msg("mail", "deleted");
+					dbg_msg("mail", "deleted 20 messages");
 
 					for (int i = 0; i < 20; i++)
 					{
@@ -2317,7 +2348,9 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 							GiveItem(ClientID, ItemID, ItemNum);
 					}
 
-					ResetVotes(ClientID, MAILMENU);
+					ResetVotes(ClientID, AUTH);
+
+					return;
 				}
 
 				for(int i = 0; i < 64; ++i)
@@ -2331,6 +2364,62 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 						ResetVotes(ClientID, CSETTING);
 						return;
 					}
+				}
+
+				// Прокачка за ачивки
+				if (str_comp(aCmd, "upacsil") == 0) {
+					if (Server()->GetItemCount(ClientID, UP_BONUS_SILVER) < 5) {
+						if (Server()->GetItemCount(ClientID, ACHIEVMENT_POINT) > 0) {
+							Server()->GiveItem(ClientID, UP_BONUS_SILVER, 1);
+							Server()->RemItem(ClientID, ACHIEVMENT_POINT, 1, 0);
+							SendChatTarget(ClientID, "Upgrade success");
+						}
+						else {
+							SendChatTarget(ClientID, "Need more achievement points");
+						}
+					}
+					else {
+						SendChatTarget(ClientID, "You bought the maximum level");
+					}
+
+					ResetVotes(ClientID, ACHUPGRADE);
+					return;
+				}
+				if (str_comp(aCmd, "upacxp") == 0) {
+					if (Server()->GetItemCount(ClientID, UP_BONUS_XP) < 5) {
+						if (Server()->GetItemCount(ClientID, ACHIEVMENT_POINT) > 0) {
+							Server()->GiveItem(ClientID, UP_BONUS_XP, 1);
+							Server()->RemItem(ClientID, ACHIEVMENT_POINT, 1, 0);
+							SendChatTarget(ClientID, "Upgrade success");
+						}
+						else {
+							SendChatTarget(ClientID, "Need more achievement points");
+						}
+					}
+					else {
+						SendChatTarget(ClientID, "You bought the maximum level");
+					}
+
+					ResetVotes(ClientID, ACHUPGRADE);
+					return;
+				}
+				if (str_comp(aCmd, "upacdmg") == 0) {
+					if (Server()->GetItemCount(ClientID, UP_BONUS_DMG) < 5) {
+						if (Server()->GetItemCount(ClientID, ACHIEVMENT_POINT) > 0) {
+							Server()->GiveItem(ClientID, UP_BONUS_DMG, 1);
+							Server()->RemItem(ClientID, ACHIEVMENT_POINT, 1, 0);
+							SendChatTarget(ClientID, "Upgrade success");
+						}
+						else {
+							SendChatTarget(ClientID, "Need more achievement points");
+						}
+					}
+					else {
+						SendChatTarget(ClientID, "You bought the maximum level");
+					}
+
+					ResetVotes(ClientID, ACHUPGRADE);
+					return;
 				}
 			}
 		}
@@ -2653,9 +2742,10 @@ void CGameContext::GiveItem(int ClientID, int ItemID, int Count, int Enchant)
 
 	if((ItemID >= AMULETCLEEVER && ItemID <= APAIN) || (ItemID >= SNAPDAMAGE && ItemID <= FORMULAFORRING) || (ItemID >= RINGBOOMER && ItemID <= EARRINGSKWAH) || (ItemID >= BOOKMONEYMIN && ItemID <= RELRINGS)
 		|| (ItemID >=CLANBOXEXP && ItemID <= CUSTOMSKIN) || (ItemID >= WHITETICKET && ItemID <= RANDOMCRAFTITEM)
-		|| (ItemID >=GUNBOUNCE && ItemID <= LAMPHAMMER) || ItemID == JUMPIMPULS || ItemID == FARMBOX || ItemID == PIZDAMET) // rare iteems
+		|| (ItemID >=GUNBOUNCE && ItemID <= LAMPHAMMER) || ItemID == JUMPIMPULS || ItemID == FARMBOX || ItemID == PIZDAMET 
+		|| (ItemID >=RARE_FISH && ItemID <= LEGENDARY_FISH)) // rare iteems
 	{
-		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} got {str:items}x{int:counts}"), "name", Server()->ClientName(ClientID), "items", Server()->GetItemName(ClientID, ItemID, false), "counts", &Count, NULL);
+		SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} got {str:items} x{int:counts}"), "name", Server()->ClientName(ClientID), "items", Server()->GetItemName(ClientID, ItemID, false), "counts", &Count, NULL);
 
 		if(m_apPlayers[ClientID]->GetCharacter())
 			CreateLolText(m_apPlayers[ClientID]->GetCharacter(), false, vec2(0,-75), vec2 (0,-1), 50, Server()->GetItemName(ClientID, ItemID, false));
@@ -2667,6 +2757,8 @@ void CGameContext::GiveItem(int ClientID, int ItemID, int Count, int Enchant)
 		else if(ItemID == MINEREXP)
 			SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("[Profession] {str:items}"), "items", Server()->GetItemName(ClientID, ItemID), NULL);
 		else if(ItemID == LOADEREXP)
+			SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("[Profession] {str:items}"), "items", Server()->GetItemName(ClientID, ItemID), NULL);
+		else if (ItemID == FISHINGLEVEL)
 			SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("[Profession] {str:items}"), "items", Server()->GetItemName(ClientID, ItemID), NULL);
 		else
 			SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} got {str:items}"), "name", Server()->ClientName(ClientID), "items", Server()->GetItemName(ClientID, ItemID), NULL);
@@ -3110,7 +3202,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		{
 			if (Server()->GetItemCount(ClientID, ORIHALCIUMORE) < 500 || Server()->GetItemCount(ClientID, WOOD) < 200 || Server()->GetItemCount(ClientID, MITHRIL_BODY) < 1 || Server()->GetItemCount(ClientID, SLIMESOUL) < 10)
 			{
-				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Mithril Orex500, Woodx200, Slime Soulx10, Mithril Bodyx1", NULL);
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Orihalcium Orex500, Woodx200, Slime Soulx10, Mithril Bodyx1", NULL);
 				return;
 			}
 			Server()->RemItem(ClientID, ORIHALCIUMORE, 500, -1);
@@ -3122,7 +3214,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		{
 			if (Server()->GetItemCount(ClientID, ORIHALCIUMORE) < 400 || Server()->GetItemCount(ClientID, WOOD) < 150 || Server()->GetItemCount(ClientID, MITHRIL_FEET) < 1 || Server()->GetItemCount(ClientID, SLIMESOUL) < 5)
 			{
-				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Mithril Orex400, Woodx150, Slime Soulx5, Mithril Feetx1", NULL);
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Orihalcium Orex400, Woodx150, Slime Soulx5, Mithril Feetx1", NULL);
 				return;
 			}
 			Server()->RemItem(ClientID, ORIHALCIUMORE, 400, -1);
@@ -3134,7 +3226,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		{
 			if (Server()->GetItemCount(ClientID, TITANIUMORE) < 500 || Server()->GetItemCount(ClientID, WOOD) < 200 || Server()->GetItemCount(ClientID, ORIHALCIUM_BODY) < 1)
 			{
-				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Mithril Orex500, Woodx200, Orihalcium Bodyx1", NULL);
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Titanium Orex500, Woodx200, Orihalcium Bodyx1", NULL);
 				return;
 			}
 			Server()->RemItem(ClientID, TITANIUMORE, 500, -1);
@@ -3145,7 +3237,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		{
 			if (Server()->GetItemCount(ClientID, TITANIUMORE) < 400 || Server()->GetItemCount(ClientID, WOOD) < 150 || Server()->GetItemCount(ClientID, ORIHALCIUM_FEET) < 1)
 			{
-				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Mithril Orex400, Woodx150, Orihalcium Feetx1", NULL);
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Titanium Orex400, Woodx150, Orihalcium Feetx1", NULL);
 				return;
 			}
 			Server()->RemItem(ClientID, TITANIUMORE, 400, -1);
@@ -3156,7 +3248,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		{
 			if (Server()->GetItemCount(ClientID, ASTRALIUMORE) < 500 || Server()->GetItemCount(ClientID, WOOD) < 200 || Server()->GetItemCount(ClientID, TITANIUM_BODY) < 1 || Server()->GetItemCount(ClientID, SLIMESOUL) < 30)
 			{
-				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Mithril Orex500, Woodx200, Slime Soulx30, Titanium Bodyx1", NULL);
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Astralium Orex500, Woodx200, Slime Soulx30, Titanium Bodyx1", NULL);
 				return;
 			}
 			Server()->RemItem(ClientID, ASTRALIUMORE, 500, -1);
@@ -3168,7 +3260,7 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 		{
 			if (Server()->GetItemCount(ClientID, ASTRALIUMORE) < 400 || Server()->GetItemCount(ClientID, WOOD) < 150 || Server()->GetItemCount(ClientID, TITANIUM_FEET) < 1 || Server()->GetItemCount(ClientID, SLIMESOUL) < 20)
 			{
-				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Mithril Orex400, Woodx150, Slime Soulx20 Titanium Feetx1", NULL);
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Astralium Orex400, Woodx150, Slime Soulx20 Titanium Feetx1", NULL);
 				return;
 			}
 			Server()->RemItem(ClientID, ASTRALIUMORE, 400, -1);
@@ -3176,9 +3268,96 @@ void CGameContext::CreateItem(int ClientID, int ItemID, int Count)
 			Server()->RemItem(ClientID, TITANIUM_FEET, 20, -1);
 			Server()->RemItem(ClientID, SLIMESOUL, 20, -1);
 		} break;
+		case PET_MITHRIL_GOLEM:
+		{
+			if (Server()->GetItemCount(ClientID, MITHRILORE) < 300 || Server()->GetItemCount(ClientID, COOPERORE) < 10000)
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Mithril Ore x300, Copper Ore x10000", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, MITHRILORE, 400, -1);
+			Server()->RemItem(ClientID, COOPERORE, 10000, -1);
+		} break;
+		case PET_CLEVER:
+		{
+			if (Server()->GetItemCount(ClientID, GOLDORE) < 100 || Server()->GetItemCount(ClientID, DIAMONDORE) < 100 || Server()->GetItemCount(ClientID, COOPERORE) < 500)
+			{
+				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("For crafted need {str:need}"), "need", "Gold Ore x100, Diamond Ore x100, Copper Ore x500", NULL);
+				return;
+			}
+			Server()->RemItem(ClientID, GOLDORE, 100, -1);
+			Server()->RemItem(ClientID, DIAMONDORE, 100, -1);
+			Server()->RemItem(ClientID, COOPERORE, 500, -1);
+		} break;
 	}
-	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} crafted item {str:item}x{int:coun}"), "name", Server()->ClientName(ClientID), "item", Server()->GetItemName(ClientID, ItemID, false), "coun", &Count ,NULL);
+	SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} crafted item {str:item} x{int:coun}"), "name", Server()->ClientName(ClientID), "item", Server()->GetItemName(ClientID, ItemID, false), "coun", &Count ,NULL);
 	SendMail(ClientID, "Hello, succesful craft item!", ItemID, Count);
+	Server()->GiveItem(ClientID, CRAFT_XP, 1);
+
+	// Achievment
+	if ((Server()->GetItemCount(ClientID, CRAFT_XP) >= 7) && (Server()->GetItemCount(ClientID, CRAFTMASTER_1) < 1)) {
+		Server()->GiveItem(ClientID, CRAFTMASTER_1, 1);
+		Server()->GiveItem(ClientID, COOPERORE, 100);
+		Server()->GiveItem(ClientID, ACHIEVMENT_POINT, 1);
+
+		SendChatTarget_Localization(ClientID, 0, "Achievment unlocked!");
+		SendChatTarget(ClientID, "Your reward:");
+		SendChatTarget(ClientID, "Copper ore x100");
+	}
+	if ((Server()->GetItemCount(ClientID, CRAFT_XP) >= 15) && (Server()->GetItemCount(ClientID, CRAFTMASTER_2) < 1)) {
+		Server()->GiveItem(ClientID, CRAFTMASTER_2, 1);
+		Server()->GiveItem(ClientID, COOPERORE, 300);
+		Server()->GiveItem(ClientID, ACHIEVMENT_POINT, 1);
+
+		SendChatTarget_Localization(ClientID, 0, "Achievment unlocked!");
+		SendChatTarget(ClientID, "Your reward:");
+		SendChatTarget(ClientID, "Copper ore x300");
+	}
+	if ((Server()->GetItemCount(ClientID, CRAFT_XP) >= 23) && (Server()->GetItemCount(ClientID, CRAFTMASTER_3) < 1)) {
+		Server()->GiveItem(ClientID, CRAFTMASTER_3, 1);
+		Server()->GiveItem(ClientID, IRONORE, 200);
+		Server()->GiveItem(ClientID, ACHIEVMENT_POINT, 1);
+
+		SendChatTarget_Localization(ClientID, 0, "Achievment unlocked!");
+		SendChatTarget(ClientID, "Your reward:");
+		SendChatTarget(ClientID, "Iron ore x200");
+	}
+	if ((Server()->GetItemCount(ClientID, CRAFT_XP) >= 30) && (Server()->GetItemCount(ClientID, CRAFTMASTER_4) < 1)) {
+		Server()->GiveItem(ClientID, CRAFTMASTER_4, 1);
+		Server()->GiveItem(ClientID, IRONORE, 300);
+		Server()->GiveItem(ClientID, ACHIEVMENT_POINT, 1);
+
+		SendChatTarget_Localization(ClientID, 0, "Achievment unlocked!");
+		SendChatTarget(ClientID, "Your reward:");
+		SendChatTarget(ClientID, "Iron ore x300");
+	}
+	if ((Server()->GetItemCount(ClientID, CRAFT_XP) >= 40) && (Server()->GetItemCount(ClientID, CRAFTMASTER_5) < 1)) {
+		Server()->GiveItem(ClientID, CRAFTMASTER_5, 1);
+		Server()->GiveItem(ClientID, IRONORE, 500);
+		Server()->GiveItem(ClientID, ACHIEVMENT_POINT, 1);
+
+		SendChatTarget_Localization(ClientID, 0, "Achievment unlocked!");
+		SendChatTarget(ClientID, "Your reward:");
+		SendChatTarget(ClientID, "Iron ore x500");
+	}
+	if ((Server()->GetItemCount(ClientID, CRAFT_XP) >= 50) && (Server()->GetItemCount(ClientID, CRAFTMASTER_6) < 1)) {
+		Server()->GiveItem(ClientID, CRAFTMASTER_6, 1);
+		Server()->GiveItem(ClientID, GOLDORE, 400);
+		Server()->GiveItem(ClientID, ACHIEVMENT_POINT, 1);
+
+		SendChatTarget_Localization(ClientID, 0, "Achievment unlocked!");
+		SendChatTarget(ClientID, "Your reward:");
+		SendChatTarget(ClientID, "Gold ore x400");
+	}
+	if ((Server()->GetItemCount(ClientID, CRAFT_XP) >= 60) && (Server()->GetItemCount(ClientID, CRAFTMASTER_7) < 1)) {
+		Server()->GiveItem(ClientID, CRAFTMASTER_7, 1);
+		Server()->GiveItem(ClientID, GOLDORE, 500);
+		Server()->GiveItem(ClientID, ACHIEVMENT_POINT, 1);
+
+		SendChatTarget_Localization(ClientID, 0, "Achievment unlocked!");
+		SendChatTarget(ClientID, "Your reward:");
+		SendChatTarget(ClientID, "Gold ore x500");
+	}
 }
 
 void CGameContext::BuySkill(int ClientID, int Price, int ItemID)
@@ -3270,7 +3449,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote("······················· ", "null", ClientID);
 		AddVote_Localization(ClientID, "null", "♫ {str:psevdo}", "psevdo", LocalizeText(ClientID, "Sub Menu Personal"));
 		AddVoteMenu_Localization(ClientID, MAILMENU, MENUONLY, "☞ Mailbox ✉");
-		AddVoteMenu_Localization(ClientID, ARMORMENU, MENUONLY, "☞ Armor ☭");
+		AddVoteMenu_Localization(ClientID, ARMORMENU, MENUONLY, "☞ Armor & Pets ☭");
 		AddVoteMenu_Localization(ClientID, INVENTORY, MENUONLY, "☞ Inventory & Items");
 		AddVoteMenu_Localization(ClientID, CRAFTING, MENUONLY, "☞ Crafting item's");
 		AddVoteMenu_Localization(ClientID, QUEST, MENUONLY, "☞ Quest & Reward");
@@ -3396,6 +3575,11 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		Exp = Server()->GetItemCount(ClientID, LOADEREXP);
 		AddVote_Localization(ClientID, "null", "Profession Loader ({int:exp}/{int:nexp} Level: {int:lvl})", "exp", &Exp, "nexp", &NeedExp, "lvl", &Level);
 
+		Level = 1 + Server()->GetItemCount(ClientID, FISHINGLEVEL)/g_Config.m_SvFishingExp;
+		NeedExp = Level*g_Config.m_SvFishingExp;
+		Exp = Server()->GetItemCount(ClientID, FISHINGLEVEL);
+		AddVote_Localization(ClientID, "null", "Profession Fishing ({int:exp}/{int:nexp} Level: {int:lvl})", "exp", &Exp, "nexp", &NeedExp, "lvl", &Level);
+
 		AddVote_Localization(ClientID, "null", "Profession Woodcutter (Not Leveling)");
 		AddVote_Localization(ClientID, "null", "Profession Fishing (coming)");
 
@@ -3436,6 +3620,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "armor1", "☞ Body Armor {str:enquip}", "enquip", Server()->GetItemName(ClientID, Server()->GetItemEnquip(ClientID, 15)));
 		AddVote_Localization(ClientID, "armor2", "☞ Feet Armor {str:enquip}", "enquip", Server()->GetItemName(ClientID, Server()->GetItemEnquip(ClientID, 16)));
 		AddVote_Localization(ClientID, "armor3", "☞ Stabilized {str:enquip}", "enquip", Server()->GetItemName(ClientID, Server()->GetItemEnquip(ClientID, 17)));
+		AddVote_Localization(ClientID, "armor4", "☞ Pet {str:enquip}", "enquip", Server()->GetItemName(ClientID, Server()->GetItemEnquip(ClientID, 18)));
 
 		AddBack(ClientID);
 		AddVote("", "null", ClientID);
@@ -3446,6 +3631,8 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			Server()->ListInventory(ClientID, 16);
 		else if(m_apPlayers[ClientID]->m_SelectArmor == 3)
 			Server()->ListInventory(ClientID, 17);
+		else if (m_apPlayers[ClientID]->m_SelectArmor == 4)
+			Server()->ListInventory(ClientID, 18);
 	}
 
 
@@ -3467,23 +3654,39 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		CreateNewShop(ClientID, X2MONEYEXPVIP, 1, 0, 0);
 		CreateNewShop(ClientID, TITLEENCHANT, 1, 0, 0);
 		AddVote("", "null", ClientID);
-		if (Server()->GetItemCount(ClientID, PIGKILLER_1)) { AddVote("☑ | Pig Killer I", "null", ClientID); } else { AddVote("☐ | Pig Killer I", "null", ClientID); };
-		if (Server()->GetItemCount(ClientID, PIGKILLER_2)) { AddVote("☑ | Pig Killer II", "null", ClientID); } else { AddVote("☐ | Pig Killer II", "null", ClientID); };
-		if (Server()->GetItemCount(ClientID, PIGKILLER_3)) { AddVote("☑ | Pig Killer III", "null", ClientID); } else { AddVote("☐ | Pig Killer III", "null", ClientID); };
-		if (Server()->GetItemCount(ClientID, PIGKILLER_4)) { AddVote("☑ | Pig Killer IV", "null", ClientID); } else { AddVote("☐ | Pig Killer IV", "null", ClientID); };
-		if (Server()->GetItemCount(ClientID, PIGKILLER_5)) { AddVote("☑ | Pig Killer V", "null", ClientID); } else { AddVote("☐ | Pig Killer V", "null", ClientID); };
+		char aBuf[256]; str_format(aBuf, 256, "Pig killed: %d", Server()->GetItemCount(ClientID, PIG_XP));
+		AddVote(aBuf, "null", ClientID);
+		if (Server()->GetItemCount(ClientID, PIGKILLER_1)) { AddVote("☑ | Pig Killer I", "null", ClientID); } else { AddVote("☐ | Pig Killer I | Kill 100 pigs", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, PIGKILLER_2)) { AddVote("☑ | Pig Killer II", "null", ClientID); } else { AddVote("☐ | Pig Killer II | Kill 500 pigs", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, PIGKILLER_3)) { AddVote("☑ | Pig Killer III", "null", ClientID); } else { AddVote("☐ | Pig Killer III | Kill 1000 pigs", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, PIGKILLER_4)) { AddVote("☑ | Pig Killer IV", "null", ClientID); } else { AddVote("☐ | Pig Killer IV | Kill 5000 pigs", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, PIGKILLER_5)) { AddVote("☑ | Pig Killer V", "null", ClientID); } else { AddVote("☐ | Pig Killer V | Kill 10000 pigs", "null", ClientID); };
 		AddVote("", "null", ClientID);
-		if (Server()->GetItemCount(ClientID, KWAHKILLER_1)) { AddVote("☑ | Kwah Killer I", "null", ClientID); } else { AddVote("☐ | Kwah Killer I", "null", ClientID); };
-		if (Server()->GetItemCount(ClientID, KWAHKILLER_2)) { AddVote("☑ | Kwah Killer II", "null", ClientID); } else { AddVote("☐ | Kwah Killer II", "null", ClientID); };
-		if (Server()->GetItemCount(ClientID, KWAHKILLER_3)) { AddVote("☑ | Kwah Killer III", "null", ClientID); } else { AddVote("☐ | Kwah Killer III", "null", ClientID); };
-		if (Server()->GetItemCount(ClientID, KWAHKILLER_4)) { AddVote("☑ | Kwah Killer IV", "null", ClientID); } else { AddVote("☐ | Kwah Killer IV", "null", ClientID); };
-		if (Server()->GetItemCount(ClientID, KWAHKILLER_5)) { AddVote("☑ | Kwah Killer V", "null", ClientID); } else { AddVote("☐ | Kwah Killer V", "null", ClientID); };
+		str_format(aBuf, 256, "Kwah killed: %d", Server()->GetItemCount(ClientID, KWAH_XP));
+		AddVote(aBuf, "null", ClientID);
+		if (Server()->GetItemCount(ClientID, KWAHKILLER_1)) { AddVote("☑ | Kwah Killer I", "null", ClientID); } else { AddVote("☐ | Kwah Killer I | Kill 100 kwahs", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, KWAHKILLER_2)) { AddVote("☑ | Kwah Killer II", "null", ClientID); } else { AddVote("☐ | Kwah Killer II | Kill 500 kwahs", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, KWAHKILLER_3)) { AddVote("☑ | Kwah Killer III", "null", ClientID); } else { AddVote("☐ | Kwah Killer III | Kill 1000 kwahs", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, KWAHKILLER_4)) { AddVote("☑ | Kwah Killer IV", "null", ClientID); } else { AddVote("☐ | Kwah Killer IV | Kill 5000 kwahs", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, KWAHKILLER_5)) { AddVote("☑ | Kwah Killer V", "null", ClientID); } else { AddVote("☐ | Kwah Killer V | Kill 10000 kwahs", "null", ClientID); };
 		AddVote("", "null", ClientID);
-		if (Server()->GetItemCount(ClientID, BOOMKILLER_1)) { AddVote("☑ | Boom Killer I", "null", ClientID); } else { AddVote("☐ | Boom Killer I", "null", ClientID); };
-		if (Server()->GetItemCount(ClientID, BOOMKILLER_2)) { AddVote("☑ | Boom Killer II", "null", ClientID); } else { AddVote("☐ | Boom Killer II", "null", ClientID); };
-		if (Server()->GetItemCount(ClientID, BOOMKILLER_3)) { AddVote("☑ | Boom Killer III", "null", ClientID); } else { AddVote("☐ | Boom Killer III", "null", ClientID); };
-		if (Server()->GetItemCount(ClientID, BOOMKILLER_4)) { AddVote("☑ | Boom Killer IV", "null", ClientID); } else { AddVote("☐ | Boom Killer IV", "null", ClientID); };
-		if (Server()->GetItemCount(ClientID, BOOMKILLER_5)) { AddVote("☑ | Boom Killer V", "null", ClientID); } else { AddVote("☐ | Boom Killer V", "null", ClientID); };
+		str_format(aBuf, 256, "Boom killed: %d", Server()->GetItemCount(ClientID, BOOM_XP));
+		AddVote(aBuf, "null", ClientID);
+		if (Server()->GetItemCount(ClientID, BOOMKILLER_1)) { AddVote("☑ | Boom Killer I", "null", ClientID); } else { AddVote("☐ | Boom Killer I | Kill 100 booms", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, BOOMKILLER_2)) { AddVote("☑ | Boom Killer II", "null", ClientID); } else { AddVote("☐ | Boom Killer II | Kill 500 booms", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, BOOMKILLER_3)) { AddVote("☑ | Boom Killer III", "null", ClientID); } else { AddVote("☐ | Boom Killer III | Kill 1000 booms", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, BOOMKILLER_4)) { AddVote("☑ | Boom Killer IV", "null", ClientID); } else { AddVote("☐ | Boom Killer IV | Kill 5000 booms", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, BOOMKILLER_5)) { AddVote("☑ | Boom Killer V", "null", ClientID); } else { AddVote("☐ | Boom Killer V | Kill 10000 booms", "null", ClientID); };
+		AddVote("", "null", ClientID);
+		str_format(aBuf, 256, "Items crafted: %d", Server()->GetItemCount(ClientID, CRAFT_XP));
+		AddVote(aBuf, "null", ClientID);
+		if (Server()->GetItemCount(ClientID, CRAFTMASTER_1)) { AddVote("☑ | Craft Master I", "null", ClientID); } else { AddVote("☐ | Craft Master I | Craft 7 items", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, CRAFTMASTER_2)) { AddVote("☑ | Craft Master II", "null", ClientID); } else { AddVote("☐ | Craft Master II | Craft 15 items", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, CRAFTMASTER_3)) { AddVote("☑ | Craft Master III", "null", ClientID); } else { AddVote("☐ | Craft Master III | Craft 23 items", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, CRAFTMASTER_4)) { AddVote("☑ | Craft Master IV", "null", ClientID); } else { AddVote("☐ | Craft Master IV | Craft 30 items", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, CRAFTMASTER_5)) { AddVote("☑ | Craft Master V", "null", ClientID); } else { AddVote("☐ | Craft Master V | Craft 40 items", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, CRAFTMASTER_6)) { AddVote("☑ | Craft Master VI", "null", ClientID); } else { AddVote("☐ | Craft Master VI | Craft 50 items", "null", ClientID); };
+		if (Server()->GetItemCount(ClientID, CRAFTMASTER_7)) { AddVote("☑ | Craft Master VII", "null", ClientID); } else { AddVote("☐ | Craft Master VII | Craft 60 items", "null", ClientID); };
 		AddBack(ClientID);
 		return;
 	}
@@ -3614,8 +3817,60 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 		AddVote_Localization(ClientID, "uskillsword", "☞ (20SP) Skill Sword ({str:act})", "act", Server()->GetItemCount(ClientID, SSWORD) ? "1 Mana ✔" : "x");
 		SkillSettings(ClientID, SSWORD, "sskillsword");
 		SkillSettings(ClientID, SHEALSUMMER, "sskillsummer");
+
+		AddVote("", "null", ClientID);
+		AddVoteMenu_Localization(ClientID, ACHUPGRADE, MENUONLY, "☞ Upgrade Tree");
+
 		AddBack(ClientID);
 		return;
+	}
+
+
+	// ############################### Апгрейд за ачивки
+	else if (Type == ACHUPGRADE) {
+		m_apPlayers[ClientID]->m_UpdateMenu = Type;
+		m_apPlayers[ClientID]->m_LastVotelist = AUTH;
+		AddVote_Localization(ClientID, "null", "☪ Information ( ´ ω ` )?:");
+		AddVote_Localization(ClientID, "null", "Upgrade Tree");
+		AddVote_Localization(ClientID, "null", "AUP - Count of achievement points");
+		AddVote_Localization(ClientID, "null", "You can get AUP for completing achievements");
+		// Мне лень с SQL работать по этому прокачка будет предметами xd
+		AddVote("", "null", ClientID);
+		char aBuf[256]; str_format(aBuf, 256, "AUP: %d", Server()->GetItemCount(ClientID, ACHIEVMENT_POINT));
+		AddVote(aBuf, "null", ClientID);
+		AddVote("", "null", ClientID);
+
+		// Silver
+		std::string data = "☐ -> ☐ -> ☐ -> ☐ -> ☐";
+		if (Server()->GetItemCount(ClientID, UP_BONUS_SILVER) == 1) data = "☑ -> ☐ -> ☐ -> ☐ -> ☐";
+		if (Server()->GetItemCount(ClientID, UP_BONUS_SILVER) == 2) data = "☑ -> ☑ -> ☐ -> ☐ -> ☐";
+		if (Server()->GetItemCount(ClientID, UP_BONUS_SILVER) == 3) data = "☑ -> ☑ -> ☑ -> ☐ -> ☐";
+		if (Server()->GetItemCount(ClientID, UP_BONUS_SILVER) == 4) data = "☑ -> ☑ -> ☑ -> ☑ -> ☐";
+		if (Server()->GetItemCount(ClientID, UP_BONUS_SILVER) == 5) data = "☑ -> ☑ -> ☑ -> ☑ -> ☑";
+		data += " | Silver Bonus (+5%)";
+		AddVote(data.c_str(), "upacsil", ClientID);
+
+		// XP
+		data = "☐ -> ☐ -> ☐ -> ☐ -> ☐";
+		if (Server()->GetItemCount(ClientID, UP_BONUS_XP) == 1) data = "☑ -> ☐ -> ☐ -> ☐ -> ☐";
+		if (Server()->GetItemCount(ClientID, UP_BONUS_XP) == 2) data = "☑ -> ☑ -> ☐ -> ☐ -> ☐";
+		if (Server()->GetItemCount(ClientID, UP_BONUS_XP) == 3) data = "☑ -> ☑ -> ☑ -> ☐ -> ☐";
+		if (Server()->GetItemCount(ClientID, UP_BONUS_XP) == 4) data = "☑ -> ☑ -> ☑ -> ☑ -> ☐";
+		if (Server()->GetItemCount(ClientID, UP_BONUS_XP) == 5) data = "☑ -> ☑ -> ☑ -> ☑ -> ☑";
+		data += " | XP Bonus (+5%)";
+		AddVote(data.c_str(), "upacxp", ClientID);
+
+		// DMG
+		data = "☐ -> ☐ -> ☐ -> ☐ -> ☐";
+		if (Server()->GetItemCount(ClientID, UP_BONUS_DMG) == 1) data = "☑ -> ☐ -> ☐ -> ☐ -> ☐";
+		if (Server()->GetItemCount(ClientID, UP_BONUS_DMG) == 2) data = "☑ -> ☑ -> ☐ -> ☐ -> ☐";
+		if (Server()->GetItemCount(ClientID, UP_BONUS_DMG) == 3) data = "☑ -> ☑ -> ☑ -> ☐ -> ☐";
+		if (Server()->GetItemCount(ClientID, UP_BONUS_DMG) == 4) data = "☑ -> ☑ -> ☑ -> ☑ -> ☐";
+		if (Server()->GetItemCount(ClientID, UP_BONUS_DMG) == 5) data = "☑ -> ☑ -> ☑ -> ☑ -> ☑";
+		data += " | DMG Bonus (+3%)";
+		AddVote(data.c_str(), "upacdmg", ClientID);
+
+		AddBack(ClientID);
 	}
 
 	// ############################### Клан основное меню
@@ -3681,7 +3936,7 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 			AddVote("Comming", "null", ClientID);
 		}
 		else
-		 	AddVote_Localization(ClientID, "null", "Your Clan not House!");
+			AddVote_Localization(ClientID, "null", "Your Clan not House!");
 
 		AddBack(ClientID);
 		return;
@@ -4144,13 +4399,14 @@ void CGameContext::ResetVotes(int ClientID, int Type)
 				AddNewCraftVote(ClientID, "Titanium Orex400, Woodx150, Orihalcium Feetx1", TITANIUM_FEET);
 				AddNewCraftVote(ClientID, "Astralium Orex500, Woodx200, Slime Soulx30, Titanium Bodyx1", ASTRALIUM_BODY);
 				AddNewCraftVote(ClientID, "Astralium Orex400, Woodx150, Slime Soulx20, Titanium Feetx1", ASTRALIUM_FEET);
+				AddNewCraftVote(ClientID, "Mithril ore x300, Copper ore x10000", PET_MITHRIL_GOLEM);
+				AddNewCraftVote(ClientID, "Gold ore x100, Diamond ore x100, Copper ore x500", PET_CLEVER);
 			}
 		}
 		else AddVote_Localization(ClientID, "null", "You are not in the Craft Room");
 
 		return;
 	}
-	
 }
 
 void CGameContext::AddNewCraftVote(int ClientID, const char *Need, int ItemID)
@@ -4744,16 +5000,16 @@ void CGameContext::UpdateBotInfo(int ClientID)
 		else str_copy(NameSkin, "coala", sizeof(NameSkin));
 	}
 
-    Server()->ResetBotInfo(ClientID, BotType, BotSubType);
-    str_copy(m_apPlayers[ClientID]->m_TeeInfos.m_SkinName, NameSkin, sizeof(m_apPlayers[ClientID]->m_TeeInfos.m_SkinName));
-    m_apPlayers[ClientID]->m_TeeInfos.m_UseCustomColor = false;
-    m_pController->OnPlayerInfoChange(m_apPlayers[ClientID]);
+	Server()->ResetBotInfo(ClientID, BotType, BotSubType);
+	str_copy(m_apPlayers[ClientID]->m_TeeInfos.m_SkinName, NameSkin, sizeof(m_apPlayers[ClientID]->m_TeeInfos.m_SkinName));
+	m_apPlayers[ClientID]->m_TeeInfos.m_UseCustomColor = false;
+	m_pController->OnPlayerInfoChange(m_apPlayers[ClientID]);
 }
 
 void CGameContext::CreateBot(int ClientID, int BotType, int BotSubType)
 {
-    int BotClientID = MAX_PLAYERS + ClientID;
-    if (m_apPlayers[BotClientID])
+	int BotClientID = MAX_PLAYERS + ClientID;
+	if (m_apPlayers[BotClientID])
 		return;
 
 	m_apPlayers[BotClientID] = new(BotClientID) CPlayer(this, BotClientID, TEAM_RED);
@@ -4793,29 +5049,29 @@ void CGameContext::SendChatClan(int ClanID, const char* pText, ...)
 
 const char* CGameContext::LevelString(int max, int value, int step, char ch1, char ch2)
 {
-    if (value < 0) value = 0;
-    if (value > max) value = max;
+	if (value < 0) value = 0;
+	if (value > max) value = max;
 
-    int size = 2 + max / step + 1;
-    char *Buf = new char[size];
-    Buf[0] = '[';
-    Buf[size - 2] = ']';
-    Buf[size - 1] = '\0';
+	int size = 2 + max / step + 1;
+	char *Buf = new char[size];
+	Buf[0] = '[';
+	Buf[size - 2] = ']';
+	Buf[size - 1] = '\0';
 
-    int a = value / step;
-    int b = (max - value) / step;
-    int i = 1;
+	int a = value / step;
+	int b = (max - value) / step;
+	int i = 1;
 
-    for (int ai = 0; ai < a; ai++, i++)
-    {
-        Buf[i] = ch1;
-    }
+	for (int ai = 0; ai < a; ai++, i++)
+	{
+		Buf[i] = ch1;
+	}
 
-    for (int bi = 0; bi < b || i < size - 2; bi++, i++)
-    {
-        Buf[i] = ch2;
-    }
-    return Buf;
+	for (int bi = 0; bi < b || i < size - 2; bi++, i++)
+	{
+		Buf[i] = ch2;
+	}
+	return Buf;
 }
 
 const char* CGameContext::LocalizeText(int ClientID, const char* pText)
@@ -4855,34 +5111,34 @@ void CGameContext::UseItem(int ClientID, int ItemID, int Count, int Type)
 			else if(ItemID == TOMATE)
 			{
 				PackOne += 30;
+				
 				if(i == Count-1)
 				{
-					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"),
-						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);
-				pPlayer->AccData.Exp += PackOne;
-					//pPlayer->ExpAdd(PackOne, false);
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} + {int:bonus} exp"),
+						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne, NULL);
+					pPlayer->AccData.Exp += PackOne;
 				}
 			}
 			else if(ItemID == POTATO)
 			{
 				PackOne += 50;
+				
 				if(i == Count-1)
 				{
-					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"),
-						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);
-pPlayer->AccData.Exp += PackOne;
-					//pPlayer->ExpAdd(PackOne, false);
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} + {int:bonus} exp"),
+						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne, NULL);
+					pPlayer->AccData.Exp += PackOne;
 				}
 			}
 			else if(ItemID == CARROT)
 			{
 				PackOne += 20;
+				
 				if(i == Count-1)
 				{
-					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"),
-						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne , NULL);
-pPlayer->AccData.Exp += PackOne;
-					//pPlayer->ExpAdd(PackOne, false);
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} + {int:bonus} exp"),
+						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne, NULL);
+					pPlayer->AccData.Exp += PackOne;
 				}
 			}
 			else if(ItemID == CLANBOXEXP)
@@ -4895,10 +5151,65 @@ pPlayer->AccData.Exp += PackOne;
 					Server()->InitClanID(Server()->GetClanID(ClientID), PLUS, "Exp", PackOne, true);
 				}
 			}
-			else if(ItemID == CLANTICKET)
+			else if (ItemID == COMMON_FISH)
 			{
-				SendChatTarget_Localization(ClientID, CHATCATEGORY_DEFAULT, _("Use: /newclan <nameclan>"), NULL);
-				break;
+				PackOne += 10;
+				if (i == Count - 1)
+				{
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"),
+						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne, NULL);
+					pPlayer->AccData.Exp += PackOne;
+				}
+			}
+			else if (ItemID == UNCOMMON_FISH)
+			{
+				PackOne += 15;
+				if (i == Count - 1)
+				{
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"),
+						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne, NULL);
+					pPlayer->AccData.Exp += PackOne;
+				}
+			}
+			else if (ItemID == RARE_FISH)
+			{
+				PackOne += 20;
+				if (i == Count - 1)
+				{
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"),
+						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne, NULL);
+					pPlayer->AccData.Exp += PackOne;
+				}
+			}
+			else if (ItemID == EPIC_FISH)
+			{
+				PackOne += 30;
+				if (i == Count - 1)
+				{
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"),
+						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne, NULL);
+					pPlayer->AccData.Exp += PackOne;
+				}
+			}
+			else if (ItemID == LEGENDARY_FISH)
+			{
+				PackOne += 45;
+				if (i == Count - 1)
+				{
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"),
+						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne, NULL);
+					pPlayer->AccData.Exp += PackOne;
+				}
+			}
+			else if (ItemID == ICE_FISH)
+			{
+				PackOne += 35;
+				if (i == Count - 1)
+				{
+					SendChatTarget_Localization(-1, CHATCATEGORY_DEFAULT, _("{str:name} used {str:used} x{int:num} and get {int:pvars} exp"),
+						"name", Server()->ClientName(ClientID), "used", Server()->GetItemName(ClientID, ItemID, false), "num", &Count, "pvars", &PackOne, NULL);
+					pPlayer->AccData.Exp += PackOne;
+				}
 			}
 			else if(ItemID == RESETINGSKILL)
 			{
@@ -4946,8 +5257,8 @@ pPlayer->AccData.Exp += PackOne;
 			}
 			else if(ItemID == RANDOMCRAFTITEM || ItemID == EVENTBOX || ItemID == FARMBOX || ItemID == BOSSBOX || ItemID == BOSSBOX2 || ItemID == BOSSBOX3)
 			{
-				Count = 1;
-				m_apPlayers[ClientID]->m_OpenBox = 210;
+				//Count = 1;
+				m_apPlayers[ClientID]->m_OpenBox = Count;
 				m_apPlayers[ClientID]->m_OpenBoxType = ItemID;
 				break;
 			}

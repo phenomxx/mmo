@@ -12,6 +12,7 @@
 #include <game/server/entities/items/moneybag.h>
 #include <game/server/entities/mobs/feya.h>
 #include <game/server/entities/drawing/info.h>
+#include <game/server/entities/pets.h>
 #include <time.h>
 #include <iostream>
 
@@ -111,7 +112,12 @@ bool CGameControllerMOD::OnEntity(const char* pName, vec2 Pivot, vec2 P0, vec2 P
 	{
 		vec2 Pos = (P0 + P1 + P2 + P3)/4.0f;
 		new CPickup(&GameServer()->m_World, 0, Pos, 5);
-	}	
+	}
+	else if (str_comp(pName, "Fishing") == 0)
+	{
+		vec2 Pos = (P0 + P1 + P2 + P3) / 4.0f;
+		new CPickup(&GameServer()->m_World, 1, Pos, 6);
+	}
 
 	return res;
 }
@@ -201,6 +207,10 @@ void CGameControllerMOD::OnCharacterSpawn(class CCharacter *pChr)
 	// default health
 	pChr->IncreaseHealth(10);
 	pChr->GiveWeapon(WEAPON_HAMMER, -1);
+
+	if (Server()->GetItemEnquip(pChr->GetPlayer()->GetCID(), 18) != -1) {
+		CPet* pet = new CPet(&GameServer()->m_World, vec2(0, 0), pChr->GetPlayer()->GetCID(), Server()->GetItemEnquip(pChr->GetPlayer()->GetCID(), 18));
+	}
 }
 
 bool CGameControllerMOD::IsSpawnable(vec2 Pos, int TeleZoneIndex)
@@ -248,7 +258,7 @@ bool CGameControllerMOD::PreSpawn(CPlayer* pPlayer, vec2 *pOutPos)
 	{
 		if(!pPlayer->AccData.Class)
 			Type = 0;
-		else if(!Server()->GetItemCount(pPlayer->GetCID(), SDROP) && !Server()->GetItemCount(pPlayer->GetCID(), SDROP))
+		else if(!Server()->GetItemCount(pPlayer->GetCID(), SDROP))
 		{
 			Type = 15;
 

@@ -18,13 +18,14 @@ public:
 	virtual void TickPaused();
 	virtual void Snap(int SnappingClient);
 
+	int m_Type;
+	int m_GetLevel;
+
 private:
 	vec2 m_ActualPos;
 	vec2 m_ActualDir;
 	vec2 m_Direction;
 	int m_StartTick;
-	int m_Type;
-	int m_GetLevel;
 	bool m_Flashing;
 	int m_LifeSpan;
 	int m_FlashTimer;

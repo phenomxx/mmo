@@ -3169,7 +3169,7 @@ public:
 			{
 				str_format(aBuf, sizeof(aBuf),
 					"SELECT il_id, item_type FROM tw_uItems "
-					"WHERE item_owner = '%d' AND item_type != '10, 12, 15, 16, 17';",
+					"WHERE item_owner = '%d' AND item_type != '10, 12, 15, 16, 17, 18';",
 					m_pServer->m_aClients[m_ClientID].m_UserID, m_Type);
 				pSqlServer->executeSqlQuery(aBuf);
 
@@ -3199,7 +3199,7 @@ public:
 				m_pServer->m_stInv[m_ClientID][ItemID].i_count = ItemCount;
 
 				char iName[64], iUsed[8];
-				if(m_Type == 15 || m_Type == 16 || m_Type == 17)
+				if(m_Type == 15 || m_Type == 16 || m_Type == 17 || m_Type == 18)
 				{
 					str_format(iUsed, sizeof(iUsed), "it%d", ItemID);
 					str_format(iName, sizeof(iName), "➳ Lvl%d %s +%d",
@@ -3214,6 +3214,11 @@ public:
 					{
 						str_format(iName, sizeof(iName), "➳ %s %s (Damage +%d)",
 							Data,  m_pServer->GetItemName(m_ClientID, ItemID), m_pServer->GetBonusEnchant(m_ClientID, ItemID, m_Type));
+					}
+					else if (m_Type == 18)
+					{
+						str_format(iName, sizeof(iName), "➳ %s %s",
+							Data, m_pServer->GetItemName(m_ClientID, ItemID));
 					}
 					else
 					{
